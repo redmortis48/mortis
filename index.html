@@ -725,7 +725,7 @@ async function sendMsg(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-3-5-sonnet-20241022',
         max_tokens:150,
         system:`Tu es ${s.nom}, ${s.lien}, ${s.age} ans, suspect dans une enquête criminelle. Alibi : ${s.alibi}. Motif possible : ${s.motif}. Traits : ${s.traits.join(', ')}. ${s.coupable?'Tu es coupable mais tu le caches absolument.':'Tu es innocent(e) mais tu as tes secrets.'} RÈGLE ABSOLUE : Réponds UNIQUEMENT à la question posée. 2 phrases maximum. En français. Direct et dans ton personnage. Ne résume jamais la conversation.`,
         messages:[{role:'user',content:q}]
