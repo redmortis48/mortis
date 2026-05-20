@@ -318,201 +318,197 @@ input,textarea{font-family:Georgia,serif}
 </div>
 
 <script>
+// ══ IMAGES ══
 const CRIME_IMGS=['https://images.unsplash.com/photo-1453873531674-2151bcd01707?w=400&q=50','https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=400&q=50','https://images.unsplash.com/photo-1590765151624-efec41b69695?w=400&q=50','https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&q=50','https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=50','https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=400&q=50'];
 const CASE_IMGS=['https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=60','https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=600&q=60','https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=600&q=60','https://images.unsplash.com/photo-1464146072230-91cabc968266?w=600&q=60','https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&q=60'];
 const SUSP_IMGS=['https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=60','https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=60','https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=60','https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=60','https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=200&q=60','https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=60'];
 const VICTIM_IMG='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=60';
 
-// ══ FALLBACK ENRICHI — répond à toutes les questions ══
-// Chaque suspect a des dizaines de mots-clés pour couvrir toutes les questions possibles
+// ══ MODÈLE CORRECT ══
+// claude-sonnet-4-5-20250929 est le dernier Sonnet disponible
+const API_MODEL = 'claude-sonnet-4-5-20250929';
+
+// ══ FALLBACK ENRICHI ══
 const FALLBACK={
 "Sophie Delacroix":[
-  [["où","etait","trouvé","chambre","nuit","soir","minuit"],"J'étais dans la chambre d'amis du 12e étage. Nous dormions séparément depuis quelques semaines."],
-  [["alibi","prouve","confirme","témoin","prouver"],"J'ai dormi seule. Personne ne peut le confirmer, c'est vrai. Mais j'étais là."],
-  [["assurance","million","5m","argent","bénéficiaire"],"Mon conseiller me l'avait recommandée il y a un mois. Une précaution normale pour quelqu'un dans sa position."],
-  [["divorce","sépar","avocat","mariage","couple"],"Oui j'avais consulté un avocat. Mais un divorce me rapporte bien moins que rester mariée à un homme riche."],
-  [["cyanure","poison","produit","substance","chimique"],"Je ne sais même pas où on achète ça. C'est une question absurde."],
+  [["où","etait","nuit","soir","chambre","minuit","trouvé"],"J'étais dans la chambre d'amis du 12e étage. Nous dormions séparément depuis quelques semaines."],
+  [["alibi","prouve","confirme","témoin"],"J'ai dormi seule. Personne ne peut le confirmer, c'est vrai. Mais j'étais là."],
+  [["assurance","million","5m","bénéficiaire"],"Mon conseiller me l'avait recommandée. Une précaution normale pour quelqu'un dans sa position."],
+  [["divorce","sépar","avocat","mariage"],"Oui j'avais consulté un avocat. Mais un divorce me rapporte bien moins que rester mariée."],
+  [["cyanure","poison","produit","chimique"],"Je ne sais même pas où on achète ça. C'est absurde."],
   [["mobile","motif","raison","pourquoi","intérêt"],"Je n'avais aucun mobile. Je l'aimais, même si notre mariage était compliqué."],
-  [["victime","victor","mari","époux","connais"],"Victor était mon mari depuis 12 ans. Malgré nos difficultés, je l'aimais."],
-  [["clé","accès","suite","entrer","porte"],"Je n'avais pas la clé maître de la suite. Je dormais dans une autre chambre."],
-  [["suspect","accuse","coupable","pensez","crois"],"Je comprends que vous vérifiez tout le monde. Mais je n'ai rien fait."],
-  [[],"Je coopère totalement avec l'enquête. J'ai rien à cacher."]
+  [["victime","victor","mari","connais"],"Victor était mon mari depuis 12 ans. Malgré nos difficultés, je l'aimais."],
+  [["clé","accès","suite","entrer","porte"],"Je n'avais pas la clé maître de la suite."],
+  [[],"Je coopère totalement avec l'enquête."]
 ],
 "Marc Fontaine":[
-  [["où","etait","trouvé","soir","nuit","minuit"],"J'étais au restaurant Le Grand Véfour jusqu'à 23h15. Trois collègues et le chef peuvent confirmer."],
-  [["alibi","prouve","confirme","témoin","restaurant"],"Dîner d'affaires de 20h à 23h15. J'ai l'addition, les noms des convives et le témoignage du chef."],
-  [["fraude","fiscal","amf","impôt","argent","finance"],"Cette affaire a été classée sans suite en 2019. Légalement vous n'avez aucun droit de l'évoquer."],
-  [["licencier","renvoyer","virer","associé","travail","contrat"],"Victor adorait menacer. C'était son style de management. Il ne m'aurait jamais vraiment viré."],
-  [["cyanure","poison","produit","substance","chimique"],"Je suis homme d'affaires, pas chimiste. Je ne saurais même pas où trouver ça."],
-  [["mobile","motif","raison","pourquoi","intérêt"],"Sa mort est une catastrophe financière pour moi. J'avais tout intérêt à ce qu'il reste en vie."],
-  [["victime","victor","associé","connais","relation"],"Victor était mon associé depuis 12 ans. On se disputait mais on se respectait professionnellement."],
-  [["suspect","accuse","coupable","pensez"],"Vérifiez mon alibi. Il est irréfutable. Je n'étais pas à l'hôtel ce soir-là."],
-  [[],"Mon alibi tient parfaitement. Je n'ai rien à ajouter sur ce sujet."]
+  [["où","etait","nuit","soir","restaurant","minuit"],"J'étais au restaurant Le Grand Véfour jusqu'à 23h15. Trois collègues et le chef peuvent confirmer."],
+  [["alibi","prouve","confirme","témoin"],"Dîner d'affaires de 20h à 23h15. J'ai l'addition et les noms des convives."],
+  [["fraude","fiscal","amf","impôt"],"Cette affaire a été classée sans suite en 2019. Vous n'avez aucun droit de l'évoquer."],
+  [["licencier","renvoyer","virer","associé"],"Victor adorait menacer. C'était son style. Il ne m'aurait jamais vraiment viré."],
+  [["cyanure","poison","produit","chimique"],"Je suis homme d'affaires, pas chimiste. Je ne saurais même pas où trouver ça."],
+  [["mobile","motif","raison","pourquoi"],"Sa mort est une catastrophe financière pour moi. J'avais tout intérêt à ce qu'il reste en vie."],
+  [["victime","victor","associé","connais"],"Victor était mon associé depuis 12 ans. On se disputait mais on se respectait."],
+  [[],"Mon alibi tient parfaitement. Je n'ai rien à ajouter."]
 ],
 "Clara Messing":[
-  [["où","etait","trouvé","soir","nuit","minuit"],"J'étais chez moi à Neuilly. J'ai regardé une série jusqu'à 1h du matin."],
-  [["alibi","prouve","confirme","témoin","seule"],"Je vis seule. Mais mes connexions Netflix horodatées et mes SMS prouvent que j'étais chez moi."],
-  [["clé","accès","maître","suite","entrer","porte"],"Victor me l'avait confiée pour des urgences professionnelles. Je devais parfois récupérer des documents tard."],
-  [["recherche","google","cyanure","internet","historique"],"J'écris un roman policier depuis 18 mois. Ces recherches sont uniquement pour mon livre."],
-  [["mobile","motif","raison","pourquoi","intérêt"],"Victor était un patron exigeant mais juste. Je n'avais absolument aucune raison de lui vouloir du mal."],
-  [["fenêtre","service","escalier","accès","entrer"],"Je ne suis jamais passée par la fenêtre de service. C'est une idée insensée."],
-  [["victime","victor","patron","connais","relation"],"Victor était exigeant mais c'était un bon patron. Il m'avait donné ma chance."],
-  [["suspect","accuse","coupable","pensez"],"Je comprends que je sois suspecte à cause de la clé. Mais je ne l'ai pas utilisée cette nuit-là."],
-  [[],"Je suis honnête avec vous. Je n'ai rien à cacher."]
+  [["où","etait","nuit","soir","maison","minuit"],"J'étais chez moi à Neuilly. J'ai regardé une série jusqu'à 1h du matin."],
+  [["alibi","prouve","confirme","témoin","seule"],"Je vis seule. Mais mes connexions Netflix et mes SMS prouvent que j'étais chez moi."],
+  [["clé","accès","maître","suite","entrer"],"Victor me l'avait confiée pour des urgences professionnelles."],
+  [["recherche","google","cyanure","internet","historique"],"J'écris un roman policier depuis 18 mois. Ces recherches sont pour mon livre."],
+  [["mobile","motif","raison","pourquoi"],"Victor était un patron exigeant mais juste. Je n'avais aucune raison de lui vouloir du mal."],
+  [["fenêtre","service","escalier","accès"],"Je ne suis jamais passée par la fenêtre de service."],
+  [[],"Je suis honnête avec vous. Posez-moi n'importe quelle question."]
 ],
 "Antoine Roux":[
-  [["où","etait","trouvé","soir","nuit","minuit"],"J'étais à une soirée privée à Montmartre chez un ami. Une vingtaine de personnes."],
+  [["où","etait","nuit","soir","montmartre","minuit"],"J'étais à une soirée privée à Montmartre chez un ami. Une vingtaine de personnes."],
   [["alibi","prouve","confirme","témoin","soirée"],"J'avais des gens autour de moi... presque toute la soirée."],
   [["90","heure","disparaître","manque","inexpliqué","seul"],"Je... je me suis promené. J'avais besoin d'air frais. Je ne regardais pas l'heure."],
-  [["message","menaçant","texto","sms","mail","écrit"],"Je l'ai envoyé dans un moment de colère après qu'il ait encore refusé de m'aider. Je ne le pensais pas."],
-  [["dette","argent","jeu","casino","crédit","financier"],"J'avais des dettes mais j'allais trouver une solution. J'avais des contacts qui pouvaient aider."],
-  [["héritage","hériter","testament","fortune","succession"],"Je savais que j'héritais un jour comme tout fils. Ça ne veut pas dire que j'ai voulu précipiter les choses."],
-  [["cyanure","poison","produit","substance","chimique"],"Je n'ai jamais acheté ni manipulé ce genre de substance. Jamais."],
-  [["mobile","motif","raison","pourquoi","intérêt"],"Mon père était ma seule famille. Je n'aurais pas fait ça."],
-  [["victime","père","papa","victor","relation"],"C'était mon père. On se disputait souvent mais c'était mon père quand même."],
-  [["clé","accès","hôtel","entrer","suite"],"Je n'avais pas de clé de l'hôtel. Je ne sais même pas comment entrer sans badge."],
-  [["suspect","accuse","coupable","pensez"],"Vous perdez votre temps avec moi. Trouvez le vrai coupable."],
+  [["message","menaçant","texto","sms","mail"],"Je l'ai envoyé dans un moment de colère après qu'il ait encore refusé de m'aider."],
+  [["dette","argent","jeu","casino","crédit"],"J'avais des dettes mais j'allais trouver une solution."],
+  [["héritage","hériter","testament","fortune"],"Je savais que j'héritais un jour comme tout fils. Ça ne veut pas dire que j'ai voulu précipiter les choses."],
+  [["cyanure","poison","produit","chimique"],"Je n'ai jamais acheté ni manipulé ce genre de substance. Jamais."],
+  [["mobile","motif","raison","pourquoi"],"Mon père était ma seule famille. Je n'aurais pas fait ça."],
+  [["victime","père","papa","victor"],"C'était mon père. On se disputait souvent mais c'était mon père quand même."],
   [[],"Je n'ai rien fait. C'est tout ce que j'ai à dire."]
 ],
 "Isabelle Renard":[
-  [["où","etait","trouvé","soir","nuit","atelier"],"J'étais dans mon atelier au niveau -2. Je restaure une toile du XVIIe siècle."],
+  [["où","etait","nuit","soir","atelier","musée"],"J'étais dans mon atelier au niveau -2. Je restaure une toile du XVIIe siècle."],
   [["alibi","prouve","confirme","témoin","gardien"],"Le gardien peut confirmer qu'il m'a entendue travailler. J'étais là toute la soirée."],
   [["scalpel","couteau","lame","arme","outil"],"Mon scalpel a disparu il y a deux semaines. Je l'avais signalé à Émile lui-même."],
-  [["fraude","falsif","faux","expertise","authenticité"],"Des falsifications ? C'est diffamatoire. Émile et moi avions des désaccords professionnels normaux."],
-  [["badge","accès","réserve","niveau","entrer"],"Je n'avais pas son badge. Et je n'avais aucune raison d'aller dans la réserve."],
-  [["mobile","motif","raison","pourquoi","intérêt"],"Émile était mon supérieur. Sa mort ne m'apporte rien professionnellement."],
-  [["victime","émile","conservateur","patron","connais"],"Émile était mon supérieur depuis 6 ans. Nous avions des désaccords mais je le respectais."],
-  [["caméra","surveillance","couper","désactiver"],"Je ne suis pas allée dans la salle de contrôle. Je ne connais même pas ce code."],
+  [["fraude","falsif","faux","expertise","authenticité"],"Des falsifications ? C'est diffamatoire. Émile et moi avions des désaccords professionnels."],
+  [["badge","accès","réserve"],"Je n'avais pas son badge. Je n'avais aucune raison d'aller dans la réserve."],
+  [["mobile","motif","raison","pourquoi"],"Émile était mon supérieur. Sa mort ne m'apporte rien professionnellement."],
+  [["caméra","surveillance","couper","désactiver"],"Je ne suis pas allée dans la salle de contrôle."],
   [[],"Je travaillais cette nuit-là. Vérifiez mes outils et mes heures de connexion."]
 ],
 "Thomas Girard":[
-  [["où","etait","trouvé","soir","nuit","anniversaire"],"J'étais à l'anniversaire d'un ami dans le 3e arrondissement. 15 personnes présentes."],
+  [["où","etait","nuit","soir","anniversaire"],"J'étais à l'anniversaire d'un ami dans le 3e arrondissement. 15 personnes présentes."],
   [["alibi","prouve","confirme","témoin","photo"],"15 témoins, des photos, des stories Instagram postées à 23h. Incontestable."],
-  [["promotion","carrière","poste","travail","bloqué"],"Oui il me freinait. Mais je cherchais un autre poste ailleurs. J'avais des offres."],
-  [["mobile","motif","raison","pourquoi"],"Sa mort ne me donne pas la promotion. Quelqu'un d'autre prendra sa place. Aucun intérêt."],
-  [[],"Mon alibi est béton. Concentrez-vous sur ceux qui étaient au musée cette nuit-là."]
+  [["promotion","carrière","poste","travail","bloqué"],"Oui il me freinait. Mais je cherchais un autre poste ailleurs."],
+  [["mobile","motif","raison"],"Sa mort ne me donne pas la promotion. Aucun intérêt."],
+  [[],"Mon alibi est béton. Concentrez-vous sur ceux qui étaient au musée."]
 ],
 "Henri Vasseur":[
-  [["où","etait","trouvé","soir","nuit","gala"],"J'étais au dîner de gala de la mairie de Lyon. Le maire lui-même peut confirmer."],
+  [["où","etait","nuit","soir","gala","mairie"],"J'étais au dîner de gala de la mairie de Lyon. Le maire lui-même peut confirmer."],
   [["alibi","prouve","confirme","témoin","photo"],"Des dizaines de photos de moi à ce dîner. Je suis rentré à 01h30."],
-  [["acquisition","tableau","authenticité","œuvre","art"],"Émile était trop prudent. Ce tableau est authentique, j'en suis certain."],
-  [["mobile","motif","raison","pourquoi"],"Sa mort complique mon acquisition, elle ne l'aide pas. J'avais tout intérêt à ce qu'il vive."],
+  [["acquisition","tableau","authenticité","œuvre"],"Émile était trop prudent. Ce tableau est authentique, j'en suis certain."],
+  [["mobile","motif","raison"],"Sa mort complique mon acquisition. J'avais tout intérêt à ce qu'il vive."],
   [[],"Je suis un soutien financier majeur de ce musée. Cherchez ailleurs."]
 ],
 "Nadia Cheikh":[
-  [["où","etait","trouvé","soir","nuit","ronde"],"Je faisais mes rondes habituelles. Niveau -1, niveau -2, rez-de-chaussée."],
-  [["alibi","prouve","confirme","témoin"],"Je patrouillais. C'est difficile de justifier chaque minute quand on fait des rondes."],
+  [["où","etait","nuit","soir","ronde","musée"],"Je faisais mes rondes habituelles. Niveau -1, niveau -2, rez-de-chaussée."],
+  [["alibi","prouve","confirme","témoin"],"Je patrouillais. C'est mon travail."],
   [["caméra","surveillance","couper","désactiver","code"],"Je n'ai pas touché aux caméras. Quelqu'un est entré dans la salle de contrôle pendant mes rondes."],
-  [["40","minutes","disparaître","manque","inexpliqué"],"J'étais aux toilettes puis j'ai fait une pause café en cuisine. Ce n'est pas un crime."],
+  [["40","minutes","disparaître","manque","inexpliqué"],"J'étais aux toilettes puis j'ai fait une pause café en cuisine."],
   [["casier","vol","antécédent","passé"],"C'était une erreur il y a 6 ans. J'ai payé et je travaille honnêtement depuis."],
-  [["mobile","motif","raison","pourquoi"],"Je n'avais aucune raison de nuire à M. Caron. Mon travail dépendait de lui."],
+  [["mobile","motif","raison"],"Je n'avais aucune raison de nuire à M. Caron."],
   [[],"Je fais mon travail correctement. Je n'ai rien à dissimuler."]
 ],
 "Valentina Cruz":[
-  [["où","etait","trouvé","soir","nuit","cabine"],"J'étais dans ma cabine avec Paulo. Nous travaillions sur des documents importants."],
+  [["où","etait","nuit","soir","cabine"],"J'étais dans ma cabine avec Paulo. Nous travaillions sur des documents importants."],
   [["alibi","prouve","confirme","paulo","témoin"],"Paulo peut confirmer. Nous avons travaillé ensemble jusqu'à 04h du matin."],
-  [["yacht","bateau","transport","illicite","contrebande"],"Ce yacht est un investissement légal. Toute suggestion contraire est diffamatoire."],
-  [["mobile","motif","raison","pourquoi"],"Ferrara était un excellent capitaine. Sa mort m'est préjudiciable."],
+  [["yacht","bateau","transport","illicite"],"Ce yacht est un investissement légal. Toute suggestion contraire est diffamatoire."],
+  [["mobile","motif","raison"],"Ferrara était un excellent capitaine. Sa mort m'est préjudiciable."],
   [[],"Mes avocats s'occuperont de répondre à vos insinuations."]
 ],
 "Paulo Mendez":[
-  [["où","etait","trouvé","soir","nuit","cabine"],"J'étais dans la cabine de Valentina. On travaillait sur des contrats."],
+  [["où","etait","nuit","soir","cabine"],"J'étais dans la cabine de Valentina. On travaillait sur des contrats."],
   [["alibi","prouve","confirme","valentina","témoin"],"Valentina était avec moi. On peut vérifier les caméras du couloir."],
   [["pointure","chaussure","taille","empreinte"],"Je chausse du 44. Pourquoi cette question ?"],
-  [["mobile","motif","raison","pourquoi"],"Ferrara nous était utile. Sa mort est une complication pour tout le monde."],
+  [["mobile","motif","raison"],"Ferrara nous était utile. Sa mort est une complication."],
   [[],"Je n'ai rien à ajouter à ce que Valentina a dit."]
 ],
 "Dr. Stefan Holz":[
-  [["où","etait","trouvé","soir","nuit","cabine","lisait"],"J'étais dans ma cabine. Je lisais un ouvrage médical. Seul."],
+  [["où","etait","nuit","soir","cabine","lisait"],"J'étais dans ma cabine. Je lisais un ouvrage médical."],
   [["alibi","prouve","confirme","témoin"],"Je lisais seul. Je n'avais aucune raison de sortir en pleine nuit."],
-  [["médicament","substance","produit","trousse","illégal"],"Ma trousse contient des médicaments légaux pour mes patients. Rien d'autre."],
-  [["somnifère","zolpidem","drogue","verre","vin"],"Je prescris du zolpidem légalement. Que Ferrara en ait eu dans son sang ne me concerne pas."],
+  [["médicament","substance","produit","trousse","illégal"],"Ma trousse contient des médicaments légaux pour mes patients."],
+  [["somnifère","zolpidem","drogue","verre","vin"],"Je prescris du zolpidem légalement. Que Ferrara en ait eu ne me concerne pas."],
   [["pointure","chaussure","taille","empreinte","45"],"Je chausse du 45, oui. Comme beaucoup d'hommes de ma taille."],
   [["radio","communication","saboter","câble"],"Je ne connais rien aux systèmes de communication maritimes."],
-  [["mobile","motif","raison","pourquoi"],"Je n'avais aucun problème avec le capitaine. Nous échangions à peine."],
+  [["mobile","motif","raison"],"Je n'avais aucun problème avec le capitaine."],
   [[],"Je suis médecin depuis 30 ans. Cette conversation est déplacée."]
 ],
 "Camille Brun":[
-  [["où","etait","trouvé","soir","nuit","pont","écrivait"],"J'étais sur le pont supérieur à écrire. J'ai envoyé des emails à ma rédaction à 02h30."],
+  [["où","etait","nuit","soir","pont","écrivait"],"J'étais sur le pont supérieur à écrire. J'ai envoyé des emails à ma rédaction à 02h30."],
   [["alibi","prouve","confirme","email","serveur","heure"],"Les serveurs de mon journal enregistrent l'heure d'envoi. C'est vérifiable immédiatement."],
-  [["source","ferrara","capitaine","enquête","article"],"Ferrara était ma source principale. Sa mort détruit mon enquête en cours."],
-  [["valentina","article","journaliste","enquête"],"Je ne peux pas vous parler de mon enquête en cours. Déontologie journalistique."],
-  [["mobile","motif","raison","pourquoi"],"Ma source est morte. J'ai tout perdu. Quel intérêt aurais-je eu ?"],
-  [[],"Je veux que le meurtrier soit arrêté autant que vous. Ferrara méritait mieux."]
+  [["source","ferrara","capitaine","enquête"],"Ferrara était ma source principale. Sa mort détruit mon enquête en cours."],
+  [["valentina","article","journaliste"],"Je ne peux pas vous parler de mon enquête en cours. Déontologie journalistique."],
+  [["mobile","motif","raison"],"Ma source est morte. J'ai tout perdu. Quel intérêt aurais-je eu ?"],
+  [[],"Je veux que le meurtrier soit arrêté autant que vous."]
 ],
 "Margaux Blackwood":[
-  [["où","etait","trouvé","soir","nuit","salon","jardin"],"J'étais au salon avec les invités. Vers 22h30 j'ai fait un tour au jardin."],
-  [["alibi","prouve","confirme","témoin","jardin"],"J'ai pris l'air pendant une demi-heure environ. Seule, oui. Je n'avais pas à me justifier."],
+  [["où","etait","nuit","soir","salon","jardin"],"J'étais au salon avec les invités. Vers 22h30 j'ai fait un tour au jardin."],
+  [["alibi","prouve","confirme","témoin","jardin"],"J'ai pris l'air pendant une demi-heure environ. Seule."],
   [["testament","héritage","déshériter","fondation","argent"],"Mon père avait des idées changeantes. Il ne m'aurait jamais vraiment déshéritée."],
   [["gant","cuir","noir","taille","main"],"Ce gant n'est pas à moi. Je porte du S, pas du M."],
-  [["cordelette","soie","rouge","étrangler","arme"],"Je ne sais même pas où mon père gardait ces affaires dans le manoir."],
-  [["mobile","motif","raison","pourquoi"],"Mon père et moi avions une relation complexe. Mais je l'aimais."],
+  [["cordelette","soie","rouge","étrangler"],"Je ne sais même pas où mon père gardait ces affaires."],
+  [["mobile","motif","raison"],"Mon père et moi avions une relation complexe. Mais je l'aimais."],
   [[],"Je viens de perdre mon père. Ce questionnement est indécent."]
 ],
 "Édouard Plantier":[
-  [["où","etait","trouvé","soir","nuit","table","manger"],"J'étais à table dans la salle à manger. Les époux Dumont étaient avec moi."],
-  [["alibi","prouve","confirme","dumont","témoin"],"Les Dumont peuvent confirmer que je n'ai pas quitté la table de la soirée."],
-  [["testament","changer","notaire","irrégularité"],"J'ignorais les modifications envisagées. Mon rôle est de conseiller, pas de décider."],
-  [["mobile","motif","raison","pourquoi"],"Je n'ai aucun intérêt à voir mon client mourir. C'est une perte professionnelle majeure."],
+  [["où","etait","nuit","soir","table","manger"],"J'étais à table dans la salle à manger. Les époux Dumont étaient avec moi."],
+  [["alibi","prouve","confirme","dumont","témoin"],"Les Dumont peuvent confirmer que je n'ai pas quitté la table."],
+  [["testament","changer","notaire","irrégularité"],"J'ignorais les modifications envisagées. Mon rôle est de conseiller."],
+  [["mobile","motif","raison"],"Je n'ai aucun intérêt à voir mon client mourir."],
   [[],"Mon alibi est confirmé par deux témoins indépendants."]
 ],
 "Jacques Moreau":[
-  [["où","etait","trouvé","soir","nuit","servait","salon"],"Je servais les invités au salon et dans la salle à manger toute la soirée."],
+  [["où","etait","nuit","soir","servait","salon"],"Je servais les invités au salon et dans la salle à manger."],
   [["alibi","prouve","confirme","témoin","cuisine"],"Je circulais entre les pièces. Des invités m'ont vu à intervalles réguliers."],
-  [["retraite","pension","argent","licencier","fin"],"Monsieur avait annoncé ma retraite pour le printemps. Les conditions n'étaient pas idéales, c'est vrai."],
-  [["mobile","motif","raison","pourquoi"],"J'ai servi cette famille 40 ans. Monsieur Gérard avait ses défauts mais je lui dois tout."],
-  [["cordelette","tiroir","accès","connais"],"Je connais l'existence de ce tiroir, oui. Comme tout le personnel du manoir."],
-  [[],"Je suis à votre disposition pour toute question. Je n'ai rien à dissimuler."]
+  [["retraite","pension","argent","licencier"],"Monsieur avait annoncé ma retraite pour le printemps. Les conditions n'étaient pas idéales."],
+  [["mobile","motif","raison"],"J'ai servi cette famille 40 ans. Monsieur Gérard avait ses défauts mais je lui dois tout."],
+  [[],"Je suis à votre disposition pour toute question."]
 ],
 "Céline Aubert":[
-  [["où","etait","trouvé","soir","nuit","chambre","migraine"],"J'avais une migraine terrible. Je suis montée dans ma chambre à 21h30."],
-  [["alibi","prouve","confirme","témoin","chambre"],"Je n'ai pas quitté ma chambre. J'ai pris des médicaments et je me suis couchée tôt."],
-  [["testament","promesse","argent","héritage","exclure"],"Gérard m'avait promis quelque chose. Et il allait tout reprendre. C'est injuste mais c'est ainsi."],
-  [["relation","amour","maîtresse","liaison","secret"],"Notre relation était complexe. Il m'aimait à sa façon, j'en suis convaincue."],
-  [["mobile","motif","raison","pourquoi"],"Je l'aimais. On ne tue pas quelqu'un qu'on aime."],
-  [[],"Je l'aimais vraiment. Vous ne pouvez pas comprendre ce que je ressens là."]
+  [["où","etait","nuit","soir","chambre","migraine"],"J'avais une migraine terrible. Je suis montée dans ma chambre à 21h30."],
+  [["alibi","prouve","confirme","témoin","chambre"],"Je n'ai pas quitté ma chambre. J'ai pris des médicaments et je me suis couchée."],
+  [["testament","promesse","argent","héritage"],"Gérard m'avait promis quelque chose. Et il allait tout reprendre."],
+  [["relation","amour","maîtresse","liaison"],"Notre relation était complexe. Il m'aimait à sa façon."],
+  [["mobile","motif","raison"],"Je l'aimais. On ne tue pas quelqu'un qu'on aime."],
+  [[],"Je l'aimais vraiment. Vous ne pouvez pas comprendre ce que je ressens."]
 ],
 "Prof. Arnaud Claes":[
-  [["où","etait","trouvé","soir","nuit","maison","chez"],"J'étais chez moi. Je me suis couché vers 23h30 après une longue journée."],
+  [["où","etait","nuit","soir","maison","chez"],"J'étais chez moi. Je me suis couché vers 23h30 après une longue journée."],
   [["alibi","prouve","confirme","femme","témoin"],"Ma femme peut confirmer que j'étais à la maison toute la nuit."],
-  [["badge","accès","02h55","03h","laboratoire","entrer"],"Mon badge utilisé à 02h55 ? C'est impossible. J'étais chez moi à cette heure-là."],
-  [["nx7","neurotoxine","substance","produit","injection"],"NX-7 est un composé strictement encadré. Éléonore travaillait dans les règles du protocole."],
-  [["données","effacer","disque","ordinateur","voler"],"Je ne sais pas de quelles données vous parlez. Je n'étais pas au laboratoire cette nuit."],
-  [["mobile","motif","raison","pourquoi"],"Éléonore était une brillante chercheuse. Sa mort est une perte immense pour la science."],
+  [["badge","accès","02h55","03h","laboratoire"],"Mon badge utilisé à 02h55 ? C'est impossible. J'étais chez moi à cette heure-là."],
+  [["nx7","neurotoxine","substance","produit","injection"],"NX-7 est un composé strictement encadré. Éléonore travaillait dans les règles."],
+  [["données","effacer","disque","ordinateur"],"Je ne sais pas de quelles données vous parlez. Je n'étais pas au laboratoire cette nuit."],
+  [["mobile","motif","raison"],"Éléonore était une brillante chercheuse. Sa mort est une perte immense."],
   [[],"Mes travaux ont sauvé des vies. Ces accusations sont grotesques."]
 ],
 "Dr. Raphaël Stein":[
-  [["où","etait","trouvé","soir","nuit","bureau","02h"],"J'étais dans mon bureau au laboratoire jusqu'à 02h07. Mon badge de sortie l'atteste."],
+  [["où","etait","nuit","soir","bureau","02h"],"J'étais dans mon bureau au laboratoire jusqu'à 02h07. Mon badge de sortie l'atteste."],
   [["alibi","prouve","confirme","badge","témoin"],"Badge de sortie à 02h07. Je suis rentré chez moi en voiture, arrivé vers 02h40."],
   [["falsifier","résultat","donnée","fraude","publication"],"Éléonore et moi avions des désaccords scientifiques. C'est normal dans un laboratoire."],
-  [["mobile","motif","raison","pourquoi"],"Sa mort ne m'aide pas. J'avais besoin de ses travaux pour avancer dans mes propres recherches."],
+  [["mobile","motif","raison"],"Sa mort ne m'aide pas. J'avais besoin de ses travaux."],
   [[],"Vérifiez mon badge. Je n'étais plus là quand ça s'est passé."]
 ],
 "Ingrid Sauer":[
-  [["où","etait","trouvé","soir","nuit","hôtel","sofitel"],"J'étais à l'hôtel Sofitel de Strasbourg. Check-in à 21h, je n'ai pas quitté l'hôtel."],
-  [["alibi","prouve","confirme","hôtel","chambre","témoin"],"Carte de chambre, room service à 23h, appels depuis le téléphone fixe de la chambre."],
-  [["argent","investissement","40m","perte","nx7"],"Mon investissement est légal. Si le scandale éclate, je suis aussi victime."],
-  [["mobile","motif","raison","pourquoi"],"Je veux que cette affaire soit résolue. Mon nom doit être blanchi au plus vite."],
-  [[],"Mon alibi est vérifiable minute par minute. Je n'étais pas au laboratoire."]
+  [["où","etait","nuit","soir","hôtel","sofitel"],"J'étais à l'hôtel Sofitel de Strasbourg. Check-in à 21h, je n'ai pas quitté l'hôtel."],
+  [["alibi","prouve","confirme","hôtel","chambre"],"Carte de chambre, room service à 23h, appels depuis le téléphone fixe."],
+  [["argent","investissement","40m","perte"],"Mon investissement est légal. Si le scandale éclate, je suis aussi victime."],
+  [["mobile","motif","raison"],"Je veux que cette affaire soit résolue. Mon nom doit être blanchi."],
+  [[],"Mon alibi est vérifiable minute par minute."]
 ],
 "Mia Tanaka":[
-  [["où","etait","trouvé","soir","nuit","couloir"],"J'étais dans le couloir B. Je travaillais tard sur des analyses importantes."],
-  [["alibi","prouve","confirme","caméra","couloir","03h"],"Les caméras du couloir B me montrent clairement jusqu'à 03h00. Vérifiez."],
-  [["renvoyer","licencier","espionnage","concurrence"],"Elle m'a renvoyée injustement. J'analysais des données pour un article personnel, pas pour la concurrence."],
-  [["mobile","motif","raison","pourquoi"],"Je voulais qu'elle reconnaisse son erreur, pas qu'elle meure."],
+  [["où","etait","nuit","soir","couloir"],"J'étais dans le couloir B. Je travaillais tard sur des analyses."],
+  [["alibi","prouve","confirme","caméra","couloir","03h"],"Les caméras du couloir B me montrent clairement jusqu'à 03h00."],
+  [["renvoyer","licencier","espionnage","concurrence"],"Elle m'a renvoyée injustement. J'analysais des données pour un article personnel."],
+  [["mobile","motif","raison"],"Je voulais qu'elle reconnaisse son erreur, pas qu'elle meure."],
   [[],"Les caméras me montrent dans le couloir. Je ne pouvais pas être en B7 en même temps."]
 ]
 };
 
 function getFallback(nom,q){
   const reps=FALLBACK[nom];
-  if(!reps)return"Je préfère ne pas répondre à cette question.";
+  if(!reps)return"Je préfère ne pas répondre à cette question pour le moment.";
   const ql=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
   for(const [keys,resp] of reps){
-    if(keys.length===0)return resp; // default
+    if(keys.length===0)return resp;
     if(keys.some(k=>ql.includes(k)))return resp;
   }
-  return reps[reps.length-1][1]; // dernière entrée = default
+  return reps[reps.length-1][1];
 }
 
 const SCENARIOS=[
@@ -693,12 +689,14 @@ function initAudio(){
     const flt=audioCtx.createBiquadFilter();flt.type='lowpass';flt.frequency.value=320;
     const ng=audioCtx.createGain();ng.gain.value=0.03;
     ns.connect(flt);flt.connect(ng);ng.connect(masterGain);ns.start();
+    musicOn=true;
+    document.getElementById('music-btn').textContent='♪ ON';
   }catch(e){}
 }
 function toggleMusic(){
-  initAudio();if(!audioCtx)return;
+  if(!audioCtx){initAudio();return;}
   musicOn=!musicOn;
-  masterGain.gain.linearRampToValueAtTime(musicOn?.13:0,audioCtx.currentTime+1.5);
+  if(masterGain)masterGain.gain.linearRampToValueAtTime(musicOn?.13:0,audioCtx.currentTime+1.5);
   document.getElementById('music-btn').textContent=musicOn?'♪ ON':'♪ OFF';
 }
 
@@ -737,7 +735,6 @@ function buildCaseGrid(){
   });
 }
 
-// ══ JEU ══
 function startGame(id){
   SC=SCENARIOS.find(s=>s.id===id);
   indicesCol=[];suspActif=null;interrogesCnt=0;connNodes=[];connLinks=[];selNode=null;
@@ -773,7 +770,6 @@ function showPanel(name,btn){
   if(name==='reputation')updateRep();
 }
 
-// ══ DOSSIER ══
 function buildDossier(){
   document.getElementById('dnum').textContent=SC.num;
   document.getElementById('vphoto').innerHTML=`<img src="${VICTIM_IMG}" onerror="this.parentElement.textContent='💀'">`;
@@ -816,7 +812,6 @@ function addIndice(ind){
   buildConnNodes();
 }
 
-// ══ SUSPECTS ══
 function buildSuspects(){
   const grid=document.getElementById('sgrid'),sb=document.getElementById('sb-suspects');
   grid.innerHTML='';sb.innerHTML='';
@@ -839,7 +834,6 @@ function buildSuspects(){
   });
 }
 
-// ══ INTERROGATOIRE ══
 function buildIBtns(){
   const c=document.getElementById('i-btns');c.innerHTML='';
   SC.suspects.forEach(s=>{
@@ -902,27 +896,26 @@ async function sendMsg(){
   const s=suspActif;
   let resp=null;
   try{
-    // ✅ Appel /api/chat sur Vercel — clé API sécurisée côté serveur
+    // ✅ Appel via /api/chat Vercel — modèle corrigé : claude-sonnet-4-5-20250929
     const res=await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model: API_MODEL,
         max_tokens:120,
-        system:`Tu es ${s.nom}, ${s.lien}, ${s.age} ans, suspect dans une enquête criminelle française. Alibi : ${s.alibi}. Motif possible contre toi : ${s.motif}. Traits de personnalité : ${s.traits.join(', ')}. ${s.coupable?'Tu ES le coupable mais tu le caches absolument et stratégiquement.':'Tu es innocent(e) mais tu as des choses à cacher.'} RÈGLE ABSOLUE : Réponds UNIQUEMENT et DIRECTEMENT à la question posée. Maximum 2 phrases. Toujours en français. Reste dans ton personnage. Ne résume JAMAIS la conversation précédente.`,
+        system:`Tu es ${s.nom}, ${s.lien}, ${s.age} ans, suspect dans une enquête criminelle française. Alibi : ${s.alibi}. Motif possible : ${s.motif}. Traits : ${s.traits.join(', ')}. ${s.coupable?'Tu ES le coupable mais tu le caches stratégiquement.':'Tu es innocent(e) mais tu as tes secrets.'} RÈGLE ABSOLUE : Réponds UNIQUEMENT et DIRECTEMENT à la question posée. Maximum 2 phrases courtes. En français. Dans ton personnage. Ne résume JAMAIS la conversation.`,
         messages:[{role:'user',content:q}]
       })
     });
     if(res.ok){const data=await res.json();resp=data.content?.[0]?.text||null;}
   }catch(e){}
-  // ✅ Fallback enrichi — couvre toutes les questions
+  // Fallback enrichi si API indisponible
   if(!resp)resp=getFallback(s.nom,q);
   tEl.remove();
   addMsg('sus',resp);
   btn.disabled=false;
 }
 
-// ══ CARTE ══
 function buildCarte(){
   const svg=document.getElementById('mapsvg');svg.innerHTML='';
   const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');bg.setAttribute('width','800');bg.setAttribute('height','440');bg.setAttribute('fill','#0c0c18');svg.appendChild(bg);
@@ -952,7 +945,6 @@ function exploreRoom(p){
   });
 }
 
-// ══ CARNET ══
 function buildConnNodes(){
   connNodes=[];
   SC.suspects.forEach(s=>connNodes.push({id:'s-'+s.nom,label:s.nom,color:'#c0392b'}));
@@ -988,7 +980,6 @@ function updateLinksList(){
 }
 function removeLink(i){connLinks.splice(i,1);refreshCanvas();}
 
-// ══ RÉPUTATION ══
 const RANKS=[{n:'Apprenti Détective',min:0},{n:'Inspecteur',min:500},{n:'Inspecteur Principal',min:1000},{n:'Commissaire',min:2000},{n:'Commissaire Divisionnaire',min:4000}];
 function getRank(xp){let r=RANKS[0];RANKS.forEach(rk=>{if(xp>=rk.min)r=rk;});return r;}
 function getNext(xp){return RANKS.find(r=>r.min>xp)||null;}
@@ -1010,7 +1001,6 @@ function updateRep(){
   document.getElementById('rep-badges').innerHTML=badges.map(b=>`<span class="rep-bdg${b.cond?' earned':''}">${b.cond?'🏅':'🔒'} ${b.label}</span>`).join('');
 }
 
-// ══ ACCUSATION ══
 function buildAccSus(){
   const c=document.getElementById('acc-sus');c.innerHTML='';
   SC.suspects.forEach(s=>{
@@ -1030,7 +1020,6 @@ function updateAccStats(){
   document.getElementById('ev-s').textContent=score;
 }
 
-// ══ VERDICT ══
 function endGame(correct,nom){
   clearInterval(timerInt);
   const timeB=Math.floor(sLeft/6),idxB=indicesCol.length*15,connB=connLinks.length*10;
