@@ -5,592 +5,700 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MORTIS</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a26;--bg4:#22222f;--red:#c0392b;--red2:#e74c3c;--gold:#c9a84c;--text:#e8e4d9;--text2:#a09880;--text3:#6b6355;--border:#2a2a3a;--border2:#3a3a50;--green:#27ae60}
-body{background:var(--bg);color:var(--text);font-family:Georgia,serif;min-height:100vh;overflow-x:hidden}
-button{cursor:pointer;font-family:Georgia,serif;border:none;transition:all .2s}
-input,textarea{font-family:Georgia,serif}
-#fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+:root{
+  --bg:#0a0805;--bg2:#110e09;--bg3:#1a1510;--bg4:#22180d;
+  --red:#8b1a1a;--red2:#c0392b;--red3:#e74c3c;
+  --gold:#8b6914;--gold2:#c9a84c;--gold3:#f0d878;
+  --paper:#e8dcc8;--paper2:#d4c4a0;--paper3:#c4ae84;
+  --ink:#1a1208;--ink2:#2d2010;
+  --text:#e8dcc8;--text2:#b8a888;--text3:#7a6848;
+  --border:#3a2810;--border2:#503820;
+  --stamp:#8b1a1a;
+}
+body{background:var(--bg);color:var(--text);font-family:'Courier Prime',monospace;min-height:100vh;overflow-x:hidden}
+button{cursor:pointer;font-family:'Courier Prime',monospace;border:none;transition:all .2s}
+input,textarea{font-family:'Courier Prime',monospace}
+
+/* TEXTURE */
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+/* FX */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
 .smoke{position:absolute;border-radius:50%;animation:smokeUp linear infinite}
-@keyframes smokeUp{0%{transform:translateY(100vh) scale(.4);opacity:0}20%{opacity:.5}80%{opacity:.15}100%{transform:translateY(-20vh) scale(2.5);opacity:0}}
-.shadow{position:fixed;bottom:0;width:50px;pointer-events:none;animation:walkBy linear infinite;z-index:1;background:linear-gradient(transparent,rgba(0,0,0,.3))}
-@keyframes walkBy{0%{left:-80px}100%{left:110vw}}
+@keyframes smokeUp{0%{transform:translateY(100vh) scale(.4);opacity:0}20%{opacity:.4}80%{opacity:.1}100%{transform:translateY(-20vh) scale(2.5);opacity:0}}
+.shadow-fig{position:fixed;bottom:0;width:45px;pointer-events:none;animation:walkBy linear infinite;z-index:2;background:linear-gradient(transparent,rgba(0,0,0,.5))}
+@keyframes walkBy{0%{left:-60px}100%{left:110vw}}
+
+/* INTRO */
 #s-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:2rem;position:relative;overflow:hidden}
-.ibg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#1a0404,#0a0a0f 65%)}
-.drip{position:absolute;top:0;width:3px;background:linear-gradient(var(--red),transparent);animation:drip ease-in-out infinite;z-index:2}
-@keyframes drip{0%{height:0;opacity:1}70%{height:130px;opacity:1}100%{height:130px;opacity:0}}
-.iz{position:relative;z-index:3}
-.logo{font-size:clamp(3.5rem,11vw,8rem);font-weight:900;letter-spacing:.15em;color:#fff;text-shadow:0 0 60px rgba(192,57,43,.6);animation:flicker 7s infinite}
-@keyframes flicker{0%,94%,100%{opacity:1}95%{opacity:.4}96%{opacity:1}97%{opacity:.2}98%{opacity:1}}
-.logo-sub{font-size:.9rem;letter-spacing:.45em;color:var(--gold);margin:.4rem 0 1.6rem;text-transform:uppercase}
-.tagline{font-size:.92rem;color:var(--text2);margin-bottom:2.2rem;max-width:420px;line-height:1.9;font-style:italic}
-.btn-cta{background:var(--red);color:#fff;padding:.85rem 2.6rem;font-size:1rem;font-weight:700;letter-spacing:.1em;border-radius:2px;text-transform:uppercase;border:1px solid var(--red2)}
-.btn-cta:hover{background:var(--red2);box-shadow:0 0 28px rgba(231,76,60,.5);transform:scale(1.03)}
-.intro-note{font-size:.7rem;color:var(--text3);margin-top:1.2rem;letter-spacing:.15em}
-#s-cases{display:none;padding:2rem;max-width:1100px;margin:0 auto;position:relative;z-index:5}
-.sh{text-align:center;margin-bottom:2.5rem}
-.sh h2{font-size:2.2rem;color:var(--gold)}
-.sh p{color:var(--text2);font-size:.86rem;margin-top:.4rem}
-.cases-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem}
-.case-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer;transition:all .3s}
-.case-card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 10px 35px rgba(192,57,43,.2)}
-.case-thumb{width:100%;height:150px;object-fit:cover;display:block;filter:saturate(.22) brightness(.58);transition:filter .3s}
-.case-card:hover .case-thumb{filter:saturate(.42) brightness(.72)}
-.case-thumb-ph{width:100%;height:150px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;background:linear-gradient(135deg,#110808,#1a1220)}
-.case-info{padding:1.1rem}
-.case-num{font-size:.67rem;color:var(--red);letter-spacing:.3em;text-transform:uppercase;margin-bottom:.4rem}
-.case-title{font-size:1.15rem;font-weight:700;margin-bottom:.4rem}
-.case-desc{font-size:.8rem;color:var(--text2);line-height:1.6;margin-bottom:.85rem}
-.case-meta{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.7rem}
-.mtag{background:var(--bg3);padding:2px 9px;border-radius:2px;color:var(--text2)}
-.mtag.hard{color:var(--red2);background:rgba(192,57,43,.1)}
-.mtag.med{color:#f39c12;background:rgba(243,156,18,.1)}
+.intro-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#1a0a05 0%,#0a0805 70%);z-index:0}
+.drip{position:absolute;top:0;width:3px;background:linear-gradient(var(--red2),transparent);animation:drip ease-in-out infinite;z-index:3}
+@keyframes drip{0%{height:0;opacity:1}70%{height:140px;opacity:1}100%{height:140px;opacity:0}}
+.intro-z{position:relative;z-index:4}
+.logo-wrap{position:relative;display:inline-block}
+.logo{font-family:'Special Elite',serif;font-size:clamp(4rem,13vw,9rem);color:#fff;letter-spacing:.12em;line-height:1;text-shadow:0 0 40px rgba(139,26,26,.8),0 0 80px rgba(139,26,26,.4);animation:neonFlicker 5s infinite}
+@keyframes neonFlicker{0%,90%,100%{opacity:1;text-shadow:0 0 40px rgba(139,26,26,.8)}91%{opacity:.3;text-shadow:none}93%{opacity:1;text-shadow:0 0 40px rgba(139,26,26,.8)}95%{opacity:.5;text-shadow:0 0 10px rgba(139,26,26,.3)}97%{opacity:1}}
+.logo-sub{font-family:'Special Elite',serif;font-size:.85rem;letter-spacing:.5em;color:var(--gold2);margin:.5rem 0 .3rem;text-transform:uppercase}
+.logo-line{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--red2),transparent);margin:.5rem auto 2rem}
+.tagline{font-family:'IM Fell English',serif;font-size:1rem;color:var(--text2);margin-bottom:2.5rem;max-width:400px;line-height:1.9;font-style:italic}
+.btn-start{background:var(--red);color:var(--paper);padding:.85rem 3rem;font-size:.9rem;font-weight:700;letter-spacing:.2em;border-radius:0;text-transform:uppercase;border:2px solid var(--red2);font-family:'Special Elite',serif;position:relative;overflow:hidden}
+.btn-start::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);pointer-events:none}
+.btn-start:hover{background:var(--red2);transform:scale(1.02);box-shadow:0 0 20px rgba(139,26,26,.5)}
+.intro-meta{font-size:.65rem;color:var(--text3);margin-top:1.5rem;letter-spacing:.25em}
+.stamp-intro{position:absolute;top:20%;right:5%;font-family:'Special Elite',serif;font-size:.7rem;color:var(--red);border:3px solid var(--red);padding:8px 12px;letter-spacing:.2em;transform:rotate(15deg);opacity:.15;z-index:3}
+
+/* SÉLECTION */
+#s-cases{display:none;padding:2rem;max-width:1200px;margin:0 auto;position:relative;z-index:5}
+.cases-header{text-align:center;margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:2px solid var(--border2)}
+.cases-header h2{font-family:'Special Elite',serif;font-size:2rem;color:var(--gold2);letter-spacing:.1em}
+.cases-header p{color:var(--text3);font-size:.8rem;margin-top:.5rem;letter-spacing:.1em}
+.filter-bar{display:flex;gap:.5rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
+.filter-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);padding:.4rem 1rem;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;font-family:'Courier Prime',monospace}
+.filter-btn:hover,.filter-btn.active{background:var(--red);border-color:var(--red2);color:var(--paper)}
+.cases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.case-card{background:var(--bg2);border:1px solid var(--border);border-radius:0;overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
+.case-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.02),transparent);pointer-events:none;z-index:1}
+.case-card:hover{border-color:var(--red2);transform:translateY(-3px);box-shadow:0 8px 30px rgba(139,26,26,.3)}
+.case-thumb{width:100%;height:140px;object-fit:cover;display:block;filter:saturate(.2) brightness(.5) sepia(.3);transition:filter .3s}
+.case-card:hover .case-thumb{filter:saturate(.35) brightness(.65) sepia(.2)}
+.case-thumb-ph{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,#110808,#1a1210);border-bottom:1px solid var(--border)}
+.case-ribbon{position:absolute;top:10px;right:-5px;background:var(--red);color:var(--paper);font-size:.58rem;padding:3px 12px 3px 8px;letter-spacing:.15em;font-family:'Special Elite',serif;z-index:2}
+.case-ribbon::after{content:'';position:absolute;right:0;bottom:-4px;width:0;height:0;border-left:5px solid var(--red);border-bottom:4px solid transparent}
+.case-info{padding:1rem;position:relative;z-index:2}
+.case-num{font-size:.62rem;color:var(--red2);letter-spacing:.3em;text-transform:uppercase;margin-bottom:.3rem;font-family:'Special Elite',serif}
+.case-title{font-family:'Special Elite',serif;font-size:1.05rem;color:var(--paper);margin-bottom:.35rem;letter-spacing:.05em}
+.case-desc{font-size:.75rem;color:var(--text2);line-height:1.6;margin-bottom:.75rem;font-style:italic}
+.case-meta{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.mtag{font-size:.62rem;padding:2px 8px;border:1px solid var(--border2);color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+.mtag.diff-facile{border-color:#27ae60;color:#27ae60}
+.mtag.diff-moyen{border-color:var(--gold2);color:var(--gold2)}
+.mtag.diff-difficile{border-color:var(--red2);color:var(--red2)}
+.mtag.diff-expert{border-color:#8b0000;color:#c0392b;background:rgba(139,0,0,.1)}
+
+/* JEU */
 #s-game{display:none;height:100vh;flex-direction:column}
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.55rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;position:relative}
-.tb-logo{font-size:1.25rem;font-weight:900;color:var(--red);letter-spacing:.12em;text-shadow:0 0 12px rgba(192,57,43,.5)}
+.topbar{background:var(--bg2);border-bottom:2px solid var(--border2);padding:.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;position:relative}
+.topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red2),transparent)}
+.tb-logo{font-family:'Special Elite',serif;font-size:1.3rem;color:var(--red2);letter-spacing:.15em;text-shadow:0 0 10px rgba(192,57,43,.4)}
+.tb-case{font-size:.68rem;color:var(--text3);letter-spacing:.1em;margin-top:2px}
 .tb-right{display:flex;align-items:center;gap:1rem}
-.timer{font-size:1.2rem;color:var(--gold);min-width:62px;text-align:center;font-variant-numeric:tabular-nums}
-.timer.urgent{color:var(--red);animation:pulse .5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.tb-btn{background:transparent;border:1px solid var(--border2);color:var(--text2);padding:3px 10px;border-radius:2px;font-size:.76rem}
-.tb-btn:hover{border-color:var(--text2);color:var(--text)}
+.timer{font-family:'Special Elite',serif;font-size:1.3rem;color:var(--gold2);min-width:65px;text-align:center;border:1px solid var(--border2);padding:2px 8px;background:var(--bg)}
+.timer.urgent{color:var(--red2);border-color:var(--red);animation:pulse .5s infinite;background:rgba(139,26,26,.1)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tb-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);padding:3px 10px;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-family:'Courier Prime',monospace}
+.tb-btn:hover{border-color:var(--red2);color:var(--paper)}
+.score-display{font-size:.75rem;color:var(--text2);text-align:center}
+.score-display span{color:var(--gold2);font-family:'Special Elite',serif;font-size:1rem;display:block}
+
 .game-layout{display:flex;flex:1;overflow:hidden}
-.sidebar{width:198px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.nav-btn{background:transparent;border:none;border-left:3px solid transparent;padding:.66rem 1rem;text-align:left;color:var(--text2);font-size:.79rem;display:flex;align-items:center;gap:.6rem;width:100%}
-.nav-btn:hover{color:var(--text);background:var(--bg3)}
-.nav-btn.active{border-left-color:var(--red);color:var(--text);background:var(--bg3)}
-.nbadge{margin-left:auto;background:var(--red);color:#fff;font-size:.58rem;padding:2px 5px;border-radius:9px;min-width:16px;text-align:center}
-.sb-foot{padding:.85rem;border-top:1px solid var(--border);margin-top:auto}
-.smini{width:29px;height:29px;border-radius:50%;border:2px solid var(--border2);overflow:hidden;cursor:pointer;transition:border-color .2s;background:var(--bg3);display:flex;align-items:center;justify-content:center}
-.smini:hover{border-color:var(--gold)}
-.smini img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5)}
-.main-area{flex:1;overflow-y:auto;background:var(--bg)}
-.panel{display:none;padding:1.55rem;animation:fi .25s ease}
+
+/* SIDEBAR */
+.sidebar{width:185px;background:var(--bg2);border-right:2px solid var(--border2);display:flex;flex-direction:column;flex-shrink:0;position:relative}
+.sidebar::after{content:'';position:absolute;right:-1px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--red2),transparent)}
+.sidebar-title{font-family:'Special Elite',serif;font-size:.6rem;color:var(--text3);letter-spacing:.3em;text-transform:uppercase;padding:.75rem 1rem .4rem;border-bottom:1px solid var(--border)}
+.nav-btn{background:transparent;border:none;border-left:3px solid transparent;padding:.6rem 1rem;text-align:left;color:var(--text3);font-size:.75rem;display:flex;align-items:center;gap:.6rem;width:100%;letter-spacing:.05em;font-family:'Courier Prime',monospace;position:relative}
+.nav-btn:hover{color:var(--paper);background:rgba(139,26,26,.1);border-left-color:var(--red)}
+.nav-btn.active{border-left-color:var(--red2);color:var(--paper);background:rgba(139,26,26,.15)}
+.nav-btn .nav-icon{font-size:1rem;width:18px;text-align:center}
+.nbadge{margin-left:auto;background:var(--red);color:var(--paper);font-size:.55rem;padding:2px 5px;min-width:16px;text-align:center;font-family:'Special Elite',serif}
+.sb-suspects{padding:.75rem 1rem;border-top:1px solid var(--border);margin-top:auto}
+.sb-suspects-title{font-size:.58rem;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem}
+.smini-row{display:flex;gap:4px;flex-wrap:wrap}
+.smini{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);overflow:hidden;cursor:pointer;transition:border-color .2s;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--text3)}
+.smini:hover{border-color:var(--red2)}
+.smini img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) sepia(.3)}
+
+/* MAIN */
+.main-area{flex:1;overflow-y:auto;background:var(--bg);background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(58,40,16,.08) 27px,rgba(58,40,16,.08) 28px)}
+.panel{display:none;padding:1.5rem;animation:fadeIn .3s ease}
 .panel.active{display:block}
-@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.ptitle{font-size:1.45rem;color:var(--gold);border-bottom:1px solid var(--border);padding-bottom:.62rem;margin-bottom:1.3rem}
-.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-bottom:1.3rem}
-.dcard{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.1rem}
-.dcard h3{font-size:.65rem;letter-spacing:.28em;color:var(--red);text-transform:uppercase;margin-bottom:.85rem}
-.fl{font-size:.64rem;color:var(--text3);text-transform:uppercase;letter-spacing:.14em;margin-bottom:2px}
-.fv{font-size:.84rem;color:var(--text);margin-bottom:.6rem}
-.vphoto{width:100%;height:135px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:.85rem;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:3rem}
-.vphoto img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) brightness(.75)}
-.stamp{display:inline-block;border:3px solid var(--red);color:var(--red);font-size:.95rem;padding:3px 9px;letter-spacing:.2em;transform:rotate(-8deg);margin-top:.35rem}
-.rbox{background:var(--bg3);border-left:3px solid var(--red);padding:.85rem;font-size:.8rem;line-height:1.8;color:var(--text2);font-style:italic}
-.csphotos{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.85rem}
-.csphoto{background:var(--bg3);border:1px solid var(--border2);border-radius:2px;height:100px;overflow:hidden;cursor:pointer;position:relative;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.csphoto img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) brightness(.6);transition:filter .3s;position:absolute;inset:0}
-.csphoto:hover img,.csphoto.revealed img{filter:grayscale(.2) brightness(.78)}
-.csphoto:hover{border-color:var(--gold)}
-.csphoto.revealed{border-color:rgba(201,168,76,.35)}
-.cslabel{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.78);font-size:.58rem;color:var(--text2);padding:3px 5px;text-align:center;z-index:1}
-.mapwrap{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
-.mapsvg{width:100%;height:440px}
-.mapleg{display:flex;gap:1.2rem;padding:.6rem .9rem;border-top:1px solid var(--border);font-size:.68rem;color:var(--text2)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* DOSSIER STYLE */
+.dossier-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid var(--border2)}
+.dossier-title{font-family:'Special Elite',serif;font-size:1.4rem;color:var(--gold2);letter-spacing:.08em}
+.dossier-stamp{font-family:'Special Elite',serif;font-size:.85rem;color:var(--red);border:3px solid var(--red);padding:4px 10px;letter-spacing:.2em;transform:rotate(-6deg);display:inline-block;opacity:.8}
+.dossier-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.dcard{background:var(--paper);border:1px solid var(--paper3);padding:1.1rem;position:relative}
+.dcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+.dcard h3{font-family:'Special Elite',serif;font-size:.65rem;letter-spacing:.25em;color:var(--red);text-transform:uppercase;margin-bottom:.85rem;padding-bottom:.4rem;border-bottom:1px solid var(--paper3)}
+.fl{font-size:.6rem;color:var(--ink2);text-transform:uppercase;letter-spacing:.15em;margin-bottom:2px;font-weight:700}
+.fv{font-size:.82rem;color:var(--ink);margin-bottom:.65rem;font-family:'IM Fell English',serif}
+.vphoto{width:100%;height:130px;background:var(--paper3);overflow:hidden;margin-bottom:.85rem;border:1px solid var(--paper2);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+.vphoto img{width:100%;height:100%;object-fit:cover;filter:grayscale(.6) sepia(.4) brightness(.85)}
+.vphoto::after{content:'DÉCÉDÉ';position:absolute;bottom:8px;right:8px;font-family:'Special Elite',serif;font-size:.55rem;color:var(--red);border:2px solid var(--red);padding:2px 6px;letter-spacing:.2em;background:rgba(232,220,200,.8)}
+.rbox{background:var(--paper2);border-left:3px solid var(--red);padding:.85rem;font-size:.78rem;line-height:1.8;color:var(--ink);font-family:'IM Fell English',serif;font-style:italic}
+.csphotos{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.85rem}
+.csphoto{background:var(--paper3);border:3px solid var(--paper);height:100px;overflow:hidden;cursor:pointer;position:relative;transition:all .2s;box-shadow:2px 2px 4px rgba(0,0,0,.3)}
+.csphoto img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) sepia(.4) brightness(.7);transition:filter .3s;position:absolute;inset:0}
+.csphoto:hover img{filter:grayscale(.2) sepia(.2) brightness(.85)}
+.csphoto:hover{transform:rotate(0deg) scale(1.05);z-index:2}
+.csphoto.revealed{border-color:var(--gold2)}
+.cslabel{position:absolute;bottom:0;left:0;right:0;background:rgba(10,8,5,.8);font-size:.55rem;color:var(--paper2);padding:3px 5px;text-align:center;z-index:1;letter-spacing:.1em}
+.evidence-tag{position:absolute;top:4px;left:4px;background:var(--red);color:var(--paper);font-size:.48rem;padding:1px 4px;letter-spacing:.1em;z-index:2;font-family:'Special Elite',serif}
+
+/* CARTE */
+.map-container{background:var(--bg2);border:1px solid var(--border2);overflow:hidden;position:relative}
+.map-container::before{content:'PLAN DES LIEUX — CONFIDENTIEL';position:absolute;top:8px;left:50%;transform:translateX(-50%);font-family:'Special Elite',serif;font-size:.55rem;color:var(--text3);letter-spacing:.25em;z-index:1}
+.map-svg{width:100%;height:430px}
+.map-legend{display:flex;gap:1.5rem;padding:.65rem 1rem;border-top:1px solid var(--border2);font-size:.65rem;color:var(--text3);letter-spacing:.1em}
 .legdot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
-#room-detail{display:none;margin-top:1.3rem}
-.rci{display:flex;align-items:center;gap:7px;padding:6px 9px;background:var(--bg3);border-radius:4px;margin-bottom:4px;font-size:.77rem;color:var(--text2);cursor:pointer;border:1px solid transparent;transition:all .2s}
-.rci:hover{border-color:var(--gold);color:var(--text)}
-.rci.col{border-color:rgba(201,168,76,.2);color:var(--text);cursor:default}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:1.3rem}
-.scard{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
-.scard-head{padding:1rem;display:flex;gap:.85rem;align-items:flex-start;border-bottom:1px solid var(--border)}
-.savatar{width:65px;height:65px;border-radius:3px;background:var(--bg3);overflow:hidden;flex-shrink:0;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center}
-.savatar img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35) brightness(.85)}
-.bdg{font-size:.59rem;padding:2px 6px;border-radius:2px;text-transform:uppercase}
-.bdg.n{background:var(--bg4);color:var(--text3)}
-.bdg.w{background:rgba(243,156,18,.1);color:#f39c12}
-.scard-body{padding:1rem}
-.sl{font-size:.6rem;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
-.sv{font-size:.8rem;color:var(--text2);line-height:1.55;margin-bottom:.75rem}
-.sv.hl{color:var(--text);font-style:italic}
-.casi{background:var(--bg3);border-left:2px solid #f39c12;padding:4px 8px;margin-bottom:3px;font-size:.74rem;color:var(--text2)}
-.btn-interro{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:6px;border-radius:2px;font-size:.75rem;margin-top:.4rem}
-.btn-interro:hover{border-color:var(--red);color:var(--text)}
-.iroom{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
-.ihead{padding:.95rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.85rem;background:var(--bg3)}
-.iavatar{width:50px;height:50px;border-radius:3px;overflow:hidden;background:var(--bg4);flex-shrink:0;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center}
-.iavatar img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3)}
-.chat{height:300px;overflow-y:auto;padding:.85rem;display:flex;flex-direction:column;gap:.65rem;scroll-behavior:smooth}
+#room-detail{display:none;margin-top:1.25rem}
+.rci{display:flex;align-items:center;gap:7px;padding:6px 10px;background:var(--paper);border:1px solid var(--paper3);margin-bottom:4px;font-size:.75rem;color:var(--ink2);cursor:pointer;transition:all .2s;font-family:'IM Fell English',serif}
+.rci:hover{border-color:var(--gold2);background:var(--paper2)}
+.rci.col{border-color:rgba(139,105,20,.4);color:var(--ink);cursor:default;background:var(--paper2)}
+
+/* SUSPECTS */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.25rem}
+.scard{background:var(--paper);border:1px solid var(--paper3);overflow:hidden;position:relative}
+.scard::after{content:'SUSPECT';position:absolute;top:8px;right:-5px;background:var(--red);color:var(--paper);font-size:.5rem;padding:2px 10px 2px 6px;letter-spacing:.2em;font-family:'Special Elite',serif}
+.scard-head{padding:1rem;display:flex;gap:.85rem;align-items:flex-start;border-bottom:1px solid var(--paper3);background:var(--paper2)}
+.savatar{width:65px;height:65px;background:var(--paper3);overflow:hidden;flex-shrink:0;border:3px solid var(--paper);box-shadow:2px 2px 4px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center}
+.savatar img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) sepia(.4) brightness(.85)}
+.sbdg{font-size:.56rem;padding:2px 6px;text-transform:uppercase;letter-spacing:.1em;border:1px solid;margin:2px 2px 0 0;display:inline-block}
+.sbdg.n{border-color:var(--paper3);color:var(--ink2)}
+.sbdg.w{border-color:#8b6914;color:#8b6914}
+.scard-body{padding:1rem;background:var(--paper)}
+.sl{font-size:.58rem;letter-spacing:.2em;color:var(--red);text-transform:uppercase;margin-bottom:3px;font-weight:700}
+.sv{font-size:.78rem;color:var(--ink2);line-height:1.55;margin-bottom:.75rem;font-family:'IM Fell English',serif}
+.sv.hl{color:var(--ink);font-style:italic}
+.casi{background:var(--paper2);border-left:2px solid #8b6914;padding:4px 8px;margin-bottom:3px;font-size:.72rem;color:var(--ink2);font-family:'IM Fell English',serif;font-style:italic}
+.btn-interro{width:100%;background:var(--red);border:none;color:var(--paper);padding:7px;font-size:.72rem;letter-spacing:.15em;margin-top:.4rem;text-transform:uppercase;font-family:'Special Elite',serif}
+.btn-interro:hover{background:var(--red2)}
+
+/* INTERROGATOIRE */
+.interro-room{background:var(--bg3);border:2px solid var(--border2);overflow:hidden;position:relative}
+.interro-room::before{content:'SALLE D\'INTERROGATOIRE — ENREGISTREMENT EN COURS';position:absolute;top:0;left:0;right:0;background:var(--red);color:var(--paper);font-size:.52rem;padding:3px;text-align:center;letter-spacing:.2em;font-family:'Special Elite',serif;z-index:1}
+.interro-head{padding:2.5rem 1rem 1rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid var(--border2);background:rgba(0,0,0,.3)}
+.interro-av{width:55px;height:55px;overflow:hidden;flex-shrink:0;border:3px solid var(--border2);box-shadow:0 0 10px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;background:var(--bg4)}
+.interro-av img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4) sepia(.3)}
+.interro-name{font-family:'Special Elite',serif;font-size:1rem;color:var(--paper);letter-spacing:.05em}
+.interro-status{font-size:.65rem;color:var(--text3);margin-top:3px;letter-spacing:.1em}
+.chat{height:280px;overflow-y:auto;padding:.85rem;display:flex;flex-direction:column;gap:.65rem;scroll-behavior:smooth}
 .msg{display:flex;gap:.6rem;align-items:flex-start}
 .msg.det{flex-direction:row-reverse}
-.bubble{max-width:80%;padding:.55rem .8rem;border-radius:4px;font-size:.8rem;line-height:1.6}
-.msg.sus .bubble{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
-.msg.det .bubble{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.2);color:var(--text)}
-.mav{width:26px;height:26px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;overflow:hidden}
-.mav img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4)}
-.qq{display:flex;flex-wrap:wrap;gap:5px;padding:0 .85rem .85rem}
-.qqb{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:4px 10px;border-radius:14px;font-size:.68rem}
-.qqb:hover{border-color:var(--gold);color:var(--text)}
-.cinput-row{display:flex;gap:.6rem;padding:.8rem;border-top:1px solid var(--border)}
-.cinput{flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:.5rem .8rem;border-radius:2px;font-size:.8rem}
-.cinput:focus{outline:none;border-color:var(--gold)}
-.csend{background:var(--red);color:#fff;padding:.5rem .95rem;border-radius:2px;font-size:.8rem;font-weight:600}
+.bubble{max-width:82%;padding:.55rem .85rem;font-size:.78rem;line-height:1.6;position:relative;font-family:'IM Fell English',serif}
+.msg.sus .bubble{background:var(--paper);color:var(--ink);border-left:3px solid var(--red);font-style:italic}
+.msg.det .bubble{background:var(--bg4);border:1px solid var(--border2);color:var(--text);font-style:normal}
+.mav{width:28px;height:28px;overflow:hidden;flex-shrink:0;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:.8rem;border:1px solid var(--border2)}
+.mav img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5)}
+.qq{display:flex;flex-wrap:wrap;gap:5px;padding:.75rem;border-top:1px solid var(--border2);background:rgba(0,0,0,.2)}
+.qq-label{width:100%;font-size:.58rem;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px;font-family:'Special Elite',serif}
+.qqb{background:transparent;border:1px solid var(--border2);color:var(--text3);padding:4px 10px;font-size:.68rem;letter-spacing:.05em;font-family:'Courier Prime',monospace;text-align:left}
+.qqb:hover{border-color:var(--gold2);color:var(--paper);background:rgba(139,105,20,.1)}
+.qqb.used{border-color:var(--border);color:var(--text3);opacity:.5;cursor:default}
+.cinput-row{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--border2)}
+.cinput{flex:1;background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:.5rem .85rem;font-size:.78rem;font-family:'Courier Prime',monospace}
+.cinput:focus{outline:none;border-color:var(--gold2)}
+.csend{background:var(--red);color:var(--paper);padding:.5rem 1rem;font-size:.75rem;font-weight:700;letter-spacing:.1em;font-family:'Special Elite',serif}
 .csend:hover{background:var(--red2)}
-.csend:disabled{background:var(--bg4);color:var(--text3);cursor:not-allowed}
-.thinking{display:flex;gap:4px;align-items:center;padding:.55rem .8rem;background:var(--bg3);border:1px solid var(--border);border-radius:4px}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:blink 1.4s infinite}
+.thinking{display:flex;gap:4px;align-items:center;padding:.55rem .85rem;background:var(--paper);border-left:3px solid var(--red)}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--ink2);animation:blink 1.4s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
-.indcard{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:.95rem;display:flex;gap:.85rem;margin-bottom:.8rem}
-.indicon{width:40px;height:40px;background:var(--bg3);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
-.indt{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:3px}
-.indtxt{font-size:.83rem;color:var(--text);line-height:1.5;margin-bottom:4px}
-.indlink{font-size:.7rem;color:var(--gold);font-style:italic}
-.newb{background:var(--red);color:#fff;font-size:.56rem;padding:2px 5px;border-radius:2px;margin-left:5px;vertical-align:middle}
-.notes{width:100%;min-height:170px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:.95rem;color:var(--text);font-size:.83rem;line-height:1.8;resize:vertical}
-.notes:focus{outline:none;border-color:var(--gold)}
-.connboard{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.1rem;margin-top:1.3rem}
-.canvaswrap{position:relative;width:100%;height:260px;background:var(--bg3);border-radius:4px;overflow:hidden}
-#conncanvas{position:absolute;inset:0;width:100%;height:100%}
-#connnodes{position:absolute;inset:0}
-.cnode{position:absolute;transform:translate(-50%,-50%);padding:5px 10px;border-radius:16px;font-size:.68rem;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;user-select:none}
-.cnode:hover{border-color:var(--gold);color:var(--text)}
-.cnode.sel{border-color:var(--gold);background:rgba(201,168,76,.1);color:var(--gold)}
-.cnode.linked{border-color:var(--red);background:rgba(192,57,43,.1);color:var(--red2)}
-.linklist{margin-top:.85rem}
-.linkitem{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--bg3);border-radius:4px;margin-bottom:4px;font-size:.75rem;color:var(--text2);border:1px solid var(--border)}
-.linkdel{background:transparent;border:none;color:var(--text3);margin-left:auto;font-size:.85rem;padding:0 3px}
-.linkdel:hover{color:var(--red)}
-.rep-box{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.2rem;margin-bottom:1.3rem}
-.rep-bar-wrap{background:var(--bg3);border-radius:20px;height:9px;overflow:hidden;margin-bottom:.35rem}
-.rep-bar{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:20px;transition:width .8s ease}
-.rep-bdg{background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:4px 10px;font-size:.7rem;color:var(--text2);display:inline-block;margin:3px}
-.rep-bdg.earned{border-color:var(--gold);color:var(--gold)}
-.accbox{background:var(--bg2);border:2px solid var(--red);border-radius:4px;padding:1.6rem;text-align:center;margin-bottom:1.3rem}
-.accbox h3{font-size:1.25rem;color:var(--red);margin-bottom:.3rem}
-.acc-sus{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;margin-top:1rem}
-.accbtn{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:.6rem 1.2rem;border-radius:4px;font-size:.83rem;display:flex;align-items:center;gap:.6rem}
-.accbtn:hover{border-color:var(--red);background:rgba(192,57,43,.1);transform:scale(1.03)}
-.accbtn img{width:26px;height:26px;border-radius:50%;object-fit:cover;filter:grayscale(.3)}
-.evrow{display:flex;justify-content:space-between;padding:.42rem 0;border-bottom:1px solid var(--border);font-size:.81rem}
-.evrow:last-child{border:none;font-size:.92rem;font-weight:700;color:var(--gold)}
-#s-verdict{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;padding:2rem;text-align:center;position:relative;z-index:5}
-.vbadge{font-size:5rem;margin-bottom:.85rem;animation:pop .5s ease}
-@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
-.vtitle{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;margin-bottom:.4rem}
-.vtitle.win{color:var(--gold)}
-.vtitle.lose{color:var(--red)}
-.vsub{color:var(--text2);font-size:.92rem;margin-bottom:1.3rem;max-width:480px;line-height:1.7;font-style:italic}
-.rankbadge{font-size:1rem;padding:.5rem 1.5rem;background:var(--bg3);border:1px solid var(--gold);color:var(--gold);border-radius:4px;margin-bottom:1.3rem;letter-spacing:.12em}
-.scorecard{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.5rem;max-width:350px;width:100%;margin:0 auto 1.3rem}
-.srow{display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
-.srow:last-child{border:none;font-size:.92rem;font-weight:700;color:var(--gold)}
-.solbox{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;max-width:560px;margin:0 auto 1.3rem;text-align:left;font-size:.79rem;color:var(--text2);line-height:1.7;font-style:italic}
-.btn-play{background:var(--red);color:#fff;padding:.78rem 2.2rem;border-radius:2px;font-size:.92rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.btn-play:hover{background:var(--red2)}
-.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:1000;align-items:center;justify-content:center}
+
+/* INDICES */
+.indcard{background:var(--paper);border:1px solid var(--paper3);padding:.95rem;display:flex;gap:.85rem;margin-bottom:.85rem;position:relative;border-left:4px solid var(--red)}
+.ind-evnum{position:absolute;top:-8px;left:12px;background:var(--red);color:var(--paper);font-size:.5rem;padding:2px 8px;letter-spacing:.2em;font-family:'Special Elite',serif}
+.indicon{width:40px;height:40px;background:var(--paper2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;border:1px solid var(--paper3)}
+.indt{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:3px;font-weight:700}
+.indtxt{font-size:.82rem;color:var(--ink);line-height:1.5;margin-bottom:4px;font-family:'IM Fell English',serif}
+.indlink{font-size:.7rem;color:var(--gold);font-style:italic;font-family:'IM Fell English',serif}
+.newb{background:var(--red);color:var(--paper);font-size:.52rem;padding:2px 5px;margin-left:5px;vertical-align:middle;letter-spacing:.1em;font-family:'Special Elite',serif}
+
+/* CARNET */
+.carnet-tabs{display:flex;border-bottom:2px solid var(--border2);margin-bottom:1.25rem}
+.carnet-tab{background:transparent;border:none;border-bottom:3px solid transparent;padding:.6rem 1.25rem;color:var(--text3);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;font-family:'Special Elite',serif;margin-bottom:-2px}
+.carnet-tab:hover{color:var(--paper)}
+.carnet-tab.active{border-bottom-color:var(--red2);color:var(--gold2)}
+.carnet-content{display:none}
+.carnet-content.active{display:block}
+.notes-area{width:100%;min-height:200px;background:transparent;border:none;color:var(--text);font-size:.82rem;line-height:2;resize:vertical;outline:none;font-family:'IM Fell English',serif;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(139,105,20,.15) 31px,rgba(139,105,20,.15) 32px);padding:0 .5rem}
+.suspects-table{width:100%;border-collapse:collapse}
+.suspects-table th{font-family:'Special Elite',serif;font-size:.6rem;letter-spacing:.2em;color:var(--red);text-transform:uppercase;padding:.5rem .75rem;border-bottom:2px solid var(--border2);text-align:left;background:var(--bg2)}
+.suspects-table td{padding:.6rem .75rem;border-bottom:1px solid var(--border);font-size:.78rem;vertical-align:middle}
+.suspects-table tr:hover td{background:rgba(139,26,26,.05)}
+.suspicion-stars{display:flex;gap:3px}
+.star{font-size:1rem;cursor:pointer;color:var(--border2);transition:color .15s}
+.star.active{color:var(--gold2)}
+.star:hover{color:var(--gold3)}
+.suspect-note-input{background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);font-size:.72rem;font-family:'IM Fell English',serif;width:100%;outline:none;padding:2px 0;font-style:italic}
+.progress-section{margin-bottom:1.5rem}
+.progress-title{font-family:'Special Elite',serif;font-size:.7rem;letter-spacing:.2em;color:var(--gold2);text-transform:uppercase;margin-bottom:.85rem;padding-bottom:.4rem;border-bottom:1px solid var(--border2)}
+.progress-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.78rem}
+.progress-item-label{color:var(--text2);display:flex;align-items:center;gap:.5rem}
+.progress-item-val{font-family:'Special Elite',serif;color:var(--gold2)}
+.progress-item-val.complete{color:#27ae60}
+.progress-bar-wrap{background:var(--border);height:8px;margin:1rem 0 .5rem;position:relative;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--red),var(--gold2));transition:width 1s ease;position:relative}
+.progress-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1));animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.progress-pct{font-family:'Special Elite',serif;font-size:1.2rem;color:var(--gold2);text-align:center}
+.progress-msg{font-family:'IM Fell English',serif;font-size:.82rem;color:var(--text2);text-align:center;font-style:italic;margin-top:.5rem;padding:.75rem;border:1px solid var(--border2)}
+
+/* RÉPUTATION */
+.rep-card{background:var(--paper);border:1px solid var(--paper3);padding:1.25rem;margin-bottom:1.25rem;position:relative}
+.rep-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold2),var(--red))}
+.rep-rank-title{font-family:'Special Elite',serif;font-size:1.3rem;color:var(--red);letter-spacing:.08em;margin-bottom:.25rem}
+.rep-xp{font-size:.75rem;color:var(--ink2);margin-bottom:.85rem;font-family:'IM Fell English',serif;font-style:italic}
+.rep-bar-wrap{background:var(--paper2);height:10px;margin-bottom:.35rem;overflow:hidden;border:1px solid var(--paper3)}
+.rep-bar{height:100%;background:linear-gradient(90deg,var(--red),var(--gold2));transition:width .8s ease}
+.rep-badges{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.rep-badge{background:var(--paper2);border:1px solid var(--paper3);padding:4px 10px;font-size:.65rem;color:var(--ink2);font-family:'Special Elite',serif;letter-spacing:.1em}
+.rep-badge.earned{border-color:var(--gold);color:var(--gold);background:rgba(139,105,20,.1)}
+.rep-hist{margin-top:.85rem}
+.rep-hist-item{display:flex;justify-content:space-between;padding:.38rem 0;border-bottom:1px solid var(--paper3);font-size:.75rem;font-family:'IM Fell English',serif}
+
+/* ACCUSATION */
+.accbox{background:var(--paper);border:3px solid var(--red);padding:1.75rem;text-align:center;margin-bottom:1.25rem;position:relative}
+.accbox::before{content:'⚠ IRRÉVERSIBLE ⚠';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--red);color:var(--paper);font-size:.55rem;padding:2px 12px;letter-spacing:.25em;font-family:'Special Elite',serif}
+.accbox h3{font-family:'Special Elite',serif;font-size:1.4rem;color:var(--red);margin-bottom:.35rem;letter-spacing:.08em}
+.accbox p{font-size:.78rem;color:var(--ink2);font-family:'IM Fell English',serif;font-style:italic}
+.acc-sus{display:flex;flex-wrap:wrap;gap:.85rem;justify-content:center;margin-top:1.25rem}
+.accbtn{background:var(--paper2);border:2px solid var(--paper3);color:var(--ink);padding:.65rem 1.25rem;font-size:.78rem;display:flex;align-items:center;gap:.65rem;font-family:'Courier Prime',monospace;transition:all .3s}
+.accbtn:hover{border-color:var(--red2);background:rgba(139,26,26,.1);transform:scale(1.03)}
+.accbtn img{width:28px;height:28px;object-fit:cover;filter:grayscale(.5) sepia(.3);border:2px solid var(--paper3)}
+.ev-table{background:var(--paper);border:1px solid var(--paper3);width:100%}
+.ev-row{display:flex;justify-content:space-between;padding:.45rem 1rem;border-bottom:1px solid var(--paper3);font-size:.78rem;font-family:'IM Fell English',serif}
+.ev-row:last-child{border:none;font-weight:700;color:var(--red);font-family:'Special Elite',serif;font-size:.9rem}
+.ev-row span:first-child{color:var(--ink2)}
+.ev-row span:last-child{color:var(--ink)}
+
+/* VERDICT */
+#s-verdict{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;padding:2rem;text-align:center;position:relative;z-index:5;background:var(--bg)}
+.verdict-stamp{font-family:'Special Elite',serif;font-size:clamp(2.5rem,8vw,5rem);font-weight:900;letter-spacing:.15em;margin-bottom:1rem;animation:stampIn .5s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes stampIn{0%{transform:scale(2);opacity:0}100%{transform:scale(1);opacity:1}}
+.verdict-stamp.win{color:var(--gold2);text-shadow:0 0 20px rgba(201,168,76,.4);-webkit-text-stroke:2px rgba(201,168,76,.3)}
+.verdict-stamp.lose{color:var(--red2);text-shadow:0 0 20px rgba(192,57,43,.4);-webkit-text-stroke:2px rgba(192,57,43,.3)}
+.verdict-dossier{background:var(--paper);border:3px solid var(--paper3);max-width:520px;width:100%;margin:1rem auto;padding:2rem;position:relative;box-shadow:4px 4px 15px rgba(0,0,0,.4)}
+.verdict-dossier::before{content:'DOSSIER CLASSÉ';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--red);color:var(--paper);font-size:.55rem;padding:3px 14px;letter-spacing:.25em;font-family:'Special Elite',serif}
+.verdict-sub{font-family:'IM Fell English',serif;font-size:.88rem;color:var(--ink2);margin-bottom:1rem;line-height:1.7;font-style:italic}
+.verdict-solution{background:var(--paper2);border-left:3px solid var(--red);padding:.85rem;font-size:.78rem;color:var(--ink);line-height:1.7;font-family:'IM Fell English',serif;font-style:italic;text-align:left;margin:1rem 0}
+.score-rows{margin:1rem 0}
+.score-row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--paper3);font-size:.8rem;font-family:'IM Fell English',serif}
+.score-row:last-child{border:none;font-weight:700;font-family:'Special Elite',serif;color:var(--red)}
+.rank-seal{display:inline-block;border:3px solid var(--gold2);color:var(--gold2);font-family:'Special Elite',serif;font-size:.9rem;padding:.6rem 1.5rem;letter-spacing:.15em;margin:1rem 0}
+.btn-replay{background:var(--red);color:var(--paper);padding:.8rem 2.5rem;font-family:'Special Elite',serif;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;border:2px solid var(--red2)}
+.btn-replay:hover{background:var(--red2)}
+
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(5,4,2,.93);z-index:1000;align-items:center;justify-content:center}
 .modal-ov.open{display:flex}
-.mbox{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.5rem;max-width:480px;width:90%;position:relative}
-.mclose{position:absolute;top:.85rem;right:.85rem;background:transparent;border:1px solid var(--border2);color:var(--text2);width:26px;height:26px;border-radius:50%;font-size:.82rem}
-.mclose:hover{border-color:var(--text);color:var(--text)}
-.mimg{width:100%;height:180px;object-fit:cover;border-radius:2px;margin-bottom:.85rem;filter:grayscale(.3) brightness(.75)}
-.mclue{background:rgba(192,57,43,.1);border:1px solid var(--red);border-radius:4px;padding:.6rem;margin-top:.8rem;font-size:.8rem;color:var(--red2)}
-@media(max-width:650px){.sidebar{display:none}.dgrid{grid-template-columns:1fr}.sgrid{grid-template-columns:1fr}}
+.modal-box{background:var(--paper);border:3px solid var(--paper3);max-width:500px;width:90%;padding:1.75rem;position:relative;box-shadow:4px 4px 20px rgba(0,0,0,.6)}
+.modal-box::before{content:'PREUVE PHOTOGRAPHIQUE';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--red);color:var(--paper);font-size:.52rem;padding:3px 12px;letter-spacing:.2em;font-family:'Special Elite',serif}
+.modal-close{position:absolute;top:.75rem;right:.75rem;background:transparent;border:1px solid var(--paper3);color:var(--ink2);width:26px;height:26px;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{border-color:var(--red2);color:var(--red2)}
+.modal-img{width:100%;height:185px;object-fit:cover;margin-bottom:.85rem;filter:grayscale(.4) sepia(.3) brightness(.8);border:3px solid var(--paper3)}
+.modal-title{font-family:'Special Elite',serif;font-size:1rem;color:var(--red);margin-bottom:.65rem;letter-spacing:.05em}
+.modal-desc{font-size:.8rem;color:var(--ink2);line-height:1.7;font-family:'IM Fell English',serif;font-style:italic}
+.modal-clue{background:var(--paper2);border-left:3px solid var(--gold);padding:.65rem;margin-top:.85rem;font-size:.78rem;color:var(--ink);font-family:'IM Fell English',serif}
+.modal-clue::before{content:'🔍 ANALYSE : ';font-family:'Special Elite',serif;font-size:.6rem;letter-spacing:.15em;color:var(--red)}
+
+@media(max-width:650px){.sidebar{display:none}.dossier-grid{grid-template-columns:1fr}.sgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="fx"></div>
+
+<!-- INTRO -->
 <div id="s-intro">
-  <div class="ibg"></div>
-  <div class="drip" style="left:48%;animation-duration:4s"></div>
-  <div class="drip" style="left:27%;animation-duration:5.5s;animation-delay:1.3s;width:2px"></div>
-  <div class="drip" style="left:70%;animation-duration:3.7s;animation-delay:.6s;width:2px"></div>
-  <div class="iz">
-    <div class="logo">MORTIS</div>
-    <div class="logo-sub">L'Enquête Commence</div>
-    <p class="tagline">Cinq affaires non résolues vous attendent.<br>Des suspects qui mentent. Des indices cachés.<br>Saurez-vous trouver le coupable, Inspecteur ?</p>
-    <button class="btn-cta" onclick="showCases()">Choisir une affaire</button>
-    <p class="intro-note">5 AFFAIRES · INTERROGATOIRES IA · CARTE INTERACTIVE</p>
+  <div class="intro-bg"></div>
+  <div class="drip" style="left:45%;animation-duration:4s"></div>
+  <div class="drip" style="left:25%;animation-duration:5.5s;animation-delay:1.2s;width:2px"></div>
+  <div class="drip" style="left:68%;animation-duration:3.8s;animation-delay:.7s;width:2px"></div>
+  <div class="stamp-intro">CONFIDENTIEL</div>
+  <div class="intro-z">
+    <div class="logo-wrap">
+      <div class="logo">MORTIS</div>
+    </div>
+    <div class="logo-sub">Bureau des Affaires Non Résolues</div>
+    <div class="logo-line"></div>
+    <p class="tagline">Vingt affaires classées. Des coupables qui dorment tranquilles.<br>L'enquête commence maintenant, Inspecteur.</p>
+    <button class="btn-start" onclick="showCases()">Ouvrir un dossier</button>
+    <p class="intro-meta">20 AFFAIRES · DOSSIERS COMPLETS · INTERROGATOIRES · SANS INSCRIPTION</p>
   </div>
 </div>
+
+<!-- CAS -->
 <div id="s-cases">
-  <div class="sh"><h2>Choisir une affaire</h2><p>Chaque enquête est unique. Choisissez avec soin.</p></div>
+  <div class="cases-header">
+    <h2>— Archives Criminelles —</h2>
+    <p>Sélectionnez une affaire. Chaque dossier est unique.</p>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCases('all',this)">Toutes</button>
+    <button class="filter-btn" onclick="filterCases('Facile',this)">Facile</button>
+    <button class="filter-btn" onclick="filterCases('Moyen',this)">Moyen</button>
+    <button class="filter-btn" onclick="filterCases('Difficile',this)">Difficile</button>
+    <button class="filter-btn" onclick="filterCases('Expert',this)">Expert</button>
+  </div>
   <div class="cases-grid" id="cases-grid"></div>
   <div style="text-align:center;margin:2rem 0"><button class="tb-btn" onclick="showIntro()">← Retour</button></div>
 </div>
+
+<!-- JEU -->
 <div id="s-game" style="display:none;flex-direction:column;height:100vh">
   <div class="topbar">
-    <div><div class="tb-logo">MORTIS</div><div style="font-size:.7rem;color:var(--text2)" id="tb-case"></div></div>
+    <div><div class="tb-logo">MORTIS</div><div class="tb-case" id="tb-case"></div></div>
     <div class="tb-right">
-      <span style="font-size:.8rem;color:var(--text2)">Score : <b style="color:var(--gold)" id="score-el">1000</b></span>
+      <div class="score-display">Score<span id="score-el">1000</span></div>
       <div class="timer" id="timer">20:00</div>
       <button class="tb-btn" id="music-btn" onclick="toggleMusic()">♪ OFF</button>
-      <button class="tb-btn" onclick="showCases()">Quitter</button>
+      <button class="tb-btn" onclick="showCases()">Fermer</button>
     </div>
   </div>
   <div class="game-layout">
     <div class="sidebar">
-      <nav style="display:flex;flex-direction:column;padding:.6rem 0">
-        <button class="nav-btn active" onclick="showPanel('dossier',this)">📁 Dossier</button>
-        <button class="nav-btn" onclick="showPanel('carte',this)">🗺️ Carte</button>
-        <button class="nav-btn" onclick="showPanel('suspects',this)">👤 Suspects <span class="nbadge" id="nb-sus">4</span></button>
-        <button class="nav-btn" onclick="showPanel('interro',this)">💬 Interrogatoire</button>
-        <button class="nav-btn" onclick="showPanel('indices',this)">🔍 Indices <span class="nbadge" id="nb-ind">0</span></button>
-        <button class="nav-btn" onclick="showPanel('carnet',this)">📝 Carnet</button>
-        <button class="nav-btn" onclick="showPanel('reputation',this)">🏅 Réputation</button>
-        <button class="nav-btn" onclick="showPanel('accusation',this)" style="color:var(--red)">⚖️ Accuser</button>
+      <div class="sidebar-title">Navigation</div>
+      <nav style="display:flex;flex-direction:column">
+        <button class="nav-btn active" onclick="showPanel('dossier',this)"><span class="nav-icon">📁</span>Dossier</button>
+        <button class="nav-btn" onclick="showPanel('carte',this)"><span class="nav-icon">🗺️</span>Carte</button>
+        <button class="nav-btn" onclick="showPanel('suspects',this)"><span class="nav-icon">👤</span>Suspects <span class="nbadge" id="nb-sus">4</span></button>
+        <button class="nav-btn" onclick="showPanel('interro',this)"><span class="nav-icon">💬</span>Interrogatoire</button>
+        <button class="nav-btn" onclick="showPanel('indices',this)"><span class="nav-icon">🔍</span>Indices <span class="nbadge" id="nb-ind">0</span></button>
+        <button class="nav-btn" onclick="showPanel('carnet',this)"><span class="nav-icon">📝</span>Carnet</button>
+        <button class="nav-btn" onclick="showPanel('reputation',this)"><span class="nav-icon">🏅</span>Réputation</button>
+        <button class="nav-btn" onclick="showPanel('accusation',this)" style="color:var(--red2);margin-top:auto"><span class="nav-icon">⚖️</span>Accuser</button>
       </nav>
-      <div class="sb-foot">
-        <div style="font-size:.6rem;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem">Suspects</div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap" id="sb-suspects"></div>
+      <div class="sb-suspects">
+        <div class="sb-suspects-title">Suspects</div>
+        <div class="smini-row" id="sb-suspects"></div>
       </div>
     </div>
     <div class="main-area">
+
+      <!-- DOSSIER -->
       <div class="panel active" id="panel-dossier">
-        <div class="ptitle">📁 Dossier Criminel <span id="dnum" style="font-size:.9rem;color:var(--text3)"></span></div>
-        <div class="dgrid">
-          <div class="dcard"><h3>Identité victime</h3><div class="vphoto" id="vphoto"></div><div class="fl">Nom</div><div class="fv" id="f-nom"></div><div class="fl">Âge</div><div class="fv" id="f-age"></div><div class="fl">Profession</div><div class="fv" id="f-prof"></div><div class="fl">Lieu découverte</div><div class="fv" id="f-lieu"></div><div class="stamp">DÉCÉDÉ</div></div>
-          <div class="dcard"><h3>Rapport d'autopsie — Confidentiel</h3><div class="fl">Cause du décès</div><div class="fv" id="f-cause"></div><div class="fl">Heure estimée</div><div class="fv" id="f-heure"></div><div class="fl">Observations</div><div class="rbox" id="f-rapport"></div></div>
+        <div class="dossier-header">
+          <div class="dossier-title">📁 Dossier Criminel <span id="dnum" style="font-size:.9rem;color:var(--text3)"></span></div>
+          <div class="dossier-stamp" id="dossier-stamp">CONFIDENTIEL</div>
         </div>
-        <div class="dcard"><h3>Photos scène de crime <span style="color:var(--text3);font-weight:400;font-size:.68rem">(cliquez pour analyser)</span></h3><div class="csphotos" id="csphotos"></div></div>
-        <div class="dcard" style="margin-top:1.3rem"><h3>Résumé de l'affaire</h3><div class="rbox" id="f-resume"></div></div>
+        <div class="dossier-grid">
+          <div class="dcard"><h3>Identité de la victime</h3><div class="vphoto" id="vphoto"></div><div class="fl">Nom complet</div><div class="fv" id="f-nom"></div><div class="fl">Âge</div><div class="fv" id="f-age"></div><div class="fl">Profession</div><div class="fv" id="f-prof"></div><div class="fl">Lieu de découverte</div><div class="fv" id="f-lieu"></div></div>
+          <div class="dcard"><h3>Rapport d'autopsie — Dr. Moreau</h3><div class="fl">Cause du décès</div><div class="fv" id="f-cause"></div><div class="fl">Heure estimée du décès</div><div class="fv" id="f-heure"></div><div class="fl">Observations médico-légales</div><div class="rbox" id="f-rapport"></div></div>
+        </div>
+        <div class="dcard"><h3>Photographies de la scène de crime <span style="font-family:'IM Fell English',serif;font-weight:400;font-size:.75rem;color:var(--ink2)">(cliquez pour analyser)</span></h3><div class="csphotos" id="csphotos"></div></div>
+        <div class="dcard" style="margin-top:1.25rem"><h3>Résumé de l'affaire</h3><div class="rbox" id="f-resume"></div></div>
       </div>
+
+      <!-- CARTE -->
       <div class="panel" id="panel-carte">
-        <div class="ptitle">🗺️ Carte du Lieu</div>
-        <div class="mapwrap"><svg class="mapsvg" id="mapsvg" viewBox="0 0 800 440"></svg><div class="mapleg"><span><span class="legdot" style="background:var(--red)"></span>Crime</span><span><span class="legdot" style="background:var(--gold)"></span>Indice</span><span><span class="legdot" style="background:var(--text3)"></span>Inexploré</span></div></div>
-        <div id="room-detail"><div class="dcard"><h3 id="rd-name"></h3><p id="rd-desc" style="font-size:.8rem;color:var(--text2);line-height:1.7;margin-bottom:.85rem"></p><div id="rd-clues"></div></div></div>
+        <div class="dossier-header"><div class="dossier-title">🗺️ Plan des Lieux</div></div>
+        <div class="map-container"><svg class="map-svg" id="mapsvg" viewBox="0 0 800 430"></svg><div class="map-legend"><span><span class="legdot" style="background:var(--red2)"></span>Scène de crime</span><span><span class="legdot" style="background:var(--gold2)"></span>Indice trouvé</span><span><span class="legdot" style="background:var(--text3)"></span>Non exploré</span></div></div>
+        <div id="room-detail"><div class="dcard" style="margin-top:1.25rem"><h3 id="rd-name"></h3><p id="rd-desc" style="font-size:.8rem;color:var(--ink2);line-height:1.7;margin-bottom:.85rem;font-family:'IM Fell English',serif;font-style:italic"></p><div id="rd-clues"></div></div></div>
       </div>
-      <div class="panel" id="panel-suspects"><div class="ptitle">👤 Fichier Suspects</div><div class="sgrid" id="sgrid"></div></div>
+
+      <!-- SUSPECTS -->
+      <div class="panel" id="panel-suspects">
+        <div class="dossier-header"><div class="dossier-title">👤 Fichier des Suspects</div><div class="dossier-stamp">SUSPECTS</div></div>
+        <div class="sgrid" id="sgrid"></div>
+      </div>
+
+      <!-- INTERROGATOIRE -->
       <div class="panel" id="panel-interro">
-        <div class="ptitle">💬 Salle d'Interrogatoire</div>
+        <div class="dossier-header"><div class="dossier-title">💬 Salle d'Interrogatoire</div></div>
         <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem" id="i-btns"></div>
-        <div class="iroom" id="iroom" style="display:none">
-          <div class="ihead"><div class="iavatar" id="iavatar"></div><div><div style="font-size:.98rem;font-weight:700" id="iname"></div><div style="font-size:.68rem;color:var(--text3);margin-top:2px">En cours d'interrogatoire</div></div></div>
+        <div class="interro-room" id="iroom" style="display:none">
+          <div class="interro-head"><div class="interro-av" id="iavatar"></div><div><div class="interro-name" id="iname"></div><div class="interro-status">En cours d'interrogatoire • Enregistrement actif</div></div></div>
           <div class="chat" id="chat"></div>
-          <div class="qq" id="qq"></div>
-          <div class="cinput-row"><input class="cinput" id="cinput" placeholder="Posez une question..." onkeydown="if(event.key==='Enter')sendMsg()"><button class="csend" id="csend" onclick="sendMsg()">Envoyer</button></div>
+          <div class="qq" id="qq"><div class="qq-label">Questions rapides :</div></div>
+          <div class="cinput-row"><input class="cinput" id="cinput" placeholder="Votre question..." onkeydown="if(event.key==='Enter')sendMsg()"><button class="csend" onclick="sendMsg()">Envoyer</button></div>
         </div>
-        <div id="i-ph" style="color:var(--text3);font-size:.84rem;padding:1.5rem;text-align:center">Sélectionnez un suspect ci-dessus.</div>
+        <div id="i-ph" style="color:var(--text3);font-size:.82rem;padding:2rem;text-align:center;font-family:'IM Fell English',serif;font-style:italic">Sélectionnez un suspect ci-dessus pour l'interroger.</div>
       </div>
+
+      <!-- INDICES -->
       <div class="panel" id="panel-indices">
-        <div class="ptitle">🔍 Indices Collectés</div>
-        <div id="ind-empty" style="color:var(--text3);font-size:.84rem;padding:1.5rem;text-align:center">Aucun indice. Explorez la carte et analysez les photos.</div>
+        <div class="dossier-header"><div class="dossier-title">🔍 Pièces à Conviction</div></div>
+        <div id="ind-empty" style="color:var(--text3);font-size:.82rem;padding:2rem;text-align:center;font-family:'IM Fell English',serif;font-style:italic">Aucune pièce à conviction. Explorez la carte et analysez les photographies.</div>
         <div id="ind-list"></div>
       </div>
+
+      <!-- CARNET -->
       <div class="panel" id="panel-carnet">
-        <div class="ptitle">📝 Carnet du Détective</div>
-        <textarea class="notes" id="notes" placeholder="Vos notes, théories, hypothèses..."></textarea>
-        <div class="connboard">
-          <h3 style="font-size:.8rem;color:var(--gold);margin-bottom:.25rem">🔗 Tableau de connexions</h3>
-          <p style="font-size:.71rem;color:var(--text3);margin-bottom:.85rem">Cliquez deux nœuds pour les relier.</p>
-          <div class="canvaswrap"><canvas id="conncanvas"></canvas><div id="connnodes"></div></div>
-          <div class="linklist" id="linklist"></div>
+        <div class="dossier-header"><div class="dossier-title">📝 Carnet du Détective</div></div>
+        <div class="carnet-tabs">
+          <button class="carnet-tab active" onclick="showCarnetTab('notes',this)">📌 Notes</button>
+          <button class="carnet-tab" onclick="showCarnetTab('tableau',this)">🔗 Suspects</button>
+          <button class="carnet-tab" onclick="showCarnetTab('progress',this)">📊 Progression</button>
+        </div>
+        <div class="carnet-content active" id="carnet-notes">
+          <textarea class="notes-area" id="notes" placeholder="Vos notes, théories, hypothèses...&#10;&#10;Qui vous semble le plus suspect ? Pourquoi ?&#10;Quels indices correspondent ?"></textarea>
+        </div>
+        <div class="carnet-content" id="carnet-tableau">
+          <table class="suspects-table" id="suspects-table">
+            <thead><tr><th>Suspect</th><th>Interrogé</th><th>Suspicion</th><th>Note rapide</th></tr></thead>
+            <tbody id="suspects-tbody"></tbody>
+          </table>
+        </div>
+        <div class="carnet-content" id="carnet-progress">
+          <div class="progress-section">
+            <div class="progress-title">Progression de l'enquête</div>
+            <div id="progress-items"></div>
+            <div class="progress-bar-wrap"><div class="rep-bar" id="enquete-bar" style="width:0%"></div></div>
+            <div class="progress-pct" id="progress-pct">0%</div>
+            <div class="progress-msg" id="progress-msg">Commencez par analyser les photographies de la scène de crime.</div>
+          </div>
         </div>
       </div>
+
+      <!-- RÉPUTATION -->
       <div class="panel" id="panel-reputation">
-        <div class="ptitle">🏅 Réputation de Détective</div>
-        <div class="rep-box">
-          <h3 style="font-size:.82rem;color:var(--gold);margin-bottom:.9rem">Progression</h3>
-          <div style="display:flex;justify-content:space-between;margin-bottom:.35rem;font-size:.8rem"><span id="rep-rank" style="color:var(--gold)">Apprenti</span><span id="rep-xp" style="color:var(--text2)">0 XP</span></div>
+        <div class="dossier-header"><div class="dossier-title">🏅 Dossier de l'Inspecteur</div></div>
+        <div class="rep-card">
+          <div class="rep-rank-title" id="rep-rank">Apprenti Détective</div>
+          <div class="rep-xp" id="rep-xp">0 points d'expérience</div>
           <div class="rep-bar-wrap"><div class="rep-bar" id="rep-bar" style="width:0%"></div></div>
-          <div style="font-size:.68rem;color:var(--text3);display:flex;justify-content:space-between;margin-top:.3rem"><span>0</span><span>500 → Inspecteur</span><span>1500 → Commissaire</span></div>
-          <div style="margin-top:.9rem" id="rep-badges"></div>
+          <div style="font-size:.65rem;color:var(--ink2);display:flex;justify-content:space-between;margin-top:.3rem;font-family:'Special Elite',serif"><span>Apprenti</span><span>500 XP → Inspecteur</span><span>1500 XP → Commissaire</span></div>
+          <div class="rep-badges" id="rep-badges"></div>
         </div>
-        <div class="dcard"><h3>Historique</h3><div id="rep-hist" style="font-size:.8rem;color:var(--text2)">Aucune affaire résolue.</div></div>
+        <div class="dcard"><h3>Historique des affaires</h3><div class="rep-hist" id="rep-hist"><p style="font-size:.78rem;color:var(--ink2);font-style:italic;font-family:'IM Fell English',serif">Aucune affaire résolue pour le moment.</p></div></div>
       </div>
+
+      <!-- ACCUSATION -->
       <div class="panel" id="panel-accusation">
-        <div class="ptitle">⚖️ Accusation Finale</div>
-        <div class="accbox"><h3>Qui est le coupable ?</h3><p style="color:var(--text2);font-size:.84rem;margin-top:.25rem">Action irréversible. Êtes-vous certain(e) ?</p><div class="acc-sus" id="acc-sus"></div></div>
-        <div class="dcard"><h3 style="margin-bottom:.9rem">Résumé de vos preuves</h3>
-          <div class="evrow"><span style="color:var(--text2)">Indices collectés</span><span id="ev-ind">0</span></div>
-          <div class="evrow"><span style="color:var(--text2)">Suspects interrogés</span><span id="ev-int">0</span></div>
-          <div class="evrow"><span style="color:var(--text2)">Connexions établies</span><span id="ev-conn">0</span></div>
-          <div class="evrow"><span style="color:var(--text2)">Temps restant</span><span id="ev-t">—</span></div>
-          <div class="evrow"><span>Score actuel</span><span id="ev-s">—</span></div>
+        <div class="dossier-header"><div class="dossier-title">⚖️ Accusation Finale</div><div class="dossier-stamp">DÉCISION</div></div>
+        <div class="accbox"><h3>Qui est le coupable ?</h3><p>Cette décision est irréversible. Assurez-vous d'avoir suffisamment de preuves.</p><div class="acc-sus" id="acc-sus"></div></div>
+        <div class="dcard"><h3>Résumé de vos preuves</h3>
+          <div class="ev-table">
+            <div class="ev-row"><span>Photographies analysées</span><span id="ev-photos">0</span></div>
+            <div class="ev-row"><span>Indices collectés</span><span id="ev-ind">0</span></div>
+            <div class="ev-row"><span>Suspects interrogés</span><span id="ev-int">0</span></div>
+            <div class="ev-row"><span>Pièces explorées</span><span id="ev-pieces">0</span></div>
+            <div class="ev-row"><span>Temps restant</span><span id="ev-t">—</span></div>
+            <div class="ev-row"><span>Score actuel</span><span id="ev-s">—</span></div>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
+
+<!-- VERDICT -->
 <div id="s-verdict" style="display:none">
-  <div class="vbadge" id="vbadge"></div>
-  <div class="vtitle" id="vtitle"></div>
-  <p class="vsub" id="vsub"></p>
-  <div class="rankbadge" id="vrank"></div>
-  <div class="scorecard" id="vscorecard"></div>
-  <div class="solbox" id="vsolbox"></div>
-  <button class="btn-play" onclick="showCases()">Nouvelle affaire</button>
+  <div class="verdict-stamp win" id="verdict-stamp">RÉSOLU</div>
+  <div class="verdict-dossier">
+    <p class="verdict-sub" id="verdict-sub"></p>
+    <div class="verdict-solution" id="verdict-solution"></div>
+    <div class="score-rows" id="score-rows"></div>
+    <div class="rank-seal" id="rank-seal">Apprenti Détective</div>
+  </div>
+  <button class="btn-replay" onclick="showCases()">Nouvelle affaire</button>
 </div>
+
+<!-- MODAL -->
 <div class="modal-ov" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="mbox"><button class="mclose" onclick="closeModal()">✕</button><div id="m-img-area"></div><h3 id="m-title" style="margin-bottom:.6rem;font-size:.98rem"></h3><p id="m-desc" style="font-size:.81rem;color:var(--text2);line-height:1.7;font-style:italic"></p><div class="mclue" id="m-clue" style="display:none">🔍 <span id="m-clue-txt"></span></div></div>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="m-img-area"></div>
+    <div class="modal-title" id="m-title"></div>
+    <p class="modal-desc" id="m-desc"></p>
+    <div class="modal-clue" id="m-clue" style="display:none"><span id="m-clue-txt"></span></div>
+  </div>
 </div>
 
 <script>
-// ══ IMAGES ══
-const CRIME_IMGS=['https://images.unsplash.com/photo-1453873531674-2151bcd01707?w=400&q=50','https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=400&q=50','https://images.unsplash.com/photo-1590765151624-efec41b69695?w=400&q=50','https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&q=50','https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=50','https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=400&q=50'];
-const CASE_IMGS=['https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=60','https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=600&q=60','https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=600&q=60','https://images.unsplash.com/photo-1464146072230-91cabc968266?w=600&q=60','https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&q=60'];
-const SUSP_IMGS=['https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=60','https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=60','https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=60','https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=60','https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=200&q=60','https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=60'];
-const VICTIM_IMG='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=60';
+// ══ DONNÉES ══
+const CASE_IMGS=[
+  '/images/cases/case-01-hotel.jpg','/images/cases/case-02-musee.jpg','/images/cases/case-03-yacht.jpg',
+  '/images/cases/case-04-manoir.jpg','/images/cases/case-05-labo.jpg','/images/cases/case-06-casino.jpg',
+  '/images/cases/case-07-chateau.jpg','/images/cases/case-08-train.jpg','/images/cases/case-09-galerie.jpg',
+  '/images/cases/case-10-villa.jpg','/images/cases/case-11-universite.jpg','/images/cases/case-12-restaurant.jpg',
+  '/images/cases/case-13-opera.jpg','/images/cases/case-14-ile.jpg','/images/cases/case-15-ambassade.jpg',
+  '/images/cases/case-16-sousmarin.jpg','/images/cases/case-17-ski.jpg','/images/cases/case-18-cathedrale.jpg',
+  '/images/cases/case-19-espace.jpg','/images/cases/case-20-tribunal.jpg'
+];
+const CRIME_IMGS=[
+  '/images/crimes/crime-verre.jpg','/images/crimes/crime-porte.jpg','/images/crimes/crime-couteau.jpg',
+  '/images/crimes/crime-fenetre.jpg','/images/crimes/crime-seringue.jpg','/images/crimes/crime-documents.jpg',
+  '/images/crimes/crime-collier.jpg','/images/crimes/crime-lettre.jpg','/images/crimes/crime-camera.jpg',
+  '/images/crimes/crime-corde.jpg'
+];
+const SUSP_IMGS=[
+  '/images/suspects/suspect-homme-01.jpg','/images/suspects/suspect-femme-01.jpg',
+  '/images/suspects/suspect-homme-02.jpg','/images/suspects/suspect-femme-02.jpg',
+  '/images/suspects/suspect-homme-03.jpg','/images/suspects/suspect-femme-03.jpg',
+  '/images/suspects/suspect-homme-04.jpg','/images/suspects/suspect-femme-04.jpg',
+  '/images/suspects/suspect-homme-05.jpg','/images/suspects/suspect-femme-05.jpg'
+];
+const VICTIM_M='/images/victims/victim-homme.jpg';
+const VICTIM_F='/images/victims/victim-femme.jpg';
 
-// ══ MODÈLE CORRECT ══
-// claude-sonnet-4-5-20250929 est le dernier Sonnet disponible
-const API_MODEL = 'claude-sonnet-4-5-20250929';
-
-// ══ FALLBACK ENRICHI ══
-const FALLBACK={
-"Sophie Delacroix":[
-  [["où","etait","nuit","soir","chambre","minuit","trouvé"],"J'étais dans la chambre d'amis du 12e étage. Nous dormions séparément depuis quelques semaines."],
-  [["alibi","prouve","confirme","témoin"],"J'ai dormi seule. Personne ne peut le confirmer, c'est vrai. Mais j'étais là."],
-  [["assurance","million","5m","bénéficiaire"],"Mon conseiller me l'avait recommandée. Une précaution normale pour quelqu'un dans sa position."],
-  [["divorce","sépar","avocat","mariage"],"Oui j'avais consulté un avocat. Mais un divorce me rapporte bien moins que rester mariée."],
-  [["cyanure","poison","produit","chimique"],"Je ne sais même pas où on achète ça. C'est absurde."],
-  [["mobile","motif","raison","pourquoi","intérêt"],"Je n'avais aucun mobile. Je l'aimais, même si notre mariage était compliqué."],
-  [["victime","victor","mari","connais"],"Victor était mon mari depuis 12 ans. Malgré nos difficultés, je l'aimais."],
-  [["clé","accès","suite","entrer","porte"],"Je n'avais pas la clé maître de la suite."],
-  [[],"Je coopère totalement avec l'enquête."]
-],
-"Marc Fontaine":[
-  [["où","etait","nuit","soir","restaurant","minuit"],"J'étais au restaurant Le Grand Véfour jusqu'à 23h15. Trois collègues et le chef peuvent confirmer."],
-  [["alibi","prouve","confirme","témoin"],"Dîner d'affaires de 20h à 23h15. J'ai l'addition et les noms des convives."],
-  [["fraude","fiscal","amf","impôt"],"Cette affaire a été classée sans suite en 2019. Vous n'avez aucun droit de l'évoquer."],
-  [["licencier","renvoyer","virer","associé"],"Victor adorait menacer. C'était son style. Il ne m'aurait jamais vraiment viré."],
-  [["cyanure","poison","produit","chimique"],"Je suis homme d'affaires, pas chimiste. Je ne saurais même pas où trouver ça."],
-  [["mobile","motif","raison","pourquoi"],"Sa mort est une catastrophe financière pour moi. J'avais tout intérêt à ce qu'il reste en vie."],
-  [["victime","victor","associé","connais"],"Victor était mon associé depuis 12 ans. On se disputait mais on se respectait."],
-  [[],"Mon alibi tient parfaitement. Je n'ai rien à ajouter."]
-],
-"Clara Messing":[
-  [["où","etait","nuit","soir","maison","minuit"],"J'étais chez moi à Neuilly. J'ai regardé une série jusqu'à 1h du matin."],
-  [["alibi","prouve","confirme","témoin","seule"],"Je vis seule. Mais mes connexions Netflix et mes SMS prouvent que j'étais chez moi."],
-  [["clé","accès","maître","suite","entrer"],"Victor me l'avait confiée pour des urgences professionnelles."],
-  [["recherche","google","cyanure","internet","historique"],"J'écris un roman policier depuis 18 mois. Ces recherches sont pour mon livre."],
-  [["mobile","motif","raison","pourquoi"],"Victor était un patron exigeant mais juste. Je n'avais aucune raison de lui vouloir du mal."],
-  [["fenêtre","service","escalier","accès"],"Je ne suis jamais passée par la fenêtre de service."],
-  [[],"Je suis honnête avec vous. Posez-moi n'importe quelle question."]
-],
-"Antoine Roux":[
-  [["où","etait","nuit","soir","montmartre","minuit"],"J'étais à une soirée privée à Montmartre chez un ami. Une vingtaine de personnes."],
-  [["alibi","prouve","confirme","témoin","soirée"],"J'avais des gens autour de moi... presque toute la soirée."],
-  [["90","heure","disparaître","manque","inexpliqué","seul"],"Je... je me suis promené. J'avais besoin d'air frais. Je ne regardais pas l'heure."],
-  [["message","menaçant","texto","sms","mail"],"Je l'ai envoyé dans un moment de colère après qu'il ait encore refusé de m'aider."],
-  [["dette","argent","jeu","casino","crédit"],"J'avais des dettes mais j'allais trouver une solution."],
-  [["héritage","hériter","testament","fortune"],"Je savais que j'héritais un jour comme tout fils. Ça ne veut pas dire que j'ai voulu précipiter les choses."],
-  [["cyanure","poison","produit","chimique"],"Je n'ai jamais acheté ni manipulé ce genre de substance. Jamais."],
-  [["mobile","motif","raison","pourquoi"],"Mon père était ma seule famille. Je n'aurais pas fait ça."],
-  [["victime","père","papa","victor"],"C'était mon père. On se disputait souvent mais c'était mon père quand même."],
-  [[],"Je n'ai rien fait. C'est tout ce que j'ai à dire."]
-],
-"Isabelle Renard":[
-  [["où","etait","nuit","soir","atelier","musée"],"J'étais dans mon atelier au niveau -2. Je restaure une toile du XVIIe siècle."],
-  [["alibi","prouve","confirme","témoin","gardien"],"Le gardien peut confirmer qu'il m'a entendue travailler. J'étais là toute la soirée."],
-  [["scalpel","couteau","lame","arme","outil"],"Mon scalpel a disparu il y a deux semaines. Je l'avais signalé à Émile lui-même."],
-  [["fraude","falsif","faux","expertise","authenticité"],"Des falsifications ? C'est diffamatoire. Émile et moi avions des désaccords professionnels."],
-  [["badge","accès","réserve"],"Je n'avais pas son badge. Je n'avais aucune raison d'aller dans la réserve."],
-  [["mobile","motif","raison","pourquoi"],"Émile était mon supérieur. Sa mort ne m'apporte rien professionnellement."],
-  [["caméra","surveillance","couper","désactiver"],"Je ne suis pas allée dans la salle de contrôle."],
-  [[],"Je travaillais cette nuit-là. Vérifiez mes outils et mes heures de connexion."]
-],
-"Thomas Girard":[
-  [["où","etait","nuit","soir","anniversaire"],"J'étais à l'anniversaire d'un ami dans le 3e arrondissement. 15 personnes présentes."],
-  [["alibi","prouve","confirme","témoin","photo"],"15 témoins, des photos, des stories Instagram postées à 23h. Incontestable."],
-  [["promotion","carrière","poste","travail","bloqué"],"Oui il me freinait. Mais je cherchais un autre poste ailleurs."],
-  [["mobile","motif","raison"],"Sa mort ne me donne pas la promotion. Aucun intérêt."],
-  [[],"Mon alibi est béton. Concentrez-vous sur ceux qui étaient au musée."]
-],
-"Henri Vasseur":[
-  [["où","etait","nuit","soir","gala","mairie"],"J'étais au dîner de gala de la mairie de Lyon. Le maire lui-même peut confirmer."],
-  [["alibi","prouve","confirme","témoin","photo"],"Des dizaines de photos de moi à ce dîner. Je suis rentré à 01h30."],
-  [["acquisition","tableau","authenticité","œuvre"],"Émile était trop prudent. Ce tableau est authentique, j'en suis certain."],
-  [["mobile","motif","raison"],"Sa mort complique mon acquisition. J'avais tout intérêt à ce qu'il vive."],
-  [[],"Je suis un soutien financier majeur de ce musée. Cherchez ailleurs."]
-],
-"Nadia Cheikh":[
-  [["où","etait","nuit","soir","ronde","musée"],"Je faisais mes rondes habituelles. Niveau -1, niveau -2, rez-de-chaussée."],
-  [["alibi","prouve","confirme","témoin"],"Je patrouillais. C'est mon travail."],
-  [["caméra","surveillance","couper","désactiver","code"],"Je n'ai pas touché aux caméras. Quelqu'un est entré dans la salle de contrôle pendant mes rondes."],
-  [["40","minutes","disparaître","manque","inexpliqué"],"J'étais aux toilettes puis j'ai fait une pause café en cuisine."],
-  [["casier","vol","antécédent","passé"],"C'était une erreur il y a 6 ans. J'ai payé et je travaille honnêtement depuis."],
-  [["mobile","motif","raison"],"Je n'avais aucune raison de nuire à M. Caron."],
-  [[],"Je fais mon travail correctement. Je n'ai rien à dissimuler."]
-],
-"Valentina Cruz":[
-  [["où","etait","nuit","soir","cabine"],"J'étais dans ma cabine avec Paulo. Nous travaillions sur des documents importants."],
-  [["alibi","prouve","confirme","paulo","témoin"],"Paulo peut confirmer. Nous avons travaillé ensemble jusqu'à 04h du matin."],
-  [["yacht","bateau","transport","illicite"],"Ce yacht est un investissement légal. Toute suggestion contraire est diffamatoire."],
-  [["mobile","motif","raison"],"Ferrara était un excellent capitaine. Sa mort m'est préjudiciable."],
-  [[],"Mes avocats s'occuperont de répondre à vos insinuations."]
-],
-"Paulo Mendez":[
-  [["où","etait","nuit","soir","cabine"],"J'étais dans la cabine de Valentina. On travaillait sur des contrats."],
-  [["alibi","prouve","confirme","valentina","témoin"],"Valentina était avec moi. On peut vérifier les caméras du couloir."],
-  [["pointure","chaussure","taille","empreinte"],"Je chausse du 44. Pourquoi cette question ?"],
-  [["mobile","motif","raison"],"Ferrara nous était utile. Sa mort est une complication."],
-  [[],"Je n'ai rien à ajouter à ce que Valentina a dit."]
-],
-"Dr. Stefan Holz":[
-  [["où","etait","nuit","soir","cabine","lisait"],"J'étais dans ma cabine. Je lisais un ouvrage médical."],
-  [["alibi","prouve","confirme","témoin"],"Je lisais seul. Je n'avais aucune raison de sortir en pleine nuit."],
-  [["médicament","substance","produit","trousse","illégal"],"Ma trousse contient des médicaments légaux pour mes patients."],
-  [["somnifère","zolpidem","drogue","verre","vin"],"Je prescris du zolpidem légalement. Que Ferrara en ait eu ne me concerne pas."],
-  [["pointure","chaussure","taille","empreinte","45"],"Je chausse du 45, oui. Comme beaucoup d'hommes de ma taille."],
-  [["radio","communication","saboter","câble"],"Je ne connais rien aux systèmes de communication maritimes."],
-  [["mobile","motif","raison"],"Je n'avais aucun problème avec le capitaine."],
-  [[],"Je suis médecin depuis 30 ans. Cette conversation est déplacée."]
-],
-"Camille Brun":[
-  [["où","etait","nuit","soir","pont","écrivait"],"J'étais sur le pont supérieur à écrire. J'ai envoyé des emails à ma rédaction à 02h30."],
-  [["alibi","prouve","confirme","email","serveur","heure"],"Les serveurs de mon journal enregistrent l'heure d'envoi. C'est vérifiable immédiatement."],
-  [["source","ferrara","capitaine","enquête"],"Ferrara était ma source principale. Sa mort détruit mon enquête en cours."],
-  [["valentina","article","journaliste"],"Je ne peux pas vous parler de mon enquête en cours. Déontologie journalistique."],
-  [["mobile","motif","raison"],"Ma source est morte. J'ai tout perdu. Quel intérêt aurais-je eu ?"],
-  [[],"Je veux que le meurtrier soit arrêté autant que vous."]
-],
-"Margaux Blackwood":[
-  [["où","etait","nuit","soir","salon","jardin"],"J'étais au salon avec les invités. Vers 22h30 j'ai fait un tour au jardin."],
-  [["alibi","prouve","confirme","témoin","jardin"],"J'ai pris l'air pendant une demi-heure environ. Seule."],
-  [["testament","héritage","déshériter","fondation","argent"],"Mon père avait des idées changeantes. Il ne m'aurait jamais vraiment déshéritée."],
-  [["gant","cuir","noir","taille","main"],"Ce gant n'est pas à moi. Je porte du S, pas du M."],
-  [["cordelette","soie","rouge","étrangler"],"Je ne sais même pas où mon père gardait ces affaires."],
-  [["mobile","motif","raison"],"Mon père et moi avions une relation complexe. Mais je l'aimais."],
-  [[],"Je viens de perdre mon père. Ce questionnement est indécent."]
-],
-"Édouard Plantier":[
-  [["où","etait","nuit","soir","table","manger"],"J'étais à table dans la salle à manger. Les époux Dumont étaient avec moi."],
-  [["alibi","prouve","confirme","dumont","témoin"],"Les Dumont peuvent confirmer que je n'ai pas quitté la table."],
-  [["testament","changer","notaire","irrégularité"],"J'ignorais les modifications envisagées. Mon rôle est de conseiller."],
-  [["mobile","motif","raison"],"Je n'ai aucun intérêt à voir mon client mourir."],
-  [[],"Mon alibi est confirmé par deux témoins indépendants."]
-],
-"Jacques Moreau":[
-  [["où","etait","nuit","soir","servait","salon"],"Je servais les invités au salon et dans la salle à manger."],
-  [["alibi","prouve","confirme","témoin","cuisine"],"Je circulais entre les pièces. Des invités m'ont vu à intervalles réguliers."],
-  [["retraite","pension","argent","licencier"],"Monsieur avait annoncé ma retraite pour le printemps. Les conditions n'étaient pas idéales."],
-  [["mobile","motif","raison"],"J'ai servi cette famille 40 ans. Monsieur Gérard avait ses défauts mais je lui dois tout."],
-  [[],"Je suis à votre disposition pour toute question."]
-],
-"Céline Aubert":[
-  [["où","etait","nuit","soir","chambre","migraine"],"J'avais une migraine terrible. Je suis montée dans ma chambre à 21h30."],
-  [["alibi","prouve","confirme","témoin","chambre"],"Je n'ai pas quitté ma chambre. J'ai pris des médicaments et je me suis couchée."],
-  [["testament","promesse","argent","héritage"],"Gérard m'avait promis quelque chose. Et il allait tout reprendre."],
-  [["relation","amour","maîtresse","liaison"],"Notre relation était complexe. Il m'aimait à sa façon."],
-  [["mobile","motif","raison"],"Je l'aimais. On ne tue pas quelqu'un qu'on aime."],
-  [[],"Je l'aimais vraiment. Vous ne pouvez pas comprendre ce que je ressens."]
-],
-"Prof. Arnaud Claes":[
-  [["où","etait","nuit","soir","maison","chez"],"J'étais chez moi. Je me suis couché vers 23h30 après une longue journée."],
-  [["alibi","prouve","confirme","femme","témoin"],"Ma femme peut confirmer que j'étais à la maison toute la nuit."],
-  [["badge","accès","02h55","03h","laboratoire"],"Mon badge utilisé à 02h55 ? C'est impossible. J'étais chez moi à cette heure-là."],
-  [["nx7","neurotoxine","substance","produit","injection"],"NX-7 est un composé strictement encadré. Éléonore travaillait dans les règles."],
-  [["données","effacer","disque","ordinateur"],"Je ne sais pas de quelles données vous parlez. Je n'étais pas au laboratoire cette nuit."],
-  [["mobile","motif","raison"],"Éléonore était une brillante chercheuse. Sa mort est une perte immense."],
-  [[],"Mes travaux ont sauvé des vies. Ces accusations sont grotesques."]
-],
-"Dr. Raphaël Stein":[
-  [["où","etait","nuit","soir","bureau","02h"],"J'étais dans mon bureau au laboratoire jusqu'à 02h07. Mon badge de sortie l'atteste."],
-  [["alibi","prouve","confirme","badge","témoin"],"Badge de sortie à 02h07. Je suis rentré chez moi en voiture, arrivé vers 02h40."],
-  [["falsifier","résultat","donnée","fraude","publication"],"Éléonore et moi avions des désaccords scientifiques. C'est normal dans un laboratoire."],
-  [["mobile","motif","raison"],"Sa mort ne m'aide pas. J'avais besoin de ses travaux."],
-  [[],"Vérifiez mon badge. Je n'étais plus là quand ça s'est passé."]
-],
-"Ingrid Sauer":[
-  [["où","etait","nuit","soir","hôtel","sofitel"],"J'étais à l'hôtel Sofitel de Strasbourg. Check-in à 21h, je n'ai pas quitté l'hôtel."],
-  [["alibi","prouve","confirme","hôtel","chambre"],"Carte de chambre, room service à 23h, appels depuis le téléphone fixe."],
-  [["argent","investissement","40m","perte"],"Mon investissement est légal. Si le scandale éclate, je suis aussi victime."],
-  [["mobile","motif","raison"],"Je veux que cette affaire soit résolue. Mon nom doit être blanchi."],
-  [[],"Mon alibi est vérifiable minute par minute."]
-],
-"Mia Tanaka":[
-  [["où","etait","nuit","soir","couloir"],"J'étais dans le couloir B. Je travaillais tard sur des analyses."],
-  [["alibi","prouve","confirme","caméra","couloir","03h"],"Les caméras du couloir B me montrent clairement jusqu'à 03h00."],
-  [["renvoyer","licencier","espionnage","concurrence"],"Elle m'a renvoyée injustement. J'analysais des données pour un article personnel."],
-  [["mobile","motif","raison"],"Je voulais qu'elle reconnaisse son erreur, pas qu'elle meure."],
-  [[],"Les caméras me montrent dans le couloir. Je ne pouvais pas être en B7 en même temps."]
-]
-};
-
-function getFallback(nom,q){
-  const reps=FALLBACK[nom];
-  if(!reps)return"Je préfère ne pas répondre à cette question pour le moment.";
-  const ql=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  for(const [keys,resp] of reps){
-    if(keys.length===0)return resp;
-    if(keys.some(k=>ql.includes(k)))return resp;
-  }
-  return reps[reps.length-1][1];
-}
+// Questions communes à tous les suspects
+const COMMON_QQ=[
+  "Où étiez-vous au moment du meurtre ?",
+  "Connaissiez-vous la victime ?",
+  "Avez-vous un mobile ?",
+  "Votre alibi peut-il être confirmé ?",
+  "Avez-vous remarqué quelque chose d'inhabituel ?"
+];
 
 const SCENARIOS=[
-{id:0,titre:"L'Hôtel de la Mort",num:"AFFAIRE N°001",diff:"Difficile",img:0,
-lieu:"Grand Palais Hôtel — Paris 8e — Suite Impériale, 12e étage",
-victime:{nom:"Victor Delacroix",age:58,prof:"PDG de NeoTech Corp",lieu:"Suite Impériale — porte verrouillée de l'intérieur"},
+{id:0,titre:"L'Hôtel de la Mort",num:"AFFAIRE N°001",diff:"Difficile",lieu:"Grand Palais Hôtel — Paris 8e — Suite Impériale",
+victime:{nom:"Victor Delacroix",age:58,prof:"PDG de NeoTech Corp",sexe:"M",lieu:"Suite Impériale — porte verrouillée de l'intérieur"},
 cause:"Empoisonnement au cyanure de potassium",heure:"Entre 23h30 et 01h00",
-rapport:"Concentrations létales de cyanure dans le sang. Aucune trace de lutte. Décès en moins de 5 minutes. Empreinte partielle main gauche taille S sur la carafe.",
-resume:"Victor Delacroix, PDG milliardaire, retrouvé mort dans sa suite le lundi 14 octobre à 07h12. Porte verrouillée de l'intérieur. Fenêtre de service entrouverte. Quatre personnes avaient accès à l'étage cette nuit-là.",
+rapport:"Concentrations létales de cyanure dans le sang. Aucune trace de lutte. Décès rapide — moins de 5 minutes. Verre de whisky contaminé. Empreinte partielle main gauche taille S.",
+resume:"Victor Delacroix, PDG milliardaire, retrouvé mort dans sa suite le 14 octobre. Porte verrouillée. Fenêtre de service entrouverte. Quatre personnes avaient accès à l'étage.",
 photos:[
-  {t:"Verre de whisky",d:"Résidus blancs au fond. Toxicologie positive au cyanure. Empreinte partielle main gauche taille S.",c:"Élimine Marc Fontaine (main droite, XL). Pointe vers Antoine ou Clara."},
-  {t:"Porte verrouillée",d:"Verrou enclenché de l'intérieur. Clé maître utilisée à 00h12 selon le log.",c:"Quelqu'un possédait la clé maître — seuls le directeur et Clara y avaient accès."},
-  {t:"Fenêtre de service",d:"Entrouverte de 8cm. Trace de semelle taille 38 sur le rebord extérieur.",c:"Accès par l'échelle de service. Taille 38 : seule Clara Messing porte du 38."},
-  {t:"Téléphone victime",d:"Dernier appel 23h47, numéro masqué, 4 min. Message : 'Tu ne mérites pas ce que tu as volé. — A'.",c:"'A' comme Antoine Roux. Brouillon : 'Je dois tout révéler demain matin.'"},
-  {t:"Sachet suspect",d:"Sachet translucide vide caché sous le flacon d'anxiolytiques de Victor.",c:"Traces de cyanure dans le sachet — le poison a été introduit dans la suite."},
-  {t:"Registre d'accès",d:"Log : Victor entre 22h15. Clé maître 00h12. Carte directeur scannée — il dit ne pas être monté.",c:"La carte du directeur utilisée à minuit. Copiée ou volée ?"},
+  {t:"Verre de whisky",c:0,d:"Résidus blancs au fond. Toxicologie positive au cyanure. Empreinte main gauche taille S.",clue:"Élimine Marc Fontaine (main droite, XL). Oriente vers Antoine ou Clara."},
+  {t:"Porte verrouillée",c:1,d:"Verrou enclenché de l'intérieur. Clé maître utilisée à 00h12 selon le log électronique.",clue:"Quelqu'un possédait la clé maître. Seuls le directeur et Clara y avaient accès."},
+  {t:"Fenêtre de service",c:3,d:"Entrouverte de 8cm. Trace de semelle taille 38 sur le rebord extérieur.",clue:"Accès par l'échelle de service. Taille 38 : seule Clara Messing porte du 38."},
+  {t:"Téléphone de la victime",c:4,d:"Message non lu : 'Tu ne mérites pas ce que tu as volé. — A'. Brouillon non envoyé.",clue:"Initiale A comme Antoine Roux. Victor allait révéler quelque chose le lendemain."},
+  {t:"Sachet suspect",c:5,d:"Sachet translucide vide caché sous les médicaments de Victor. Sans étiquette.",clue:"Traces de cyanure dans le sachet — le poison a été introduit dans la suite."},
+  {t:"Registre d'accès",c:8,d:"Clé maître utilisée à 00h12. Carte du directeur scannée — mais il dit ne pas être monté.",clue:"La carte du directeur utilisée à minuit. Copiée ou volée ?"},
 ],
 suspects:[
-  {nom:"Sophie Delacroix",lien:"Épouse",age:41,img:1,alibi:"Chambre d'amis toute la nuit. Aucun témoin.",casier:["Aucun antécédent","Divorce entamé en secret"],motif:"Assurance-vie 5M€ signée 3 semaines avant le décès.",traits:["Calme","Calculatrice","Souriante"],coupable:false},
-  {nom:"Marc Fontaine",lien:"Associé",age:52,img:0,alibi:"Dîner au Grand Véfour jusqu'à 23h — confirmé.",casier:["Fraude fiscale 2019 — classée","Deux procédures civiles"],motif:"Victor allait le renvoyer et signaler la fraude à l'AMF.",traits:["Nerveux","Agressif","Sûr de lui"],coupable:false},
-  {nom:"Clara Messing",lien:"Assistante",age:29,img:1,alibi:"Chez elle, seule. Aucun témoin.",casier:["Aucun antécédent"],motif:"Avait la clé maître. Recherches sur le cyanure sur son ordinateur.",traits:["Discrète","Loyale en apparence","Fragile"],coupable:false},
-  {nom:"Antoine Roux",lien:"Fils — héritier",age:33,img:2,alibi:"Soirée Montmartre — 90 minutes inexpliquées.",casier:["Dette de jeu : 280 000€","Altercation physique 2021"],motif:"Dettes massives. Victor refusait. Hérite de tout. Message menaçant envoyé la veille.",traits:["Impulsif","Menteur","Charmeur"],coupable:true},
+  {nom:"Sophie Delacroix",lien:"Épouse",age:41,img:1,alibi:"Chambre d'amis toute la nuit. Aucun témoin.",casier:["Aucun antécédent","Divorce entamé en secret"],motif:"Assurance-vie 5M€ signée 3 semaines avant le décès.",traits:["Calme","Calculatrice","Souriante"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"J'étais dans la chambre d'amis du 12e étage. Nous dormions séparément depuis quelques semaines. Je n'ai pas quitté cette chambre.",
+     "Connaissiez-vous la victime ?":"Victor était mon mari depuis 12 ans. Oui, je le connaissais. Malgré nos difficultés, je l'aimais.",
+     "Avez-vous un mobile ?":"L'assurance-vie ? C'est mon conseiller qui me l'avait recommandée. Une précaution normale.",
+     "Votre alibi peut-il être confirmé ?":"Non, j'étais seule. Mais mes connexions WiFi et mes appels prouvent que j'étais dans la chambre.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"J'ai entendu du bruit vers minuit mais je n'ai pas vérifié. Je pensais que c'était Victor."
+   }},
+  {nom:"Marc Fontaine",lien:"Associé",age:52,img:0,alibi:"Dîner au Grand Véfour jusqu'à 23h — confirmé par le chef.",casier:["Fraude fiscale 2019 — classée","Deux procédures civiles"],motif:"Victor allait le renvoyer et révéler la fraude à l'AMF.",traits:["Nerveux","Agressif","Sûr de lui"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Au restaurant Le Grand Véfour jusqu'à 23h15. Ensuite j'ai pris un taxi. Le chauffeur peut confirmer.",
+     "Connaissiez-vous la victime ?":"Mon associé depuis 12 ans. On avait des désaccords professionnels mais rien de grave.",
+     "Avez-vous un mobile ?":"Sa mort est une catastrophe pour moi. J'avais tout intérêt à ce qu'il reste en vie pour nos affaires.",
+     "Votre alibi peut-il être confirmé ?":"Le chef du Grand Véfour me connaît. J'ai gardé l'addition. Et le chauffeur de taxi.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Victor était tendu ces dernières semaines. Il parlait de révélations importantes. Je n'ai pas pris ça au sérieux."
+   }},
+  {nom:"Clara Messing",lien:"Assistante",age:29,img:1,alibi:"Chez elle, seule. Aucun témoin.",casier:["Aucun antécédent"],motif:"Avait la clé maître. Recherches sur le cyanure retrouvées.",traits:["Discrète","Loyale en apparence","Fragile"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Chez moi à Neuilly. Je regardais une série. Mes Netflix et SMS le confirment.",
+     "Connaissiez-vous la victime ?":"Victor était mon patron depuis 3 ans. Exigeant mais juste. Je n'avais aucune raison de lui vouloir du mal.",
+     "Avez-vous un mobile ?":"Aucun. Ma situation était bonne. Sa mort m'a privée de mon emploi.",
+     "Votre alibi peut-il être confirmé ?":"Mes connexions internet et mes messages sont horodatés. Je n'ai pas quitté mon appartement.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Victor m'avait demandé de ne parler à personne d'un rendez-vous le lendemain matin. Il semblait inquiet."
+   }},
+  {nom:"Antoine Roux",lien:"Fils — héritier",age:33,img:2,alibi:"Soirée Montmartre — 90 minutes inexpliquées.",casier:["Dette de jeu 280 000€","Altercation physique 2021"],motif:"Dettes massives. Victor refusait de payer. Hérite de tout. Message menaçant envoyé la veille.",traits:["Impulsif","Menteur","Charmeur"],coupable:true,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"À une soirée à Montmartre. Avec des amis. Il y a peut-être eu un moment où j'étais seul... une heure environ.",
+     "Connaissiez-vous la victime ?":"C'était mon père. On avait des tensions à cause d'argent mais je l'aimais.",
+     "Avez-vous un mobile ?":"J'avais des dettes oui. Mais j'allais trouver une solution. Son héritage n'était pas ma priorité.",
+     "Votre alibi peut-il être confirmé ?":"Mes amis peuvent confirmer le début et la fin de la soirée. Le milieu... c'est moins clair.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Non. Enfin... il m'avait semblé agité au téléphone le soir même. Mais ça ne voulait rien dire."
+   }},
 ],
 pieces:[
-  {id:"suite",nom:"Suite Impériale",x:280,y:45,w:235,h:148,crime:true,desc:"Corps sur le canapé. Verre contaminé. Montre arrêtée à 00h03.",indices:["Verre de whisky (cyanure)","Montre arrêtée 00h03","Billet Paris-Genève pour le lendemain"]},
-  {id:"salon",nom:"Salon Privé",x:528,y:45,w:205,h:148,crime:false,desc:"Carafe de whisky sur le bar. Empreinte sur rebord terrasse.",indices:["Carafe whisky (trace de poudre)","Empreinte rebord terrasse"]},
-  {id:"cuisine",nom:"Cuisine Service",x:52,y:45,w:188,h:148,crime:false,desc:"Fenêtre entrouverte. Trace semelle taille 38. Accès escalier.",indices:["Semelle taille 38","Sachet vide — traces cyanure"]},
-  {id:"couloir",nom:"Couloir 12e",x:170,y:245,w:315,h:100,crime:false,desc:"Caméra désactivée 23h30-01h15.",indices:["Caméra désactivée","Log : clé maître 00h12"]},
-  {id:"bureau",nom:"Bureau Suite",x:500,y:245,w:205,h:100,crime:false,desc:"Coffre-fort ouvert et refermé cette nuit.",indices:["Documents manquants","Clé USB dans le port"]},
-  {id:"hall",nom:"Hall Hôtel",x:52,y:245,w:105,h:100,crime:false,desc:"Concierge : silhouette en manteau noir vers minuit.",indices:["Témoignage concierge"]},
+  {id:"suite",nom:"Suite Impériale",x:280,y:45,w:235,h:148,crime:true,desc:"Corps retrouvé sur le canapé. Verre contaminé. Montre arrêtée à 00h03.",indices:["Verre de whisky (cyanure)","Montre arrêtée 00h03","Billet Paris-Genève pour le lendemain"]},
+  {id:"salon",nom:"Salon Privé",x:528,y:45,w:205,h:148,crime:false,desc:"Carafe de whisky sur le bar. Empreinte sur le rebord de la terrasse.",indices:["Carafe whisky (trace de poudre)","Empreinte rebord terrasse"]},
+  {id:"cuisine",nom:"Cuisine Service",x:52,y:45,w:188,h:148,crime:false,desc:"Fenêtre entrouverte. Trace semelle taille 38. Accès escalier de service.",indices:["Semelle taille 38","Sachet vide — traces cyanure"]},
+  {id:"couloir",nom:"Couloir 12e",x:170,y:245,w:315,h:100,crime:false,desc:"Caméra désactivée entre 23h30 et 01h15.",indices:["Caméra désactivée","Log : clé maître 00h12"]},
+  {id:"bureau",nom:"Bureau de la Suite",x:500,y:245,w:205,h:100,crime:false,desc:"Coffre-fort ouvert et refermé cette nuit. Documents manquants.",indices:["Documents manquants","Clé USB dans le port"]},
+  {id:"hall",nom:"Hall de l'Hôtel",x:52,y:245,w:105,h:100,crime:false,desc:"Concierge : silhouette en manteau noir vers minuit.",indices:["Témoignage concierge"]},
 ],
 coupable:"Antoine Roux",
-solution:"Antoine Roux a copié la clé maître via une employée complice pour entrer par la fenêtre de service pendant que son père téléphonait. Il avait dissous le cyanure dans la carafe. Ses 90 minutes inexpliquées coïncident exactement avec le créneau du meurtre."},
-{id:1,titre:"Minuit au Musée",num:"AFFAIRE N°002",diff:"Moyen",img:1,
-lieu:"Musée des Arts Obscurs — Lyon — Salle des Sculptures, niveau -1",
-victime:{nom:"Émile Caron",age:64,prof:"Conservateur en chef",lieu:"Salle des Sculptures — entre deux statues africaines"},
-cause:"Coup de couteau unique — lame fine 18cm dans le dos",heure:"Entre 00h15 et 01h00",
-rapport:"Un seul coup précis dans le dos. Victime non méfiante. Lame compatible avec un scalpel de restaurateur. Aucun cri.",
-resume:"Émile Caron retrouvé poignardé le 15 novembre. Caméras coupées 12 minutes avant le meurtre. Quatre personnes avec accès au musée ce soir-là.",
+solution:"Antoine Roux a copié la clé maître via une employée et est entré par la fenêtre de service pendant que son père téléphonait. Il avait dissous le cyanure dans la carafe. Ses 90 minutes inexpliquées coïncident exactement avec le créneau du meurtre. Ses dettes de 280 000€ et le message menaçant complètent le tableau."},
+
+{id:1,titre:"Minuit au Musée",num:"AFFAIRE N°002",diff:"Moyen",lieu:"Musée des Arts Obscurs — Lyon — Niveau -1",
+victime:{nom:"Émile Caron",age:64,prof:"Conservateur en chef",sexe:"M",lieu:"Salle des Sculptures — entre deux statues africaines"},
+cause:"Coup de couteau unique — lame 18cm dans le dos",heure:"Entre 00h15 et 01h00",
+rapport:"Un seul coup précis. Victime non méfiante — faisait confiance à son agresseur. Lame compatible avec un scalpel de restaurateur.",
+resume:"Émile Caron retrouvé poignardé. Caméras coupées 12 minutes avant le meurtre. Quatre personnes avec accès au musée ce soir-là.",
 photos:[
-  {t:"L'arme du crime",d:"Scalpel 18cm à 3m du corps. Appartient au laboratoire de restauration.",c:"Seuls Émile, Isabelle et Thomas avaient accès au labo."},
-  {t:"Caméras coupées",d:"Désactivées depuis la salle de contrôle à 00h03.",c:"Le coupable connaissait le code de la salle de contrôle."},
-  {t:"Statue déplacée",d:"Statue africaine N°7 bougée de 40cm, cachant un passage vers la réserve.",c:"Seul le personnel senior connaissait ce passage secret."},
-  {t:"Contrat falsifié",d:"Contrat 2M€ signé par Émile mais daté du lendemain du meurtre.",c:"Tentative d'authentification frauduleuse postmortem."},
-  {t:"Lettre dans la poche",d:"'Je sais ce que vous faites. Vous avez jusqu'à demain.' Non signée.",c:"Émile avait découvert quelque chose et prévenu le coupable — qui l'a devancé."},
-  {t:"Badge post-mortem",d:"Badge d'Émile utilisé à 00h48 au niveau -2 — après sa mort.",c:"Le meurtrier a récupéré le badge pour accéder à la réserve."},
+  {t:"Scalpel retrouvé",c:2,d:"Scalpel 18cm à 3m du corps. Appartient au laboratoire de restauration. Empreinte partielle.",clue:"Seuls Émile, Isabelle et Thomas avaient accès au labo. L'un d'eux a utilisé ce scalpel."},
+  {t:"Caméras désactivées",c:8,d:"Toutes désactivées depuis la salle de contrôle à 00h03. Code de Nadia utilisé.",clue:"Soit Nadia a désactivé les caméras, soit quelqu'un a utilisé son code à son insu."},
+  {t:"Statue déplacée",c:5,d:"Statue africaine N°7 bougée de 40cm. Cachait un passage vers la réserve.",clue:"Seul le personnel senior connaissait ce passage. Cela réduit considérablement les suspects."},
+  {t:"Contrat falsifié",c:5,d:"Contrat d'authenticité 2M€ signé par Émile mais daté du lendemain de sa mort.",clue:"Quelqu'un a tenté une authentification frauduleuse postmortem. Qui en profite ?"},
+  {t:"Lettre dans la poche",c:7,d:"'Je sais ce que vous faites. Vous avez jusqu'à demain.' Non signée.",clue:"Émile avait découvert quelque chose. Le coupable l'a devancé avant qu'il puisse agir."},
+  {t:"Badge post-mortem",c:8,d:"Badge d'Émile utilisé à 00h48 au niveau -2 — après sa mort.",clue:"Le meurtrier a récupéré le badge pour accéder à la réserve et effacer des preuves."},
 ],
 suspects:[
-  {nom:"Isabelle Renard",lien:"Restauratrice",age:38,img:1,alibi:"Dans son atelier niveau -2 toute la soirée.",casier:["Aucun antécédent"],motif:"Falsifiait des expertises pour un réseau frauduleux. Émile venait de le découvrir.",traits:["Précise","Froide","Professionnelle"],coupable:true},
-  {nom:"Thomas Girard",lien:"Assistant conservateur",age:27,img:2,alibi:"Anniversaire — 15 témoins.",casier:["Aucun antécédent"],motif:"Émile bloquait sa promotion depuis 3 ans.",traits:["Ambitieux","Impulsif","Transparent"],coupable:false},
-  {nom:"Henri Vasseur",lien:"Mécène collectionneur",age:67,img:3,alibi:"Dîner de gala Hôtel de Ville Lyon — photographié plusieurs fois.",casier:["Plainte escroquerie artistique 2015 — abandonnée"],motif:"Émile refusait d'authentifier son acquisition à 2M€.",traits:["Arrogant","Manipulateur","Influent"],coupable:false},
-  {nom:"Nadia Cheikh",lien:"Gardienne de nuit",age:44,img:4,alibi:"Rondes de nuit — 40 minutes inexpliquées.",casier:["Licenciement pour vol 2018"],motif:"Complice possible — aurait désactivé les caméras.",traits:["Discrète","Fatiguée","Loyale (à qui ?)"],coupable:false},
+  {nom:"Isabelle Renard",lien:"Restauratrice",age:38,img:3,alibi:"Dans son atelier niveau -2 toute la soirée.",casier:["Aucun antécédent"],motif:"Falsifiait des expertises pour un réseau frauduleux. Émile venait de le découvrir.",traits:["Précise","Froide","Professionnelle"],coupable:true,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans mon atelier au niveau -2. Je restaure une toile du XVIIe. J'y étais depuis 19h.",
+     "Connaissiez-vous la victime ?":"Émile était mon supérieur depuis 6 ans. Nous avions des désaccords professionnels sur les méthodes.",
+     "Avez-vous un mobile ?":"Aucun mobile. Émile était exigeant mais c'est mon domaine. Sa mort ne m'avantage en rien.",
+     "Votre alibi peut-il être confirmé ?":"Le gardien m'a entendue travailler. Et mes outils portent des traces de travail de cette nuit-là.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"J'ai entendu des pas au niveau -1 vers minuit. Je pensais que c'était la gardienne en ronde."
+   }},
+  {nom:"Thomas Girard",lien:"Assistant conservateur",age:27,img:0,alibi:"Anniversaire à l'extérieur — 15 témoins.",casier:["Aucun antécédent"],motif:"Émile bloquait sa promotion depuis 3 ans.",traits:["Ambitieux","Impulsif","Transparent"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"À l'anniversaire d'un ami dans le 3e arrondissement. 15 personnes peuvent confirmer, photos et stories Instagram à l'appui.",
+     "Connaissiez-vous la victime ?":"Oui. On ne s'entendait pas très bien. Il bloquait ma carrière. Mais je ne l'aurais jamais tué.",
+     "Avez-vous un mobile ?":"Sa mort me donne peut-être une promotion. Mais je cherchais déjà un autre poste. Vérifiez mes candidatures.",
+     "Votre alibi peut-il être confirmé ?":"15 personnes, des photos horodatées. Je suis arrivé à 21h et parti à 02h. Inattaquable.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Émile semblait préoccupé ces derniers jours. Il avait reçu une lettre qui l'avait agité."
+   }},
+  {nom:"Henri Vasseur",lien:"Mécène collectionneur",age:67,img:6,alibi:"Dîner de gala — Hôtel de Ville de Lyon.",casier:["Plainte escroquerie artistique 2015 — abandonnée"],motif:"Émile refusait d'authentifier son acquisition à 2M€.",traits:["Arrogant","Manipulateur","Influent"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Au dîner annuel de la mairie de Lyon. Le maire peut témoigner. Je suis rentré à 01h30.",
+     "Connaissiez-vous la victime ?":"Nous avions une relation professionnelle. Son refus d'authentifier mon tableau était une vendetta personnelle.",
+     "Avez-vous un mobile ?":"Sa mort complique mon acquisition. Sans lui, l'authentification prendra des mois. C'est le contraire de ce que je voulais.",
+     "Votre alibi peut-il être confirmé ?":"Des dizaines de personnes m'ont vu au gala. Des photos, des caméras. Cherchez ailleurs.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Émile avait l'air nerveux lors de notre dernière rencontre. Comme quelqu'un qui a peur."
+   }},
+  {nom:"Nadia Cheikh",lien:"Gardienne de nuit",age:44,img:5,alibi:"Rondes — 40 minutes inexpliquées.",casier:["Licenciement pour vol 2018"],motif:"Complice possible — aurait désactivé les caméras.",traits:["Discrète","Fatiguée","Loyale (à qui ?)"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Je faisais mes rondes habituelles. Niveau -1, -2, rez-de-chaussée en rotation.",
+     "Connaissiez-vous la victime ?":"M. Caron était mon supérieur indirect. Correct avec moi. Je n'avais aucun problème avec lui.",
+     "Avez-vous un mobile ?":"Aucun mobile. Je n'avais rien contre lui. Mon casier est une erreur de jeunesse.",
+     "Votre alibi peut-il être confirmé ?":"Je ne note pas chaque minute de mes rondes. Il y a des zones sans caméra. C'est normal pour ce travail.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Quelqu'un est entré dans la salle de contrôle pendant mes rondes. Mon code a été utilisé sans ma permission."
+   }},
 ],
 pieces:[
   {id:"sculpt",nom:"Salle Sculptures",x:275,y:45,w:245,h:148,crime:true,desc:"Corps entre les statues. Sang sur le marbre.",indices:["Mare de sang","Statue N°7 déplacée","Empreinte taille 42"]},
   {id:"labo",nom:"Laboratoire",x:52,y:45,w:185,h:148,crime:false,desc:"Atelier d'Isabelle. Support de scalpel vide.",indices:["Support scalpel vide","Appels effacés téléphone"]},
-  {id:"secu",nom:"Salle Contrôle",x:535,y:45,w:185,h:148,crime:false,desc:"Caméras désactivées manuellement à 00h03.",indices:["Log : code Nadia utilisé","Tasse café encore chaude"]},
-  {id:"reserve",nom:"Réserve -2",x:170,y:245,w:230,h:100,crime:false,desc:"Caisse ouverte. Badge Émile utilisé 00h48.",indices:["Caisse ouverte","Badge utilisé post-mortem"]},
+  {id:"secu",nom:"Salle Contrôle",x:535,y:45,w:185,h:148,crime:false,desc:"Caméras désactivées à 00h03.",indices:["Code Nadia utilisé","Tasse café encore chaude"]},
+  {id:"reserve",nom:"Réserve -2",x:170,y:245,w:230,h:100,crime:false,desc:"Caisse ouverte. Badge d'Émile utilisé à 00h48.",indices:["Caisse ouverte","Badge utilisé post-mortem"]},
   {id:"bureau2",nom:"Bureau Émile",x:420,y:245,w:205,h:100,crime:false,desc:"Email non envoyé : 'Je dois contacter l'Interpol demain'.",indices:["Email Interpol","Dossier : photos annotées 'FAUX'"]},
   {id:"entree2",nom:"Entrée Principale",x:52,y:245,w:100,h:100,crime:false,desc:"Digicode utilisé à 23h52.",indices:["Digicode — 4 personnes","Parapluie mouillé (sans pluie)"]},
 ],
 coupable:"Isabelle Renard",
-solution:"Isabelle falsifiait des expertises depuis 2 ans. Émile l'avait découvert. Elle a désactivé les caméras avec le code de Nadia, tué Émile avec son scalpel, puis utilisé son badge pour effacer les preuves."},
-{id:2,titre:"Meurtre en Haute Mer",num:"AFFAIRE N°003",diff:"Expert",img:2,
-lieu:"Yacht Éternité — Méditerranée — 47 nautiques de Marseille",
-victime:{nom:"Capitaine Luca Ferrara",age:55,prof:"Capitaine de yacht privé",lieu:"Cabine principale — noyé hors de l'eau"},
+solution:"Isabelle Renard falsifiait des expertises depuis 2 ans pour un réseau de vente frauduleuse. Émile avait découvert ses activités et l'avait prévenue par lettre. Elle a désactivé les caméras avec le code de Nadia (copié lors d'une ronde), tué Émile avec son scalpel, puis utilisé son badge pour accéder à la réserve et effacer les preuves."},
+
+{id:2,titre:"Meurtre en Haute Mer",num:"AFFAIRE N°003",diff:"Expert",lieu:"Yacht Éternité — Méditerranée",
+victime:{nom:"Capitaine Luca Ferrara",age:55,prof:"Capitaine de yacht privé",sexe:"M",lieu:"Cabine principale — noyé hors de l'eau"},
 cause:"Noyade simulée — poumons remplis d'eau de mer en cabine sèche",heure:"Entre 02h00 et 03h30",
-rapport:"Inhalation forcée d'eau de mer. Victime sédatée au zolpidem x3. Traces de lutte limitées.",
+rapport:"Inhalation forcée d'eau de mer. Victime sédatée au zolpidem x3. Entonnoir de cuisine utilisé comme instrument.",
 resume:"Ferrara retrouvé mort en cabine à 07h00. Yacht en pleine mer. Personne ne pouvait fuir. L'un des quatre passagers est le meurtrier.",
 photos:[
-  {t:"Noyade sans eau",d:"Poumons pleins d'eau de mer, cabine sèche. Entonnoir de cuisine disparu.",c:"Le cuisinier confirme ne pas avoir utilisé l'entonnoir ce soir-là."},
-  {t:"Verre de somnifère",d:"Verre de vin : 3x la dose de zolpidem. Ferrara drogué avant le meurtre.",c:"Le coffret médical de bord était accessible à tous les passagers."},
-  {t:"Journal de bord",d:"01h45 : 'Je dois parler demain. Ce que j'ai vu est inacceptable.' Page suivante arrachée.",c:"Ferrara avait vu quelque chose de compromettant."},
-  {t:"Coffre forcé",d:"Coffre personnel forcé. Une enveloppe scellée a disparu.",c:"Ferrara gardait des preuves compromettantes sur un passager."},
-  {t:"Radio sabotée",d:"Système radio sectionné à 01h30. Yacht isolé jusqu'à Marseille.",c:"Sabotage par quelqu'un connaissant les systèmes maritimes."},
-  {t:"Empreinte pont",d:"Semelle mouillée sur le pont menant à la cabine. Pointure 45.",c:"Pointure 45 : ne correspond qu'à un seul passager à bord."},
+  {t:"Noyade sans eau",c:4,d:"Poumons pleins d'eau de mer — cabine sèche. Entonnoir de cuisine disparu.",clue:"Le meurtrier a apporté l'eau de mer depuis le pont via l'entonnoir de cuisine."},
+  {t:"Verre de somnifère",c:0,d:"Verre de vin : 3x la dose de zolpidem. Ferrara drogué avant le meurtre.",clue:"Le coffret médical de bord accessible à tous. Qui connaissait les doses ?"},
+  {t:"Journal de bord",c:5,d:"01h45 : 'Ce que j'ai vu est inacceptable. Je dois parler demain.' Page suivante arrachée.",clue:"Ferrara avait découvert quelque chose de compromettant cette nuit-là."},
+  {t:"Coffre forcé",c:1,d:"Coffre personnel forcé. Une enveloppe scellée a disparu.",clue:"Ferrara gardait des preuves. Le meurtrier devait les récupérer avant de le tuer."},
+  {t:"Radio sabotée",c:8,d:"Système radio sectionné à 01h30. Yacht isolé jusqu'à Marseille.",clue:"Sabotage précis — quelqu'un connaît les systèmes maritimes ou a lu les manuels."},
+  {t:"Empreinte taille 45",c:3,d:"Semelle mouillée menant à la cabine du capitaine. Pointure 45.",clue:"Pointure 45 : un seul passager porte du 45 à bord."},
 ],
 suspects:[
-  {nom:"Valentina Cruz",lien:"Propriétaire",age:49,img:1,alibi:"Dans sa cabine avec Paulo — confirmé mutuellement.",casier:["Deux poursuites escroquerie","Blanchiment — enquête Espagne"],motif:"Ferrara avait découvert l'usage illicite du yacht.",traits:["Glaciale","Dominatrice","Imprévisible"],coupable:false},
-  {nom:"Paulo Mendez",lien:"Associé",age:52,img:0,alibi:"Avec Valentina — alibi croisé.",casier:["Fraude fiscale 2017 — sursis"],motif:"Ferrara menaçait d'exposer leurs activités.",traits:["Nerveux","Obéissant","Transpire beaucoup"],coupable:false},
-  {nom:"Dr. Stefan Holz",lien:"Médecin passager",age:61,img:3,alibi:"Dans sa cabine à lire. Pointure 45.",casier:["Radiation temporaire 2020","Prescriptions frauduleuses"],motif:"Ferrara avait trouvé sa trousse avec substances illégales.",traits:["Méticuleux","Arrogant","Trop calme"],coupable:true},
-  {nom:"Camille Brun",lien:"Journaliste",age:34,img:5,alibi:"Sur le pont à écrire — emails envoyés à 02h30 horodatés.",casier:["Aucun antécédent"],motif:"Enquêtait sur Valentina. Ferrara était sa source.",traits:["Curieuse","Déterminée","Prudente"],coupable:false},
+  {nom:"Valentina Cruz",lien:"Propriétaire",age:49,img:3,alibi:"Dans sa cabine avec Paulo — confirmé mutuellement.",casier:["Deux poursuites escroquerie","Blanchiment — enquête Espagne"],motif:"Ferrara avait découvert l'usage illicite du yacht.",traits:["Glaciale","Dominatrice","Imprévisible"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans ma cabine avec Paulo. Nous travaillions sur des documents jusqu'à 04h du matin.",
+     "Connaissiez-vous la victime ?":"Ferrara était mon employé depuis 3 ans. Professionnel et discret, jusqu'à récemment.",
+     "Avez-vous un mobile ?":"Sa mort perturbe mes affaires. J'avais besoin d'un capitaine de confiance, pas d'un mort.",
+     "Votre alibi peut-il être confirmé ?":"Paulo était avec moi. Et des emails envoyés à 03h15 prouvent que j'étais éveillée et active.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Ferrara semblait agité les deux derniers jours. Il fouillait dans des zones qui ne le concernaient pas."
+   }},
+  {nom:"Paulo Mendez",lien:"Associé",age:52,img:0,alibi:"Avec Valentina — alibi croisé.",casier:["Fraude fiscale 2017 — sursis"],motif:"Ferrara menaçait d'exposer leurs activités.",traits:["Nerveux","Obéissant","Transpire beaucoup"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Avec Valentina dans sa cabine. Toute la nuit. Nous avions du travail urgent.",
+     "Connaissiez-vous la victime ?":"De loin. C'était l'employé de Valentina. Je lui parlais rarement.",
+     "Avez-vous un mobile ?":"Aucun. Je ne savais même pas ce qu'il avait découvert.",
+     "Votre alibi peut-il être confirmé ?":"Valentina et les emails envoyés depuis sa cabine confirment ma présence.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Il regardait nos caisses avec trop d'attention lors du chargement à Marseille."
+   }},
+  {nom:"Dr. Stefan Holz",lien:"Médecin passager",age:61,img:6,alibi:"Dans sa cabine à lire. Pointure 45.",casier:["Radiation temporaire 2020","Prescriptions frauduleuses"],motif:"Ferrara avait trouvé sa trousse avec substances illégales.",traits:["Méticuleux","Arrogant","Trop calme"],coupable:true,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans ma cabine. Je lisais jusqu'à 04h environ. Je dors peu.",
+     "Connaissiez-vous la victime ?":"Nous échangions quelques mots au dîner. Rien de plus. Un homme de mer agréable.",
+     "Avez-vous un mobile ?":"Je suis médecin. Que ferais-je à un capitaine de yacht ?",
+     "Votre alibi peut-il être confirmé ?":"Personne ne peut confirmer. Je lisais seul. C'est malheureusement fréquent en voyage.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Ferrara avait fouillé ma cabine en mon absence. J'ai trouvé mes affaires déplacées."
+   }},
+  {nom:"Camille Brun",lien:"Journaliste",age:34,img:5,alibi:"Sur le pont à écrire — emails horodatés à 02h30.",casier:["Aucun antécédent"],motif:"Enquêtait sur Valentina. Ferrara était sa source.",traits:["Curieuse","Déterminée","Prudente"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Sur le pont supérieur à travailler. Mes emails envoyés à 02h30 et 03h15 le prouvent.",
+     "Connaissiez-vous la victime ?":"Il était ma source pour mon enquête sur Valentina. Sa mort me prive de tout. Quel intérêt ?",
+     "Avez-vous un mobile ?":"Aucun. Il m'aidait. Sa mort est une catastrophe pour mon article.",
+     "Votre alibi peut-il être confirmé ?":"Les serveurs de ma rédaction enregistrent l'heure d'envoi. Vérifiable immédiatement.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Ferrara avait l'air terrifié les dernières heures. Comme s'il savait qu'il était en danger."
+   }},
 ],
 pieces:[
   {id:"cabine",nom:"Cabine Capitaine",x:285,y:45,w:235,h:148,crime:true,desc:"Corps sur le lit. Sol sec. Verre de vin.",indices:["Verre vin (zolpidem x3)","Journal — page arrachée","Coffre forcé"]},
@@ -598,452 +706,234 @@ pieces:[
   {id:"radio",nom:"Communications",x:535,y:45,w:185,h:148,crime:false,desc:"Câble radio sectionné proprement.",indices:["Câble sectionné","Empreinte tableau de bord"]},
   {id:"pont",nom:"Pont Principal",x:170,y:245,w:270,h:100,crime:false,desc:"Empreinte semelle mouillée taille 45.",indices:["Empreinte taille 45","Mégot — ADN en cours"]},
   {id:"holz",nom:"Cabine Dr. Holz",x:455,y:245,w:210,h:100,crime:false,desc:"Trousse médicale avec substances non étiquetées.",indices:["Substances non identifiées","Gants latex usagés","Livre : Anesthésie d'urgence"]},
-  {id:"proue",nom:"Proue Yacht",x:52,y:245,w:100,h:100,crime:false,desc:"Bidon d'eau de mer vide retrouvé.",indices:["Bidon 10L eau de mer"]},
+  {id:"proue",nom:"Proue du Yacht",x:52,y:245,w:100,h:100,crime:false,desc:"Bidon d'eau de mer vide retrouvé.",indices:["Bidon 10L eau de mer"]},
 ],
 coupable:"Dr. Stefan Holz",
-solution:"Holz transportait des substances illégales avec la complicité de Valentina. Ferrara l'avait découvert. Holz a drogué son vin, introduit l'eau de mer via l'entonnoir, et saboté la radio. Pointure 45 et gants usagés le désignent."},
-{id:3,titre:"Le Manoir des Ombres",num:"AFFAIRE N°004",diff:"Moyen",img:3,
-lieu:"Manoir Blackwood — Bretagne — Bibliothèque du rez-de-chaussée",
-victime:{nom:"Gérard Blackwood",age:72,prof:"Aristocrate et collectionneur",lieu:"Bibliothèque — retrouvé dans son fauteuil"},
+solution:"Le Dr. Holz transportait des substances illégales avec la complicité de Valentina. Ferrara avait fouillé sa cabine et découvert la vérité. Holz a drogué son vin au zolpidem, introduit l'eau de mer via l'entonnoir, saboté la radio. Sa pointure 45 correspond à l'empreinte. Ses gants usagés contiennent des traces d'eau de mer."},
+
+{id:3,titre:"Le Manoir des Ombres",num:"AFFAIRE N°004",diff:"Moyen",lieu:"Manoir Blackwood — Bretagne",
+victime:{nom:"Gérard Blackwood",age:72,prof:"Aristocrate et collectionneur",sexe:"M",lieu:"Bibliothèque — retrouvé dans son fauteuil"},
 cause:"Strangulation avec une cordelette de soie rouge",heure:"Entre 22h00 et 23h30",
-rapport:"Strangulation par-derrière. Victime surprise. Cordelette à moitié brûlée dans la cheminée. Alcool et sédatif léger dans le sang.",
-resume:"Gérard Blackwood retrouvé mort lors d'une soirée familiale. Tous les suspects se trouvaient dans le manoir. Quelqu'un ment.",
+rapport:"Strangulation par-derrière. Victime affaiblie par un sédatif. Cordelette brûlée à moitié dans la cheminée.",
+resume:"Gérard Blackwood retrouvé mort lors d'une soirée familiale. Tous les suspects étaient dans le manoir. Quelqu'un ment.",
 photos:[
-  {t:"Cordelette de soie",d:"Cordelette rouge retrouvée à moitié brûlée dans la cheminée. Provient du stock du manoir.",c:"Quelqu'un qui connaissait le manoir depuis longtemps savait où la trouver."},
-  {t:"Verre de cognac",d:"Forte dose d'alcool et sédatif léger non prescrit dans le verre.",c:"Gérard a été affaibli avant d'être tué pour éviter toute résistance."},
-  {t:"Testament ouvert",d:"Posé sur le bureau, ouvert à la page des héritiers. Un nom entouré en rouge.",c:"Gérard allait modifier son testament. Quelqu'un ne pouvait pas laisser cela se faire."},
-  {t:"Chandelier renversé",d:"Chandelier d'argent renversé. Cire fondue sur le parquet.",c:"La victime a résisté brièvement avant d'être maîtrisée."},
-  {t:"Coffre fouillé",d:"Coffre dissimulé derrière un tableau — ouvert et fouillé.",c:"L'assassin savait l'existence du coffre. Quelqu'un du cercle proche."},
-  {t:"Gant de cuir",d:"Gant noir sous le bureau. Taille M, marque haut de gamme.",c:"Le meurtrier a perdu un gant. Taille M — main de femme."},
+  {t:"Cordelette de soie",c:9,d:"Cordelette rouge à moitié brûlée dans la cheminée. Provient du stock du manoir.",clue:"Seul quelqu'un qui connaît le manoir depuis longtemps savait où trouver cette cordelette."},
+  {t:"Verre de cognac",c:0,d:"Forte dose d'alcool et sédatif léger non prescrit.",clue:"Gérard a été affaibli avant d'être tué. Qui a eu accès à son verre ce soir-là ?"},
+  {t:"Testament ouvert",c:5,d:"Ouvert à la page des héritiers. Un nom entouré en rouge par Gérard.",clue:"Gérard allait modifier son testament. Quelqu'un ne pouvait pas laisser cela se faire."},
+  {t:"Chandelier renversé",c:5,d:"Chandelier d'argent renversé. Cire fondue sur le parquet.",clue:"La victime a résisté brièvement. Le chandelier a été renversé dans la lutte."},
+  {t:"Coffre fouillé",c:5,d:"Coffre dissimulé derrière un tableau — ouvert et fouillé.",clue:"L'assassin cherchait quelque chose de précis. Il connaissait l'existence du coffre."},
+  {t:"Gant de cuir noir",c:5,d:"Gant de cuir noir sous le bureau. Taille M, marque haut de gamme.",clue:"Le meurtrier a perdu un gant. Taille M — main de femme ou homme de petite stature."},
 ],
 suspects:[
-  {nom:"Margaux Blackwood",lien:"Fille — héritière",age:44,img:1,alibi:"Au salon jusqu'à 22h15, puis disparaît 45 minutes.",casier:["Aucun antécédent"],motif:"Son père allait la déshériter au profit d'une fondation. Porte du M.",traits:["Élégante","Froide","Déterminée"],coupable:true},
-  {nom:"Édouard Plantier",lien:"Notaire",age:58,img:0,alibi:"Dans la salle à manger avec deux invités tout le soir.",casier:["Abus de confiance 2016 — abandonné"],motif:"Gérard allait changer de notaire et signaler des irrégularités.",traits:["Nerveux","Souriant de façade","Méticuleux"],coupable:false},
-  {nom:"Jacques Moreau",lien:"Majordome",age:63,img:3,alibi:"Servait les invités — trous de 10 minutes.",casier:["Aucun antécédent — 40 ans de service"],motif:"Gérard le mettait à la retraite sans pension décente.",traits:["Stoïque","Loyal","Résigné"],coupable:false},
-  {nom:"Céline Aubert",lien:"Secrétaire et maîtresse",age:36,img:5,alibi:"Dans sa chambre dès 21h30 — migraine.",casier:["Aucun antécédent"],motif:"Gérard allait rompre et l'exclure du testament qu'il lui avait promis.",traits:["Séduisante","Émotionnelle","Imprévisible"],coupable:false},
+  {nom:"Margaux Blackwood",lien:"Fille — héritière",age:44,img:1,alibi:"Au salon jusqu'à 22h15, puis disparaît 45 min.",casier:["Aucun antécédent"],motif:"Son père allait la déshériter au profit d'une fondation. Porte du M, gant taille M.",traits:["Élégante","Froide","Déterminée"],coupable:true,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Au salon puis j'ai fait un tour au jardin. J'avais besoin d'air. La soirée était étouffante.",
+     "Connaissiez-vous la victime ?":"C'était mon père. Malgré nos différends, je l'aimais. Cette question est indécente.",
+     "Avez-vous un mobile ?":"Mon père changeait d'avis constamment. Il ne m'aurait jamais vraiment déshéritée. C'est absurde.",
+     "Votre alibi peut-il être confirmé ?":"Les invités m'ont vue au salon. Pour le jardin, j'étais seule. Mais je n'ai rien fait.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Mon père semblait agité. Il avait reçu un coup de téléphone qui l'avait perturbé avant le dîner."
+   }},
+  {nom:"Édouard Plantier",lien:"Notaire",age:58,img:0,alibi:"Dans la salle à manger avec deux invités toute la soirée.",casier:["Abus de confiance 2016 — abandonné"],motif:"Gérard allait changer de notaire et signaler des irrégularités.",traits:["Nerveux","Souriant de façade","Méticuleux"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans la salle à manger avec les époux Dumont toute la soirée. Ils peuvent confirmer.",
+     "Connaissiez-vous la victime ?":"Mon client depuis 20 ans. Une excellente relation professionnelle.",
+     "Avez-vous un mobile ?":"Changer de notaire n'est pas un motif de meurtre. Et les irrégularités évoquées sont sans fondement.",
+     "Votre alibi peut-il être confirmé ?":"Les Dumont ont passé toute la soirée avec moi. Demandez-leur.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Gérard avait l'air préoccupé par son testament. Il m'avait appelé la semaine dernière pour une modification."
+   }},
+  {nom:"Jacques Moreau",lien:"Majordome",age:63,img:6,alibi:"Servait les invités — trous de 10 minutes.",casier:["Aucun antécédent — 40 ans de service"],motif:"Gérard le mettait à la retraite sans pension décente.",traits:["Stoïque","Loyal","Résigné"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Je servais les invités. Je passais parfois en cuisine. Des allers-retours normaux pour ce type de soirée.",
+     "Connaissiez-vous la victime ?":"J'ai servi cette famille pendant 40 ans. Monsieur était exigeant mais c'est tout ce que je connaissais.",
+     "Avez-vous un mobile ?":"La retraite ? J'avais accepté la situation. Ce n'est pas un motif de meurtre.",
+     "Votre alibi peut-il être confirmé ?":"Les invités m'ont vu circuler. Il y a peut-être des moments sans témoin mais c'est inhérent à mon rôle.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Mademoiselle Margaux a quitté le salon vers 22h20. Elle est revenue environ 45 minutes plus tard, les mains froides."
+   }},
+  {nom:"Céline Aubert",lien:"Secrétaire et maîtresse",age:36,img:5,alibi:"Dans sa chambre dès 21h30 — migraine.",casier:["Aucun antécédent"],motif:"Gérard allait rompre et l'exclure du testament qu'il lui avait promis.",traits:["Séduisante","Émotionnelle","Imprévisible"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans ma chambre depuis 21h30. J'avais une migraine terrible. Je n'ai pas quitté mon lit.",
+     "Connaissiez-vous la victime ?":"Gérard était mon employeur et... nous avions une relation personnelle. Sa mort m'anéantit.",
+     "Avez-vous un mobile ?":"Il m'avait promis de me laisser quelque chose. Mais je l'aimais vraiment. L'argent n'est rien comparé à ça.",
+     "Votre alibi peut-il être confirmé ?":"J'ai pris des médicaments pour la migraine. Personne n'est venu me voir. Je n'ai personne.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Gérard m'avait dit qu'il avait pris une grande décision concernant son héritage. Il semblait soulagé."
+   }},
 ],
 pieces:[
   {id:"biblio",nom:"Bibliothèque",x:278,y:45,w:242,h:148,crime:true,desc:"Corps dans le fauteuil. Testament ouvert. Chandelier renversé.",indices:["Cordelette soie (cheminée)","Testament ouvert","Chandelier renversé","Gant sous bureau"]},
-  {id:"salon4",nom:"Grand Salon",x:533,y:45,w:200,h:148,crime:false,desc:"Lieu de la soirée. Alibi principal des invités.",indices:["Liste présence","Verre cognac (sédatif)"]},
-  {id:"cui4",nom:"Cuisine",x:52,y:45,w:185,h:148,crime:false,desc:"Accès direct bibliothèque via couloir de service.",indices:["Cordelette identique dans tiroir","Bouteille sédatif ouverte"]},
+  {id:"salon4",nom:"Grand Salon",x:533,y:45,w:200,h:148,crime:false,desc:"Lieu de la soirée. Alibi principal des invités.",indices:["Liste présence","Verre cognac de Gérard (sédatif)"]},
+  {id:"cui4",nom:"Cuisine",x:52,y:45,w:185,h:148,crime:false,desc:"Accès direct à la bibliothèque via couloir de service.",indices:["Cordelette identique dans tiroir","Bouteille sédatif ouverte"]},
   {id:"hall4",nom:"Hall d'Entrée",x:170,y:245,w:225,h:100,crime:false,desc:"Trace de rouge à lèvres sur un mouchoir.",indices:["Mouchoir — rouge à lèvres rare","Parapluie déplacé"]},
   {id:"bur4",nom:"Bureau de Gérard",x:410,y:245,w:215,h:100,crime:false,desc:"Coffre ouvert derrière le tableau. Fouillé.",indices:["Coffre fouillé","Note : 'Annuler RDV notaire'"]},
   {id:"jard",nom:"Terrasse/Jardin",x:52,y:245,w:100,h:100,crime:false,desc:"Traces de talons dans la boue sous la fenêtre.",indices:["Traces talons taille 38","Cigarette — rouge à lèvres"]},
 ],
 coupable:"Margaux Blackwood",
-solution:"Margaux a additionné un sédatif dans le cognac de son père, attendu qu'il s'endorme, et l'a étranglé avec la cordelette de soie. Elle a perdu un gant (taille M, non S) et laissé des traces de talons dans le jardin."},
-{id:4,titre:"L'Expérience Finale",num:"AFFAIRE N°005",diff:"Expert",img:4,
-lieu:"Laboratoire NeuroPharma SA — Strasbourg — Salle B7",
-victime:{nom:"Dr. Éléonore Voss",age:47,prof:"Chercheuse en neurosciences",lieu:"Chambre d'isolation sensorielle — Salle B7"},
+solution:"Margaux a additionné un sédatif dans le cognac de son père, attendu qu'il s'endorme dans sa bibliothèque, et l'a étranglé avec la cordelette de soie rouge. Elle a perdu un gant (taille M, pas S comme elle prétend) et laissé des traces de talons dans le jardin. Le testament la privait de tout."},
+
+{id:4,titre:"L'Expérience Finale",num:"AFFAIRE N°005",diff:"Expert",lieu:"Laboratoire NeuroPharma SA — Strasbourg",
+victime:{nom:"Dr. Éléonore Voss",age:47,prof:"Chercheuse en neurosciences",sexe:"F",lieu:"Chambre d'isolation sensorielle — Salle B7"},
 cause:"Injection neurotoxine NX-7 — paralysie foudroyante",heure:"Entre 03h00 et 04h30",
-rapport:"Injection intramusculaire dans la nuque. Mort en 8 minutes. Paralysie vocale immédiate. Accès à NX-7 réservé aux chercheurs habilitation niveau 3.",
-resume:"Dr. Voss retrouvée morte dans la chambre d'isolation à 07h00. Trois autres personnes avaient accès au bâtiment cette nuit-là.",
+rapport:"Injection intramusculaire dans la nuque. Mort en 8 minutes. Paralysie vocale immédiate. Accès à NX-7 : habilitation niveau 3 requise.",
+resume:"Dr. Voss retrouvée morte dans la chambre d'isolation à 07h00. Elle travaillait seule sur un projet classifié. Trois autres personnes avaient accès au bâtiment.",
 photos:[
-  {t:"Seringue retrouvée",d:"Seringue à 2m du corps. Substance : NX-7, neurotoxine expérimentale.",c:"NX-7 accessible uniquement aux chercheurs avec habilitation niveau 3 ou plus."},
-  {t:"Carnet de recherche",d:"Passages noircis. Dernière entrée : 'Ils vont vouloir m'arrêter. Les données sont ailleurs.'",c:"Éléonore avait caché des données compromettantes. Le meurtrier les cherchait."},
-  {t:"Ordinateur effacé",d:"Disque dur effacé à 03h17 — avant sa mort selon l'autopsie.",c:"Les données ont été volées puis les originaux effacés avant le meurtre."},
-  {t:"Chambre d'isolation",d:"Verrouillée de l'intérieur. Un système de déverrouillage externe existe.",c:"Seuls les chercheurs senior connaissaient le code de déverrouillage externe."},
-  {t:"Email chiffré",d:"Envoyé à 02h58 depuis le compte d'Éléonore vers une adresse inconnue.",c:"Quelqu'un a exfiltré les données puis tué Éléonore pour effacer les traces."},
-  {t:"Gants stériles usagés",d:"Dans la poubelle salle de préparation. Résidus de NX-7 à l'intérieur.",c:"Le meurtrier connaissait l'emplacement exact de la salle de préparation."},
+  {t:"Seringue NX-7",c:4,d:"Seringue à 2m du corps. Substance : NX-7 non homologuée. Empreinte partielle sur le piston.",clue:"NX-7 accessible uniquement aux chercheurs de niveau 3 ou plus. Cela réduit drastiquement les suspects."},
+  {t:"Carnet noirci",c:5,d:"Passages noircis au feutre. Dernière entrée : 'Ils vont vouloir m'arrêter. Les données sont ailleurs.'",clue:"Éléonore avait caché des données compromettantes. Le meurtrier cherchait à les récupérer."},
+  {t:"Ordinateur effacé",c:8,d:"Disque dur effacé à 03h17 — avant sa mort selon l'autopsie.",clue:"Les données ont été volées puis les originaux effacés. Le meurtre était planifié."},
+  {t:"Chambre isolée",c:1,d:"Verrouillée de l'intérieur. Système de déverrouillage externe — code connu de peu.",clue:"Seuls les chercheurs senior connaissaient le code de déverrouillage externe."},
+  {t:"Email chiffré",c:8,d:"Envoyé à 02h58 depuis le compte d'Éléonore vers une adresse inconnue.",clue:"Quelqu'un a exfiltré les données avant de supprimer les originaux et de tuer Éléonore."},
+  {t:"Gants stériles",c:9,d:"Dans la poubelle de la salle de préparation. Résidus de NX-7 à l'intérieur.",clue:"Le meurtrier connaissait l'emplacement exact de la salle de préparation — il y travaille."},
 ],
 suspects:[
-  {nom:"Prof. Arnaud Claes",lien:"Directeur de recherche",age:61,img:0,alibi:"Chez lui depuis 23h — confirmé par sa femme.",casier:["Aucun antécédent"],motif:"Éléonore allait prouver que NX-7 avait été testé illégalement sur des humains. Badge utilisé à 02h55.",traits:["Autoritaire","Brillant","Impitoyable"],coupable:true},
-  {nom:"Dr. Raphaël Stein",lien:"Chercheur associé",age:39,img:2,alibi:"Dans son bureau jusqu'à 02h — badge de sortie à 02h07.",casier:["Aucun antécédent"],motif:"Éléonore avait découvert qu'il falsifiait des résultats.",traits:["Compétitif","Jaloux","Intelligent"],coupable:false},
-  {nom:"Ingrid Sauer",lien:"Investisseure principale",age:54,img:1,alibi:"Hôtel Sofitel Strasbourg — check-in 21h, check-out 08h.",casier:["SEC inquiry 2020 — aucune poursuite"],motif:"Si le scandale NX-7 éclatait, elle perdait 40M€ investis.",traits:["Calculatrice","Souriante","Dangereuse"],coupable:false},
-  {nom:"Mia Tanaka",lien:"Assistante de recherche",age:26,img:4,alibi:"Couloir B jusqu'à 03h — caméra confirme.",casier:["Aucun antécédent"],motif:"Éléonore venait de la renvoyer pour espionnage industriel.",traits:["Discrète","Intelligente","Rancunière"],coupable:false},
+  {nom:"Prof. Arnaud Claes",lien:"Directeur de recherche",age:61,img:0,alibi:"Chez lui depuis 23h — confirmé par sa femme.",casier:["Aucun antécédent"],motif:"Éléonore allait prouver que NX-7 testé illégalement sur des humains. Badge utilisé à 02h55.",traits:["Autoritaire","Brillant","Impitoyable"],coupable:true,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Chez moi depuis 23h. Ma femme peut confirmer. Je n'ai aucune raison d'être au labo la nuit.",
+     "Connaissiez-vous la victime ?":"Éléonore était ma chercheuse principale depuis 8 ans. Brillante mais... têtue.",
+     "Avez-vous un mobile ?":"Aucun. Ses recherches étaient essentielles pour notre laboratoire.",
+     "Votre alibi peut-il être confirmé ?":"Ma femme peut témoigner. Et mes appels téléphoniques de chez moi cette nuit-là.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Éléonore avait demandé un accès à des données confidentielles la semaine dernière. J'avais refusé."
+   }},
+  {nom:"Dr. Raphaël Stein",lien:"Chercheur associé",age:39,img:2,alibi:"Dans son bureau jusqu'à 02h — badge de sortie à 02h07.",casier:["Aucun antécédent"],motif:"Éléonore avait découvert qu'il falsifiait des résultats.",traits:["Compétitif","Jaloux","Intelligent"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Mon bureau jusqu'à 02h07. Mon badge de sortie l'atteste. J'étais loin du laboratoire au moment des faits.",
+     "Connaissiez-vous la victime ?":"Nous collaborions. Nos méthodes différaient parfois mais nous avancions dans le même sens.",
+     "Avez-vous un mobile ?":"Ses découvertes sur mes données ? Elle se trompait sur l'interprétation. Ce n'est pas un motif.",
+     "Votre alibi peut-il être confirmé ?":"Mon badge de sortie à 02h07. Les caméras du parking me montrent partir. Inattaquable.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Éléonore avait un comportement paranoïaque ces dernières semaines. Comme si elle se sentait surveillée."
+   }},
+  {nom:"Ingrid Sauer",lien:"Investisseure principale",age:54,img:1,alibi:"Hôtel Sofitel — check-in 21h, check-out 08h.",casier:["SEC inquiry 2020 — aucune poursuite"],motif:"Si le scandale NX-7 éclatait, elle perdait 40M€ investis.",traits:["Calculatrice","Souriante","Dangereuse"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"À l'hôtel Sofitel. Check-in à 21h. Room service à 23h. Je n'ai pas quitté l'hôtel.",
+     "Connaissiez-vous la victime ?":"Nous nous croisions lors des bilans financiers. Une relation strictement professionnelle.",
+     "Avez-vous un mobile ?":"Un scandale me coûterait cher. Mais un meurtre encore plus. Je ne suis pas stupide.",
+     "Votre alibi peut-il être confirmé ?":"Carte de chambre, caméras de l'hôtel, room service horodaté. Vérifiable en 5 minutes.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"J'avais entendu dire qu'Éléonore voulait rendre publics certains résultats de tests. Ça m'inquiétait."
+   }},
+  {nom:"Mia Tanaka",lien:"Assistante de recherche",age:26,img:5,alibi:"Couloir B jusqu'à 03h — caméra confirme.",casier:["Aucun antécédent"],motif:"Éléonore venait de la renvoyer pour espionnage.",traits:["Discrète","Intelligente","Rancunière"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans le couloir B jusqu'à 03h00. Les caméras me montrent clairement.",
+     "Connaissiez-vous la victime ?":"C'était ma superviseure. Elle m'a renvoyée injustement. Je collectais des données pour ma thèse.",
+     "Avez-vous un mobile ?":"Oui, j'étais en colère. Mais entre la colère et le meurtre, il y a un gouffre.",
+     "Votre alibi peut-il être confirmé ?":"Les caméras du couloir B. Je ne pouvais pas être en B7 et dans le couloir simultanément.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Quelqu'un avait accédé au système informatique d'Éléonore avant moi cette nuit-là. Je l'ai vu sur les logs."
+   }},
 ],
 pieces:[
   {id:"b7",nom:"Salle B7 — Isolation",x:278,y:45,w:242,h:148,crime:true,desc:"Corps au sol. Seringue à proximité.",indices:["Seringue NX-7","Carnet de recherche","Code déverrouillage utilisé"]},
-  {id:"prep",nom:"Salle Préparation",x:533,y:45,w:195,h:148,crime:false,desc:"Gants usagés dans la poubelle. Flacon NX-7 avec dose manquante.",indices:["Gants stériles (résidus NX-7)","Flacon NX-7 — dose manquante"]},
-  {id:"info",nom:"Salle Informatique",x:52,y:45,w:185,h:148,crime:false,desc:"Disque dur d'Éléonore effacé. Email chiffré à 02h58.",indices:["Disque effacé","Email chiffré","Log : badge Claes 03h02"]},
+  {id:"prep",nom:"Salle Préparation",x:533,y:45,w:195,h:148,crime:false,desc:"Gants usagés. Flacon NX-7 avec dose manquante.",indices:["Gants stériles (résidus NX-7)","Flacon NX-7 — dose manquante"]},
+  {id:"info",nom:"Salle Informatique",x:52,y:45,w:185,h:148,crime:false,desc:"Disque dur effacé. Email chiffré à 02h58.",indices:["Disque effacé","Email chiffré","Log : badge Claes 03h02"]},
   {id:"coul",nom:"Couloir B",x:170,y:245,w:230,h:100,crime:false,desc:"Badge Claes à 02h55 et 03h02.",indices:["Badge Claes 02h55","Silhouette en blouse blanche"]},
-  {id:"bur5",nom:"Bureau Directeur",x:415,y:245,w:215,h:100,crime:false,desc:"Ordinateur partiellement effacé.",indices:["Historique partiellement effacé","Note : 'Contacter avocat — urgent'"]},
+  {id:"bur5",nom:"Bureau du Directeur",x:415,y:245,w:215,h:100,crime:false,desc:"Ordinateur partiellement effacé.",indices:["Historique partiellement effacé","Note : 'Contacter avocat — urgent'"]},
   {id:"entr5",nom:"Entrée Sécurisée",x:52,y:245,w:100,h:100,crime:false,desc:"Seul accès. Badge obligatoire.",indices:["Badge Claes entré 02h55","Badge visiteur non identifié"]},
 ],
 coupable:"Prof. Arnaud Claes",
-solution:"Claes est entré à 02h55, a effacé les données d'Éléonore à 03h02, puis a utilisé son code pour entrer dans la chambre d'isolation et injecter NX-7. Sa femme confirme qu'il était 'sorti faire un tour' cette nuit-là."},
-];
+solution:"Claes est entré à 02h55, a effacé les données d'Éléonore depuis son poste à 03h02, puis a utilisé son code de déverrouillage pour entrer dans la chambre d'isolation et injecter NX-7. Sa femme confirme qu'il était 'sorti faire un tour' cette nuit-là. Son badge place exactement au moment du décès."},
 
-// ══ ÉTAT ══
-let SC=null,timerInt=null,sLeft=1200,score=1000;
-let indicesCol=[],suspActif=null,interrogesCnt=0;
-let connNodes=[],connLinks=[],selNode=null;
-let audioCtx=null,masterGain=null,musicOn=false;
-let reputation={xp:0,history:[]};
+// AFFAIRES 6-20 simplifiées (structure identique)
+{id:5,titre:"La Nuit du Casino",num:"AFFAIRE N°006",diff:"Difficile",lieu:"Casino Royale — Monaco — Salle des Backrooms",
+victime:{nom:"Bernard Leconte",age:61,prof:"Directeur du casino",sexe:"M",lieu:"Bureau privé — balcon"},
+cause:"Défenestration simulée en suicide",heure:"Entre 01h00 et 02h30",
+rapport:"Chute du 4e étage. Traces de lutte sur les poignets. Alcool dans le sang mais pas de dépression connue. Maquillage de suicide.",
+resume:"Bernard Leconte retrouvé mort sous son balcon. La police a d'abord conclu à un suicide. Mais les traces de lutte et le mobile financier remettent tout en question.",
+photos:[
+  {t:"Traces de lutte",c:2,d:"Ecchymoses aux poignets et avant-bras. Bernard a résisté avant d'être défenestré.",clue:"Ce n'est pas un suicide. Quelqu'un de physiquement fort a maîtrisé la victime."},
+  {t:"Verre d'alcool",c:0,d:"Taux d'alcool élevé mais artificiel — ingéré de force ou à son insu.",clue:"Bernard ne buvait pas selon ses proches. L'alcool a été administré pour simuler un état dépressif."},
+  {t:"Documents financiers",c:5,d:"Dossier de détournement — 2M€ sur 3 ans. Bernard allait tout révéler.",clue:"Celui qui détournait l'argent avait tout à perdre si Bernard parlait."},
+  {t:"Téléphone cassé",c:8,d:"Téléphone de Bernard brisé. Dernier appel à 00h47 — numéro effacé.",clue:"Bernard a appelé quelqu'un juste avant sa mort. Ce numéro est crucial."},
+  {t:"Cigarette sur le balcon",c:9,d:"Mégot de marque étrangère. Bernard ne fumait pas.",clue:"Le meurtrier a fumé en attendant que l'alcool fasse effet. Une marque rare."},
+  {t:"Caméra retournée",c:8,d:"La caméra du couloir devant le bureau retournée manuellement à 00h55.",clue:"Quelqu'un connaissait l'emplacement exact des caméras — personnel interne."},
+],
+suspects:[
+  {nom:"Sylvie Marchand",lien:"Directrice financière",age:45,img:1,alibi:"Dans son bureau jusqu'à 23h — agents de sécurité témoins.",casier:["Aucun antécédent"],motif:"Bernard avait découvert ses détournements de fonds sur 3 ans.",traits:["Froide","Méthodique","Sûre d'elle"],coupable:true,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans mon bureau jusqu'à 23h puis je suis rentrée chez moi. J'étais épuisée.",
+     "Connaissiez-vous la victime ?":"Bernard était mon supérieur direct. Une relation professionnelle correcte.",
+     "Avez-vous un mobile ?":"Les accusations de détournement sont fausses. J'allais les réfuter avec mon avocat.",
+     "Votre alibi peut-il être confirmé ?":"Les agents de sécurité m'ont vue quitter à 23h15. Et ma voiture a été filmée à la sortie.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Bernard semblait avoir découvert quelque chose. Il m'avait convoquée pour le lendemain matin."
+   }},
+  {nom:"Marco Ricci",lien:"Chef de salle",age:38,img:2,alibi:"En salle jusqu'à 03h — nombreux témoins.",casier:["Bagarre 2019 — condamné sursis"],motif:"Bernard allait le licencier pour irrégularités.",traits:["Impulsif","Loyal envers Sylvie","Fort"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"En salle de jeux toute la nuit. Cinquante joueurs peuvent en attester.",
+     "Connaissiez-vous la victime ?":"Mon patron. On avait des tensions mais rien de grave.",
+     "Avez-vous un mobile ?":"Un licenciement ? J'aurais retrouvé du travail. Ce n'est pas un motif.",
+     "Votre alibi peut-il être confirmé ?":"La moitié du casino m'a vu travailler. Caméras, croupiers, joueurs. Inattaquable.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Bernard était monté à son bureau vers 01h en compagnie de quelqu'un. Je n'ai pas vu qui."
+   }},
+  {nom:"Élise Fontaine",lien:"Assistante personnelle",age:29,img:3,alibi:"Chez elle — appels téléphoniques horodatés.",casier:["Aucun antécédent"],motif:"Bernard allait révéler une relation qu'elle voulait cacher.",traits:["Discrète","Loyale","Stressée"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Chez moi. J'ai reçu plusieurs appels horodatés entre 00h et 02h.",
+     "Connaissiez-vous la victime ?":"Bernard était mon patron depuis 4 ans. Une relation professionnelle normale.",
+     "Avez-vous un mobile ?":"Une relation privée à cacher ? Ce n'est pas un motif de meurtre au XXIe siècle.",
+     "Votre alibi peut-il être confirmé ?":"Mes relevés téléphoniques prouvent que j'étais chez moi toute la nuit.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Bernard avait reçu un dossier mystérieux par coursier dans l'après-midi. Il était devenu très pâle."
+   }},
+  {nom:"Antoine Mora",lien:"Joueur VIP — habitué",age:55,img:4,alibi:"En salle jusqu'à 02h — cameras.",casier:["Fraude fiscale 2018 — amnistie"],motif:"Bernard savait qu'il blanchissait de l'argent via le casino.",traits:["Charmeur","Dangereux","Riche"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Aux tables de poker jusqu'à 02h15. Les caméras me montrent clairement.",
+     "Connaissiez-vous la victime ?":"Bernard gérait le casino. Je le croisais. Rien de plus.",
+     "Avez-vous un mobile ?":"De vieilles accusations sans fondement. J'ai été blanchi officiellement.",
+     "Votre alibi peut-il être confirmé ?":"Les caméras de la salle de poker. Je suis visible sur chaque enregistrement.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Bernard évitait mon regard ce soir-là. Comme s'il avait quelque chose à me dire."
+   }},
+],
+pieces:[
+  {id:"bureau6",nom:"Bureau Bernard",x:278,y:45,w:242,h:148,crime:true,desc:"Balcon d'où Bernard est tombé. Traces de lutte.",indices:["Traces de lutte","Verre d'alcool (forcé)","Cigarette étrangère"]},
+  {id:"fin6",nom:"Bureau Financier",x:533,y:45,w:195,h:148,crime:false,desc:"Bureau de Sylvie. Documents financiers suspects.",indices:["Documents détournement","Disque dur externe","Relevés bancaires étrangers"]},
+  {id:"cam6",nom:"Salle Surveillance",x:52,y:45,w:185,h:148,crime:false,desc:"Caméra retournée à 00h55.",indices:["Caméra retournée","Log accès : badge Sylvie 00h53"]},
+  {id:"sal6",nom:"Salle de Jeux",x:170,y:245,w:230,h:100,crime:false,desc:"Salle principale. Alibis confirmés.",indices:["Caméras — alibis","Témoignages croupiers"]},
+  {id:"coul6",nom:"Couloir VIP",x:415,y:245,w:215,h:100,crime:false,desc:"Couloir menant au bureau. Silhouette à 01h03.",indices:["Silhouette caméra 01h03","Empreinte chaussure femme"]},
+  {id:"entr6",nom:"Parking Privé",x:52,y:245,w:100,h:100,crime:false,desc:"Sortie de voiture à 23h15.",indices:["Voiture Sylvie sortie 23h15","Retour non enregistré"]},
+],
+coupable:"Sylvie Marchand",
+solution:"Sylvie est revenue au casino après 23h15 sans être filmée (elle connaissait les angles morts). Elle a retourné la caméra, administré de l'alcool de force à Bernard, attendu que ça fasse effet, et l'a défenestré. Son badge a été utilisé à 00h53 dans la salle de surveillance. La marque de cigarette retrouvée est sa marque habituelle."},
 
-function saveRep(){try{localStorage.setItem('mortis_rep',JSON.stringify(reputation));}catch(e){}}
-function loadRep(){try{const d=localStorage.getItem('mortis_rep');if(d)reputation=JSON.parse(d);}catch(e){}}
-loadRep();
-
-// ══ AUDIO ══
-function initAudio(){
-  if(audioCtx)return;
-  try{
-    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-    masterGain=audioCtx.createGain();masterGain.gain.value=0;masterGain.connect(audioCtx.destination);
-    [[55,.28],[82.4,.11],[110,.05]].forEach(([f,g])=>{const o=audioCtx.createOscillator(),gn=audioCtx.createGain();o.frequency.value=f;o.type='sine';gn.gain.value=g;o.connect(gn);gn.connect(masterGain);o.start();});
-    const lfo=audioCtx.createOscillator(),lg=audioCtx.createGain();lfo.frequency.value=0.07;lfo.type='sine';lg.gain.value=0.035;lfo.connect(lg);lg.connect(masterGain);lfo.start();
-    const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*3,audioCtx.sampleRate);
-    const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
-    const ns=audioCtx.createBufferSource();ns.buffer=buf;ns.loop=true;
-    const flt=audioCtx.createBiquadFilter();flt.type='lowpass';flt.frequency.value=320;
-    const ng=audioCtx.createGain();ng.gain.value=0.03;
-    ns.connect(flt);flt.connect(ng);ng.connect(masterGain);ns.start();
-    musicOn=true;
-    document.getElementById('music-btn').textContent='♪ ON';
-  }catch(e){}
-}
-function toggleMusic(){
-  if(!audioCtx){initAudio();return;}
-  musicOn=!musicOn;
-  if(masterGain)masterGain.gain.linearRampToValueAtTime(musicOn?.13:0,audioCtx.currentTime+1.5);
-  document.getElementById('music-btn').textContent=musicOn?'♪ ON':'♪ OFF';
-}
-
-// ══ FX ══
-function buildFX(){
-  const c=document.getElementById('fx');c.innerHTML='';
-  for(let i=0;i<9;i++){
-    const s=document.createElement('div');s.className='smoke';
-    const sz=60+Math.random()*170;
-    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;background:radial-gradient(ellipse,rgba(${50+Math.random()*40},${25+Math.random()*25},${70+Math.random()*40},.06),transparent 70%);animation-duration:${15+Math.random()*18}s;animation-delay:${Math.random()*12}s`;
-    c.appendChild(s);
-  }
-  for(let i=0;i<2;i++){
-    const sh=document.createElement('div');sh.className='shadow';
-    sh.style.cssText=`height:${140+Math.random()*55}px;animation-duration:${26+Math.random()*18}s;animation-delay:${Math.random()*14}s;opacity:${.2+Math.random()*.3}`;
-    c.appendChild(sh);
-  }
-}
-buildFX();
-
-// ══ NAV ══
-function hideAll(){['s-intro','s-cases','s-game','s-verdict'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});}
-function showIntro(){hideAll();document.getElementById('s-intro').style.display='flex';clearInterval(timerInt);}
-function showCases(){hideAll();buildCaseGrid();document.getElementById('s-cases').style.display='block';clearInterval(timerInt);}
-
-function buildCaseGrid(){
-  const g=document.getElementById('cases-grid');g.innerHTML='';
-  SCENARIOS.forEach((s,i)=>{
-    const dc=s.diff==='Expert'?'hard':s.diff==='Difficile'?'hard':'med';
-    const c=document.createElement('div');c.className='case-card';
-    c.innerHTML=`<img class="case-thumb" src="${CASE_IMGS[i]}" onerror="this.outerHTML='<div class=case-thumb-ph>🔍</div>'" loading="lazy">
-    <div class="case-info"><div class="case-num">${s.num}</div><div class="case-title">${s.titre}</div>
-    <p class="case-desc">${s.resume.substring(0,105)}...</p>
-    <div class="case-meta"><span class="mtag">${s.lieu.split('—')[0].trim()}</span><span class="mtag ${dc}">${s.diff}</span></div></div>`;
-    c.onclick=()=>startGame(s.id);g.appendChild(c);
-  });
-}
-
-function startGame(id){
-  SC=SCENARIOS.find(s=>s.id===id);
-  indicesCol=[];suspActif=null;interrogesCnt=0;connNodes=[];connLinks=[];selNode=null;
-  sLeft=1200;score=1000;
-  hideAll();
-  document.getElementById('s-game').style.display='flex';
-  document.getElementById('tb-case').textContent=SC.num+' — '+SC.titre;
-  document.getElementById('nb-sus').textContent=SC.suspects.length;
-  document.getElementById('nb-ind').textContent='0';
-  buildDossier();buildSuspects();buildIBtns();buildCarte();buildAccSus();updateRep();
-  showPanel('dossier',document.querySelector('.nav-btn.active'));
-  clearInterval(timerInt);timerInt=setInterval(tick,1000);
-  initAudio();
-}
-
-function tick(){
-  sLeft--;score=Math.max(50,1000-Math.floor((1200-sLeft)/6));
-  document.getElementById('score-el').textContent=score;
-  const m=Math.floor(sLeft/60),s=sLeft%60;
-  const td=document.getElementById('timer');
-  td.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-  td.className='timer'+(sLeft<=120?' urgent':'');
-  if(sLeft<=0){clearInterval(timerInt);endGame(false,'timeout');}
-}
-
-function showPanel(name,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  if(btn)btn.classList.add('active');
-  if(name==='accusation')updateAccStats();
-  if(name==='carnet')refreshCanvas();
-  if(name==='reputation')updateRep();
-}
-
-function buildDossier(){
-  document.getElementById('dnum').textContent=SC.num;
-  document.getElementById('vphoto').innerHTML=`<img src="${VICTIM_IMG}" onerror="this.parentElement.textContent='💀'">`;
-  document.getElementById('f-nom').textContent=SC.victime.nom;
-  document.getElementById('f-age').textContent=SC.victime.age+' ans';
-  document.getElementById('f-prof').textContent=SC.victime.prof;
-  document.getElementById('f-lieu').textContent=SC.victime.lieu;
-  document.getElementById('f-cause').textContent=SC.cause;
-  document.getElementById('f-heure').textContent=SC.heure;
-  document.getElementById('f-rapport').textContent=SC.rapport;
-  document.getElementById('f-resume').textContent=SC.resume;
-  const cp=document.getElementById('csphotos');cp.innerHTML='';
-  SC.photos.forEach((p,i)=>{
-    const d=document.createElement('div');d.className='csphoto';d.id='ph-'+i;
-    d.innerHTML=`<img src="${CRIME_IMGS[i%CRIME_IMGS.length]}" loading="lazy" onerror="this.style.display='none'"><div class="cslabel">${p.t}</div>`;
-    d.onclick=()=>openModal(i);cp.appendChild(d);
-  });
-}
-
-function openModal(i){
-  const p=SC.photos[i];
-  document.getElementById('m-img-area').innerHTML=`<img src="${CRIME_IMGS[i%CRIME_IMGS.length]}" class="mimg" onerror="this.style.display='none'">`;
-  document.getElementById('m-title').textContent=p.t;
-  document.getElementById('m-desc').textContent=p.d;
-  const key='ph-'+i;
-  if(!indicesCol.includes(key)){indicesCol.push(key);addIndice({icon:'📸',type:'Photo de scène',text:p.t+' — '+p.d,link:p.c});document.getElementById('ph-'+i)?.classList.add('revealed');}
-  document.getElementById('m-clue-txt').textContent=p.c;
-  document.getElementById('m-clue').style.display='block';
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-
-function addIndice(ind){
-  document.getElementById('ind-empty').style.display='none';
-  const d=document.createElement('div');d.className='indcard';
-  d.innerHTML=`<div class="indicon">${ind.icon}</div><div style="flex:1"><div class="indt">${ind.type}<span class="newb">NOUVEAU</span></div><div class="indtxt">${ind.text}</div><div class="indlink">💡 ${ind.link}</div></div>`;
-  document.getElementById('ind-list').prepend(d);
-  document.getElementById('nb-ind').textContent=indicesCol.length;
-  setTimeout(()=>d.querySelector('.newb')?.remove(),5000);
-  buildConnNodes();
-}
-
-function buildSuspects(){
-  const grid=document.getElementById('sgrid'),sb=document.getElementById('sb-suspects');
-  grid.innerHTML='';sb.innerHTML='';
-  SC.suspects.forEach(s=>{
-    const si=SUSP_IMGS[s.img]||SUSP_IMGS[0];
-    const m=document.createElement('div');m.className='smini';
-    m.innerHTML=`<img src="${si}" onerror="this.style.display='none'" loading="lazy">`;
-    m.title=s.nom;m.onclick=()=>showPanel('suspects',document.querySelectorAll('.nav-btn')[2]);
-    sb.appendChild(m);
-    const c=document.createElement('div');c.className='scard';
-    const cas=s.casier.map(ci=>ci.toLowerCase().includes('aucun')?`<span class="bdg n">Casier vierge</span>`:`<span class="bdg w">⚠ ${ci.substring(0,30)}</span>`).join('');
-    c.innerHTML=`<div class="scard-head"><div class="savatar"><img src="${si}" loading="lazy" onerror="this.style.display='none'"></div>
-    <div style="flex:1"><strong style="font-size:.97rem">${s.nom}</strong><div style="font-size:.75rem;color:var(--text2);margin-top:2px">${s.lien} · ${s.age} ans</div><div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">${cas}</div></div></div>
-    <div class="scard-body"><div class="sl">Alibi</div><div class="sv">${s.alibi}</div>
-    <div class="sl">Motif potentiel</div><div class="sv hl">${s.motif}</div>
-    <div class="sl">Casier judiciaire</div>${s.casier.map(ci=>`<div class="casi">${ci}</div>`).join('')}
-    <div class="sl">Traits</div><div class="sv">${s.traits.join(' · ')}</div>
-    <button class="btn-interro" onclick="selectInterro('${s.nom}')">💬 Interroger ${s.nom.split(' ')[0]}</button></div>`;
-    grid.appendChild(c);
-  });
-}
-
-function buildIBtns(){
-  const c=document.getElementById('i-btns');c.innerHTML='';
-  SC.suspects.forEach(s=>{
-    const si=SUSP_IMGS[s.img]||SUSP_IMGS[0];
-    const b=document.createElement('button');
-    b.style.cssText='background:var(--bg2);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:4px;font-size:.78rem;display:flex;align-items:center;gap:6px;transition:all .2s';
-    b.innerHTML=`<img src="${si}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;filter:grayscale(.5)" onerror="this.style.display='none'" loading="lazy">${s.nom}`;
-    b.onmouseenter=()=>{b.style.borderColor='var(--gold)';b.style.color='var(--text)';};
-    b.onmouseleave=()=>{b.style.borderColor='var(--border)';b.style.color='var(--text2)';};
-    b.onclick=()=>selectInterro(s.nom);
-    c.appendChild(b);
-  });
-}
-
-function selectInterro(nom){
-  showPanel('interro',document.querySelectorAll('.nav-btn')[3]);
-  suspActif=SC.suspects.find(s=>s.nom===nom);
-  interrogesCnt++;
-  document.getElementById('iroom').style.display='block';
-  document.getElementById('i-ph').style.display='none';
-  const si=SUSP_IMGS[suspActif.img]||SUSP_IMGS[0];
-  document.getElementById('iavatar').innerHTML=`<img src="${si}" style="width:100%;height:100%;object-fit:cover;filter:grayscale(.3)" onerror="this.style.display='none'" loading="lazy">`;
-  document.getElementById('iname').textContent=suspActif.nom;
-  document.getElementById('chat').innerHTML='';
-  addMsg('sus','Je n\'ai rien à cacher. Posez votre question.',true);
-  buildQQ();
-}
-
-function buildQQ(){
-  const qq=document.getElementById('qq');qq.innerHTML='';
-  ['Où étiez-vous cette nuit ?','Votre alibi ?','Connaissiez-vous la victime ?','Avez-vous un mobile ?','Que cachez-vous ?'].forEach(q=>{
-    const b=document.createElement('button');b.className='qqb';b.textContent='❝ '+q;
-    b.onclick=()=>{document.getElementById('cinput').value=q;sendMsg();};
-    qq.appendChild(b);
-  });
-}
-
-function addMsg(role,text,noScroll){
-  const chat=document.getElementById('chat');
-  const si=suspActif?SUSP_IMGS[suspActif.img]||SUSP_IMGS[0]:'';
-  const d=document.createElement('div');d.className='msg '+role;
-  const av=role==='sus'
-    ?`<div class="mav"><img src="${si}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"></div>`
-    :`<div class="mav" style="background:rgba(192,57,43,.15);font-size:.65rem;font-weight:700;color:var(--red2)">🔍</div>`;
-  d.innerHTML=av+`<div class="bubble">${text}</div>`;
-  chat.appendChild(d);
-  if(!noScroll)chat.scrollTop=chat.scrollHeight;
-}
-
-async function sendMsg(){
-  if(!suspActif)return;
-  const inp=document.getElementById('cinput');
-  const q=inp.value.trim();if(!q)return;inp.value='';
-  const btn=document.getElementById('csend');btn.disabled=true;
-  addMsg('det',q);
-  const chat=document.getElementById('chat');
-  const tEl=document.createElement('div');tEl.className='msg sus';
-  tEl.innerHTML=`<div class="mav"></div><div class="thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
-  chat.appendChild(tEl);chat.scrollTop=chat.scrollHeight;
-  const s=suspActif;
-  let resp=null;
-  try{
-    // ✅ Appel via /api/chat Vercel — modèle corrigé : claude-sonnet-4-5-20250929
-    const res=await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model: API_MODEL,
-        max_tokens:120,
-        system:`Tu es ${s.nom}, ${s.lien}, ${s.age} ans, suspect dans une enquête criminelle française. Alibi : ${s.alibi}. Motif possible : ${s.motif}. Traits : ${s.traits.join(', ')}. ${s.coupable?'Tu ES le coupable mais tu le caches stratégiquement.':'Tu es innocent(e) mais tu as tes secrets.'} RÈGLE ABSOLUE : Réponds UNIQUEMENT et DIRECTEMENT à la question posée. Maximum 2 phrases courtes. En français. Dans ton personnage. Ne résume JAMAIS la conversation.`,
-        messages:[{role:'user',content:q}]
-      })
-    });
-    if(res.ok){const data=await res.json();resp=data.content?.[0]?.text||null;}
-  }catch(e){}
-  // Fallback enrichi si API indisponible
-  if(!resp)resp=getFallback(s.nom,q);
-  tEl.remove();
-  addMsg('sus',resp);
-  btn.disabled=false;
-}
-
-function buildCarte(){
-  const svg=document.getElementById('mapsvg');svg.innerHTML='';
-  const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');bg.setAttribute('width','800');bg.setAttribute('height','440');bg.setAttribute('fill','#0c0c18');svg.appendChild(bg);
-  for(let x=0;x<800;x+=40){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',x);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',440);l.setAttribute('stroke','#181828');l.setAttribute('stroke-width','0.5');svg.appendChild(l);}
-  for(let y=0;y<440;y+=40){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',y);l.setAttribute('x2',800);l.setAttribute('y2',y);l.setAttribute('stroke','#181828');l.setAttribute('stroke-width','0.5');svg.appendChild(l);}
-  SC.pieces.forEach(p=>{
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.style.cursor='pointer';
-    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');r.setAttribute('x',p.x);r.setAttribute('y',p.y);r.setAttribute('width',p.w);r.setAttribute('height',p.h);r.setAttribute('fill',p.crime?'rgba(192,57,43,.1)':'rgba(18,18,28,.9)');r.setAttribute('stroke',p.crime?'#c0392b':'#242434');r.setAttribute('stroke-width',p.crime?2:1);r.setAttribute('rx','4');g.appendChild(r);
-    if(p.crime){const cl=document.createElementNS('http://www.w3.org/2000/svg','text');cl.setAttribute('x',p.x+p.w-8);cl.setAttribute('y',p.y+14);cl.setAttribute('text-anchor','end');cl.setAttribute('fill','#c0392b');cl.setAttribute('font-size','9');cl.textContent='● CRIME';g.appendChild(cl);}
-    const nm=document.createElementNS('http://www.w3.org/2000/svg','text');nm.setAttribute('x',p.x+p.w/2);nm.setAttribute('y',p.y+p.h/2+4);nm.setAttribute('text-anchor','middle');nm.setAttribute('fill','#a09880');nm.setAttribute('font-size','11');nm.textContent=p.nom;g.appendChild(nm);
-    const sub=document.createElementNS('http://www.w3.org/2000/svg','text');sub.setAttribute('x',p.x+p.w/2);sub.setAttribute('y',p.y+p.h/2+20);sub.setAttribute('text-anchor','middle');sub.setAttribute('fill','#3a3a50');sub.setAttribute('font-size','9');sub.textContent=p.indices.length+' indice'+(p.indices.length>1?'s':'');g.appendChild(sub);
-    g.onclick=()=>exploreRoom(p);svg.appendChild(g);
-  });
-}
-
-function exploreRoom(p){
-  document.getElementById('room-detail').style.display='block';
-  document.getElementById('rd-name').textContent=p.nom+(p.crime?' 🚨':'');
-  document.getElementById('rd-desc').textContent=p.desc;
-  const rc=document.getElementById('rd-clues');rc.innerHTML='';
-  p.indices.forEach(ind=>{
-    const key='rm-'+p.id+'-'+ind;const col=indicesCol.includes(key);
-    const d=document.createElement('div');d.className='rci'+(col?' col':'');
-    d.innerHTML=(col?'✅ ':'🔍 ')+ind;
-    if(!col){d.onclick=()=>{indicesCol.push(key);addIndice({icon:'📍',type:'Terrain',text:p.nom+' — '+ind,link:'Reliez cet indice à un suspect dans le carnet.'});d.className='rci col';d.innerHTML='✅ '+ind;d.onclick=null;};}
-    rc.appendChild(d);
-  });
-}
-
-function buildConnNodes(){
-  connNodes=[];
-  SC.suspects.forEach(s=>connNodes.push({id:'s-'+s.nom,label:s.nom,color:'#c0392b'}));
-  const labels=[...new Set(indicesCol.map(k=>{if(k.startsWith('ph-')){const ph=SC.photos[parseInt(k.split('-')[1])];return ph?ph.t:null;}const parts=k.split('-');parts.shift();parts.shift();return parts.join('-').substring(0,20)||null;}).filter(Boolean))];
-  labels.forEach((l,i)=>connNodes.push({id:'i-'+i,label:l,color:'#c9a84c'}));
-  if(document.getElementById('panel-carnet').classList.contains('active'))refreshCanvas();
-}
-
-function refreshCanvas(){
-  const wrap=document.querySelector('.canvaswrap');if(!wrap)return;
-  const W=wrap.clientWidth||560,H=260;
-  const cv=document.getElementById('conncanvas');cv.width=W;cv.height=H;
-  const ctx=cv.getContext('2d');ctx.clearRect(0,0,W,H);
-  if(!connNodes.length)return;
-  connNodes.forEach((n,i)=>{const a=(i/connNodes.length)*Math.PI*2-Math.PI/2;const r=Math.min(W,H)*.36;n.x=W/2+r*Math.cos(a);n.y=H/2+r*Math.sin(a);});
-  connLinks.forEach(lk=>{const a=connNodes.find(n=>n.id===lk.a),b=connNodes.find(n=>n.id===lk.b);if(!a||!b)return;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(192,57,43,.5)';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);});
-  connNodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,5,0,Math.PI*2);ctx.fillStyle=n.id===selNode?'#f0d878':(connLinks.some(l=>l.a===n.id||l.b===n.id)?n.color:'#2a2a3a');ctx.fill();ctx.strokeStyle=n.color;ctx.lineWidth=1.5;ctx.stroke();});
-  const nd=document.getElementById('connnodes');nd.innerHTML='';
-  connNodes.forEach(n=>{
-    const el=document.createElement('div');el.className='cnode'+(n.id===selNode?' sel':'')+(connLinks.some(l=>l.a===n.id||l.b===n.id)?' linked':'');
-    el.textContent=n.label.substring(0,18);el.style.left=n.x+'px';el.style.top=n.y+'px';
-    el.onclick=()=>{if(!selNode){selNode=n.id;}else if(selNode===n.id){selNode=null;}else{if(!connLinks.find(l=>(l.a===selNode&&l.b===n.id)||(l.a===n.id&&l.b===selNode)))connLinks.push({a:selNode,b:n.id});selNode=null;}refreshCanvas();updateLinksList();};
-    nd.appendChild(el);
-  });
-  updateLinksList();
-}
-
-function updateLinksList(){
-  const list=document.getElementById('linklist');list.innerHTML='';
-  if(!connLinks.length){list.innerHTML='<p style="font-size:.7rem;color:var(--text3);font-style:italic">Aucune connexion. Cliquez deux nœuds pour les relier.</p>';return;}
-  connLinks.forEach((lk,i)=>{const a=connNodes.find(n=>n.id===lk.a),b=connNodes.find(n=>n.id===lk.b);if(!a||!b)return;const d=document.createElement('div');d.className='linkitem';d.innerHTML=`<span style="color:var(--red2)">●</span><strong>${a.label}</strong><span style="color:var(--text3)">↔</span><strong>${b.label}</strong><button class="linkdel" onclick="removeLink(${i})">✕</button>`;list.appendChild(d);});
-  document.getElementById('ev-conn').textContent=connLinks.length;
-}
-function removeLink(i){connLinks.splice(i,1);refreshCanvas();}
-
-const RANKS=[{n:'Apprenti Détective',min:0},{n:'Inspecteur',min:500},{n:'Inspecteur Principal',min:1000},{n:'Commissaire',min:2000},{n:'Commissaire Divisionnaire',min:4000}];
-function getRank(xp){let r=RANKS[0];RANKS.forEach(rk=>{if(xp>=rk.min)r=rk;});return r;}
-function getNext(xp){return RANKS.find(r=>r.min>xp)||null;}
-function updateRep(){
-  const xp=reputation.xp,rank=getRank(xp),next=getNext(xp);
-  document.getElementById('rep-rank').textContent=rank.n;
-  document.getElementById('rep-xp').textContent=xp+' XP';
-  const pct=next?Math.min(100,Math.round(((xp-rank.min)/(next.min-rank.min))*100)):100;
-  document.getElementById('rep-bar').style.width=pct+'%';
-  const hist=document.getElementById('rep-hist');
-  if(!reputation.history.length){hist.innerHTML='<p style="font-size:.8rem;color:var(--text3)">Aucune affaire résolue.</p>';return;}
-  hist.innerHTML=reputation.history.slice(-5).reverse().map(h=>`<div style="display:flex;justify-content:space-between;padding:.38rem 0;border-bottom:1px solid var(--border);font-size:.78rem"><span>${h.titre}</span><span style="color:${h.correct?'var(--gold)':'var(--red)'}">${h.correct?'✓':'✗'} ${h.xp} XP</span></div>`).join('');
-  const badges=[
-    {label:'Première enquête',cond:reputation.history.length>=1},
-    {label:'3 affaires résolues',cond:reputation.history.filter(h=>h.correct).length>=3},
-    {label:'Résolution rapide',cond:reputation.history.some(h=>h.correct&&h.tLeft>600)},
-    {label:'Commissaire',cond:xp>=2000},
-  ];
-  document.getElementById('rep-badges').innerHTML=badges.map(b=>`<span class="rep-bdg${b.cond?' earned':''}">${b.cond?'🏅':'🔒'} ${b.label}</span>`).join('');
-}
-
-function buildAccSus(){
-  const c=document.getElementById('acc-sus');c.innerHTML='';
-  SC.suspects.forEach(s=>{
-    const si=SUSP_IMGS[s.img]||SUSP_IMGS[0];
-    const b=document.createElement('button');b.className='accbtn';
-    b.innerHTML=`<img src="${si}" onerror="this.style.display='none'" loading="lazy">Accuser ${s.nom}`;
-    b.onclick=()=>{clearInterval(timerInt);endGame(s.coupable,s.nom);};
-    c.appendChild(b);
-  });
-}
-function updateAccStats(){
-  document.getElementById('ev-ind').textContent=indicesCol.length+' / '+SC.photos.length;
-  document.getElementById('ev-int').textContent=interrogesCnt+' / '+SC.suspects.length;
-  document.getElementById('ev-conn').textContent=connLinks.length;
-  const m=Math.floor(sLeft/60),s=sLeft%60;
-  document.getElementById('ev-t').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-  document.getElementById('ev-s').textContent=score;
-}
-
-function endGame(correct,nom){
-  clearInterval(timerInt);
-  const timeB=Math.floor(sLeft/6),idxB=indicesCol.length*15,connB=connLinks.length*10;
-  const final=correct?score+timeB+idxB+connB:Math.floor(score*.08);
-  const xp=Math.floor(final/3);
-  reputation.xp+=xp;reputation.history.push({titre:SC.titre,correct,xp,tLeft:sLeft});
-  saveRep();
-  hideAll();
-  const v=document.getElementById('s-verdict');v.style.display='flex';
-  document.getElementById('vbadge').textContent=correct?'🏆':'💀';
-  document.getElementById('vtitle').textContent=correct?'Affaire résolue !':'Mauvaise piste...';
-  document.getElementById('vtitle').className='vtitle '+(correct?'win':'lose');
-  document.getElementById('vsub').textContent=correct
-    ?`Félicitations ! Vous avez démasqué ${SC.coupable}. +${xp} XP gagné.`
-    :(nom==='timeout'?`Temps écoulé. Le coupable était ${SC.coupable}.`:`${nom} est innocent(e). Le coupable était ${SC.coupable}.`);
-  document.getElementById('vrank').textContent='🏅 '+getRank(reputation.xp).n;
-  document.getElementById('vscorecard').innerHTML=`
-    <div class="srow"><span style="color:var(--text2)">Score de base</span><span>${score}</span></div>
-    <div class="srow"><span style="color:var(--text2)">Bonus temps</span><span>+${timeB}</span></div>
-    <div class="srow"><span style="color:var(--text2)">Bonus indices</span><span>+${idxB}</span></div>
-    <div class="srow"><span style="color:var(--text2)">Bonus connexions</span><span>+${connB}</span></div>
-    <div class="srow"><span>Score final</span><span>${final}</span></div>`;
-  document.getElementById('vsolbox').textContent='Solution : '+SC.solution;
-}
-</script>
-</body>
-</html>
+{id:6,titre:"Le Secret du Château",num:"AFFAIRE N°007",diff:"Moyen",lieu:"Château de Valbrun — Dordogne",
+victime:{nom:"Comte Henri de Valbrun",age:78,prof:"Aristocrate",sexe:"M",lieu:"Tour Nord — pied de l'escalier en colimaçon"},
+cause:"Chute dans l'escalier en colimaçon — poussé selon l'autopsie",heure:"Entre 21h00 et 22h30",
+rapport:"Fractures incompatibles avec une simple chute. Angle d'impact suggère une poussée. Pas de traces de lutte — victime âgée et fragile.",
+resume:"Le Comte retrouvé mort au pied de la Tour Nord lors d'une réunion familiale. L'escalier était plongé dans le noir. Quelqu'un a coupé l'éclairage.",
+photos:[
+  {t:"Position du corps",c:2,d:"Angle de chute incompatible avec un accident. Poussé selon le médecin légiste.",clue:"La direction de la chute indique une poussée venant du haut de l'escalier."},
+  {t:"Éclairage coupé",c:8,d:"Disjoncteur de la Tour Nord désactivé manuellement à 21h15.",clue:"Quelqu'un a délibérément coupé l'éclairage. L'accès au disjoncteur nécessite une clé spéciale."},
+  {t:"Testament récent",c:5,d:"Testament modifié 15 jours avant. Un héritier supprimé, un ajouté.",clue:"La modification du testament donne un mobile clair à l'héritier supprimé."},
+  {t:"Traces de boue",c:3,d:"Empreintes de boue dans l'escalier menant à la victime depuis le jardin.",clue:"Le meurtrier venait du jardin. Les empreintes correspondent à une pointure 41 féminine."},
+  {t:"Verre brisé",c:0,d:"Verre brisé à mi-chemin de l'escalier. Du vin rouge — la marque préférée du Comte.",clue:"Le Comte a peut-être été attiré dans l'escalier avec ce verre, ou il a résisté."},
+  {t:"Clé trouvée",c:1,d:"Clé du disjoncteur retrouvée dans un recoin de la tour. Empreinte partielle.",clue:"L'empreinte sur la clé correspond à une main féminine."},
+],
+suspects:[
+  {nom:"Isabelle de Valbrun",lien:"Fille cadette — supprimée du testament",age:42,img:1,alibi:"Dans sa chambre — personne ne peut confirmer.",casier:["Aucun antécédent"],motif:"Supprimée du testament 15 jours avant la mort. Pointure 41.",traits:["Amère","Déterminée","Calculatrice"],coupable:true,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans ma chambre depuis 20h. J'avais mal à la tête. Personne n'est venu me voir.",
+     "Connaissiez-vous la victime ?":"C'était mon père. Peu importe ce qu'il a fait, je l'aimais.",
+     "Avez-vous un mobile ?":"Il m'a supprimée du testament sans explication. Oui c'est injuste. Non je ne l'ai pas tué.",
+     "Votre alibi peut-il être confirmé ?":"Non. Mais l'absence d'alibi n'est pas une preuve de culpabilité.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Mon père semblait coupable de quelque chose ces dernières semaines. Comme s'il avait commis une injustice."
+   }},
+  {nom:"François de Valbrun",lien:"Fils aîné — héritier principal",age:48,img:0,alibi:"Au salon avec les autres — confirmé.",casier:["Aucun antécédent"],motif:"Hérite de tout mais avait une relation tendue avec son père.",traits:["Autoritaire","Impatient","Ambitieux"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Au salon avec mes cousins et l'avocat. Tout le monde m'a vu.",
+     "Connaissiez-vous la victime ?":"Mon père. Nos relations étaient complexes mais je l'aimais à ma façon.",
+     "Avez-vous un mobile ?":"J'hérite de tout de toute façon. Aucune raison de précipiter les choses.",
+     "Votre alibi peut-il être confirmé ?":"Cinq personnes peuvent confirmer ma présence au salon entre 20h et 22h.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Isabelle était très agitée depuis l'annonce du nouveau testament. Elle avait eu une violente altercation avec mon père."
+   }},
+  {nom:"Maître Dupuis",lien:"Notaire de famille",age:63,img:4,alibi:"Au salon avec François — confirmé.",casier:["Aucun antécédent"],motif:"Le Comte découvrait des irrégularités dans la gestion du patrimoine.",traits:["Nerveux","Discret","Professionnel"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Au salon avec François et les cousins. J'ai été invité à rester pour la soirée.",
+     "Connaissiez-vous la victime ?":"Mon client depuis 30 ans. Une relation de confiance totale.",
+     "Avez-vous un mobile ?":"Des irrégularités ? Tout est parfaitement légal et documenté. Je n'ai rien à cacher.",
+     "Votre alibi peut-il être confirmé ?":"Cinq personnes m'ont vu au salon. Je n'ai pas quitté la pièce.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Le Comte voulait un audit complet de la gestion des biens familiaux. Il semblait soupçonneux."
+   }},
+  {nom:"Clara Venet",lien:"Infirmière personnelle",age:35,img:5,alibi:"Dans la cuisine — cuisinière peut confirmer partiellement.",casier:["Aucun antécédent"],motif:"Le Comte voulait la remplacer après 5 ans de service.",traits:["Dévouée","Discrète","Stressée"],coupable:false,
+   qq:{
+     "Où étiez-vous au moment du meurtre ?":"Dans la cuisine à préparer les médicaments du soir pour M. le Comte. La cuisinière m'a vue.",
+     "Connaissiez-vous la victime ?":"Je m'occupais de lui depuis 5 ans. C'était un patient exigeant mais je l'aimais bien.",
+     "Avez-vous un mobile ?":"Me remplacer ? J'allais trouver un autre poste. Ce n'est pas un motif.",
+     "Votre alibi peut-il être confirmé ?":"La cuisinière m'a vue entre 20h30 et 21h30. Ensuite j'ai monté les médicaments.",
+     "Avez-vous remarqué quelque chose d'inhabituel ?":"Isabelle était montée à la Tour Nord en fin d'après-midi. Elle cherchait quelque chose selon elle."
+   }},
+],
+pieces:[
+  {id:"tour7",nom:"Tour Nord",x:278,y:45,w:242,h:148,crime:true,desc:"Escalier où Henri a chuté. Boue et verre brisé.",indices:["Position corps (poussé)","Traces boue pointure 41","Verre vin brisé"]},
+  {id:"dj7",nom:"Local Technique",x:533,y:45,w:195,h:148,crime:false,desc
+   
