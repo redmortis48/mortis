@@ -333,6 +333,7 @@ button{cursor:pointer;transition:all .2s}
     <div class="tb-right">
       <span style="font-family:var(--sp);font-size:.75rem;color:var(--text2)">Score : <b style="color:var(--gold)" id="score-el">1000</b></span>
       <div class="timer" id="timer">20:00</div>
+      <button class="tb-btn" id="music-btn" onclick="toggleMusic()" style="min-width:60px">♪ OFF</button>
       <button class="tb-btn" onclick="showCases()">Quitter</button>
     </div>
   </div>
@@ -932,6 +933,52 @@ function loadRep(){try{const d=localStorage.getItem('mortis_rep2');if(d)reputati
 loadRep();
 
 // ══════════════════════════════════════
+// AUDIO
+// ══════════════════════════════════════
+const AUDIO_BASE='https://raw.githubusercontent.com/redmortis48/mortis/main/audio';
+const sounds={};
+let musicOn=false;
+
+function loadSounds(){
+  sounds.theme=new Audio(`${AUDIO_BASE}/mortis-theme.mp3.mp3`);
+  sounds.theme.loop=true;sounds.theme.volume=.25;
+  sounds.interro=new Audio(`${AUDIO_BASE}/mortis-interrogation.mp3.mp3`);
+  sounds.interro.loop=true;sounds.interro.volume=.2;
+  sounds.victory=new Audio(`${AUDIO_BASE}/mortis-victory.mp3.mp3`);
+  sounds.victory.volume=.5;
+  sounds.failure=new Audio(`${AUDIO_BASE}/mortis-failure.mp3.mp3`);
+  sounds.failure.volume=.5;
+}
+
+function playMusic(track){
+  if(!sounds.theme)loadSounds();
+  // Stopper toutes les musiques
+  ['theme','interro'].forEach(k=>{try{sounds[k].pause();sounds[k].currentTime=0;}catch(e){}});
+  if(!musicOn)return;
+  try{sounds[track].play();}catch(e){}
+}
+
+function playSfx(track){
+  if(!sounds.theme)loadSounds();
+  try{sounds[track].currentTime=0;sounds[track].play();}catch(e){}
+}
+
+function toggleMusic(){
+  if(!sounds.theme)loadSounds();
+  musicOn=!musicOn;
+  const btn=document.getElementById('music-btn');
+  if(musicOn){
+    btn.textContent='♪ ON';
+    btn.style.color='var(--gold)';
+    try{sounds.theme.play();}catch(e){}
+  } else {
+    btn.textContent='♪ OFF';
+    btn.style.color='';
+    ['theme','interro'].forEach(k=>{try{sounds[k].pause();}catch(e){}});
+  }
+}
+
+// ══════════════════════════════════════
 // FX
 // ══════════════════════════════════════
 function buildFX(){
@@ -1025,8 +1072,12 @@ function startGame(id){
   document.getElementById('pv-ref').textContent='Réf. : '+SC.num+' — '+new Date().toLocaleDateString('fr-FR');
   buildDossier();buildSuspects();buildSelBtns();buildCarte();buildAccSus();buildSuspTable();updateRepPanel();
   showPanel('dossier',document.querySelector('.nav-btn'));
+  ['theme','interro'].forEach(k=>{try{sounds[k]?.pause();}catch(e){}});
+  if(win) playSfx('victory');
+  else playSfx('failure');
   clearInterval(timerInt);timerInt=setInterval(tick,1000);
   updateTimer();
+  playMusic('theme');
 }
 
 function tick(){
@@ -1047,6 +1098,8 @@ function showPanel(name,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
   if(btn)btn.classList.add('active');
+  if(name==='interro') playMusic('interro');
+  else if(name==='dossier'||name==='carte'||name==='suspects') playMusic('theme');
   if(name==='accusation')updateAccStats();
   if(name==='carnet')updateProg();
   if(name==='reputation')updateRepPanel();
