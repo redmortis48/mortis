@@ -8,8 +8,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=Oswald:wght@400;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
-  --red:#c0392b;--red2:#e74c3c;--red3:#ff6b6b;
+  --bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;
+  --red:#c0392b;--red2:#e74c3c;
   --gold:#c9a84c;--gold2:#f0d878;
   --paper:#f5f0e8;--paper2:#ede8d8;--paper3:#e8e0c8;
   --ink:#1a1008;--ink2:#2d1f0a;
@@ -20,7 +20,6 @@
 body{background:var(--bg);color:var(--text);font-family:var(--tw);min-height:100vh;overflow-x:hidden}
 button{cursor:pointer;transition:all .2s}
 
-/* FX */
 #fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .smoke{position:absolute;border-radius:50%;animation:smokeUp linear infinite}
 @keyframes smokeUp{0%{transform:translateY(100vh) scale(.4);opacity:0}20%{opacity:.3}80%{opacity:.1}100%{transform:translateY(-20vh) scale(3);opacity:0}}
@@ -56,8 +55,8 @@ button{cursor:pointer;transition:all .2s}
 .cases-list{display:flex;flex-direction:column;gap:.75rem;max-width:1200px;margin:0 auto 2rem}
 .case-card-big{background:var(--bg2);border:1px solid var(--border2);overflow:hidden;cursor:pointer;position:relative;transition:all .3s}
 .case-card-big:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 8px 30px rgba(192,57,43,.2)}
-.case-thumb-ph{width:100%;height:160px;background:linear-gradient(135deg,#0f0505,#1a0808);display:flex;align-items:center;justify-content:center;font-size:3.5rem;opacity:.5}
-.case-stamp{position:absolute;top:12px;right:12px;font-family:var(--sp);font-size:.65rem;padding:3px 10px;border:2px solid;letter-spacing:.15em;transform:rotate(3deg)}
+.case-thumb-ph{width:100%;height:160px;background:linear-gradient(135deg,#0f0505,#1a0808);display:flex;align-items:center;justify-content:center;font-size:3.5rem;opacity:.5;position:relative;overflow:hidden}
+.case-stamp{position:absolute;top:12px;right:12px;font-family:var(--sp);font-size:.65rem;padding:3px 10px;border:2px solid;letter-spacing:.15em;transform:rotate(3deg);z-index:2}
 .stamp-hard{color:var(--red);border-color:var(--red);background:rgba(192,57,43,.1)}
 .stamp-med{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,.1)}
 .stamp-easy{color:#27ae60;border-color:#27ae60;background:rgba(39,174,96,.1)}
@@ -67,12 +66,34 @@ button{cursor:pointer;transition:all .2s}
 .case-desc{font-family:var(--sp);font-size:.8rem;color:var(--text2);line-height:1.7;margin-bottom:.75rem}
 .case-meta{display:flex;gap:.6rem;flex-wrap:wrap}
 .cmeta{font-family:var(--sp);font-size:.65rem;background:var(--bg3);border:1px solid var(--border);padding:2px 8px;color:var(--text3)}
-.case-card-sm{background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;gap:1rem;padding:.85rem 1rem;cursor:pointer;transition:all .3s;position:relative}
+.case-card-sm{background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;gap:1rem;padding:.85rem 1rem;cursor:pointer;transition:all .3s}
 .case-card-sm:hover{border-color:var(--red);background:var(--bg3)}
 .case-sm-num{font-family:var(--ti);font-size:.7rem;color:var(--red);letter-spacing:.2em;min-width:90px}
 .case-sm-title{font-family:var(--ti);font-size:.95rem;font-weight:600;flex:1}
 .case-sm-lieu{font-family:var(--sp);font-size:.72rem;color:var(--text3);margin-right:1rem}
 .case-sm-diff{font-family:var(--sp);font-size:.62rem;padding:2px 8px;border:1px solid}
+
+/* MODE SELECT */
+.mode-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;align-items:center;justify-content:center;flex-direction:column}
+.mode-ov.open{display:flex}
+.mode-title{font-family:var(--ti);font-size:2rem;color:#fff;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem;text-align:center}
+.mode-sub{font-family:var(--sp);font-size:.85rem;color:var(--text3);margin-bottom:2.5rem;letter-spacing:.1em;text-align:center}
+.mode-cards{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+.mode-card{background:var(--bg2);border:2px solid var(--border2);padding:2rem 2.5rem;cursor:pointer;transition:all .3s;text-align:center;min-width:220px;position:relative;overflow:hidden}
+.mode-card:hover{transform:translateY(-4px)}
+.mode-card.detective{border-color:var(--red)}
+.mode-card.detective:hover{background:rgba(192,57,43,.08);box-shadow:0 8px 30px rgba(192,57,43,.3)}
+.mode-card.enqueteur{border-color:var(--gold)}
+.mode-card.enqueteur:hover{background:rgba(201,168,76,.05);box-shadow:0 8px 30px rgba(201,168,76,.2)}
+.mode-icon{font-size:3rem;margin-bottom:1rem}
+.mode-name{font-family:var(--ti);font-size:1.3rem;font-weight:700;letter-spacing:.1em;margin-bottom:.5rem}
+.mode-card.detective .mode-name{color:var(--red)}
+.mode-card.enqueteur .mode-name{color:var(--gold)}
+.mode-desc{font-family:var(--sp);font-size:.78rem;color:var(--text2);line-height:1.7;margin-bottom:1rem}
+.mode-badge{font-family:var(--sp);font-size:.65rem;padding:3px 10px;border:1px solid;letter-spacing:.1em;display:inline-block}
+.mode-card.detective .mode-badge{color:var(--red);border-color:var(--red)}
+.mode-card.enqueteur .mode-badge{color:var(--gold);border-color:var(--gold)}
+.mode-stamp{position:absolute;top:-5px;right:-5px;font-family:var(--sp);font-size:.55rem;padding:2px 8px;transform:rotate(15deg)}
 
 /* GAME */
 #s-game{display:none;height:100vh;flex-direction:column}
@@ -80,23 +101,29 @@ button{cursor:pointer;transition:all .2s}
 .topbar::after{content:'CONFIDENTIEL';position:absolute;left:50%;transform:translateX(-50%);font-family:var(--sp);font-size:.6rem;color:rgba(192,57,43,.3);letter-spacing:.4em}
 .tb-logo{font-family:var(--ti);font-size:1.4rem;font-weight:700;color:var(--red);letter-spacing:.15em;text-shadow:0 0 10px rgba(192,57,43,.5)}
 .tb-right{display:flex;align-items:center;gap:1.2rem}
-.timer{font-family:var(--tw);font-size:1.2rem;color:var(--gold);min-width:60px;text-align:center;font-variant-numeric:tabular-nums;border:1px solid rgba(201,168,76,.3);padding:2px 8px}
+.timer{font-family:var(--tw);font-size:1.2rem;color:var(--gold);min-width:60px;text-align:center;border:1px solid rgba(201,168,76,.3);padding:2px 8px}
 .timer.urgent{color:var(--red);border-color:var(--red);animation:pulse .5s infinite}
+.timer.hidden{display:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .tb-btn{font-family:var(--sp);background:transparent;border:1px solid var(--border2);color:var(--text2);padding:3px 12px;font-size:.75rem;letter-spacing:.1em}
 .tb-btn:hover{border-color:var(--red);color:var(--text)}
+.mode-indicator{font-family:var(--sp);font-size:.65rem;padding:2px 8px;border:1px solid;letter-spacing:.1em}
+.mode-indicator.detective{color:var(--red);border-color:var(--red)}
+.mode-indicator.enqueteur{color:var(--gold);border-color:var(--gold)}
 .game-layout{display:flex;flex:1;overflow:hidden}
 .sidebar{width:195px;background:#0d0d0d;border-right:2px solid #1a1a1a;display:flex;flex-direction:column;flex-shrink:0}
 .sidebar-header{padding:.75rem 1rem;border-bottom:1px solid var(--border);background:#080808}
 .sidebar-header p{font-family:var(--sp);font-size:.6rem;color:var(--text3);letter-spacing:.2em;text-transform:uppercase}
-.nav-btn{background:transparent;border:none;border-left:3px solid transparent;padding:.65rem 1rem;text-align:left;color:var(--text3);font-family:var(--sp);font-size:.78rem;display:flex;align-items:center;gap:.6rem;width:100%;letter-spacing:.05em;transition:all .15s}
+.nav-btn{background:transparent;border:none;border-left:3px solid transparent;padding:.65rem 1rem;text-align:left;color:var(--text3);font-family:var(--sp);font-size:.78rem;display:flex;align-items:center;gap:.6rem;width:100%;letter-spacing:.05em;transition:all .15s;position:relative}
 .nav-btn:hover{color:var(--text2);background:rgba(255,255,255,.02);border-left-color:var(--border2)}
 .nav-btn.active{border-left-color:var(--red);color:var(--text);background:rgba(192,57,43,.05)}
-.nbadge{margin-left:auto;background:var(--red);color:#fff;font-size:.55rem;padding:1px 5px;min-width:16px;text-align:center;font-family:var(--tw)}
+.nbadge{margin-left:auto;background:var(--red);color:#fff;font-size:.55rem;padding:1px 5px;min-width:16px;text-align:center;font-family:var(--tw);animation:badgePulse 1s ease 3}
+@keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 .sb-foot{padding:.85rem;border-top:1px solid var(--border);margin-top:auto}
 .sb-label{font-family:var(--sp);font-size:.58rem;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem}
-.smini{width:28px;height:28px;border-radius:2px;border:1px solid var(--border2);overflow:hidden;cursor:pointer;transition:border-color .2s;background:var(--bg3);display:inline-flex;align-items:center;justify-content:center;margin:2px;font-size:1rem}
+.smini{width:28px;height:28px;border-radius:2px;border:1px solid var(--border2);overflow:hidden;cursor:pointer;transition:border-color .2s;background:var(--bg3);display:inline-flex;align-items:center;justify-content:center;margin:2px;font-size:1rem;position:relative}
 .smini:hover{border-color:var(--red)}
+.smini.interroge::after{content:'';position:absolute;bottom:0;right:0;width:6px;height:6px;background:#27ae60;border-radius:50%}
 .main-area{flex:1;overflow-y:auto;background:var(--bg)}
 .panel{display:none;padding:1.5rem;animation:fi .2s ease}
 .panel.active{display:block}
@@ -110,23 +137,23 @@ button{cursor:pointer;transition:all .2s}
 .paper-field{margin-bottom:.65rem}
 .pf-label{font-family:var(--sp);font-size:.6rem;color:#6b5a3a;text-transform:uppercase;letter-spacing:.15em;margin-bottom:1px}
 .pf-val{font-family:var(--tw);font-size:.82rem;color:var(--ink);line-height:1.5;border-bottom:1px solid rgba(0,0,0,.12);padding-bottom:2px}
-.stamp-box{display:inline-block;border:3px solid var(--red);color:var(--red);font-family:var(--sp);font-size:1.1rem;padding:4px 14px;letter-spacing:.2em;transform:rotate(-6deg);margin-top:.5rem;background:rgba(192,57,43,.05)}
+.stamp-box{display:inline-block;border:3px solid var(--red);color:var(--red);font-family:var(--sp);font-size:1.1rem;padding:4px 14px;letter-spacing:.2em;transform:rotate(-6deg);margin-top:.5rem;background:rgba(192,57,43,.05);animation:stampIn .4s ease .5s both}
+@keyframes stampIn{from{transform:rotate(-6deg) scale(2);opacity:0}to{transform:rotate(-6deg) scale(1);opacity:1}}
 .conf-bar{background:var(--red);color:#fff;font-family:var(--sp);font-size:.6rem;letter-spacing:.4em;text-align:center;padding:3px;margin-bottom:1rem;text-transform:uppercase}
-.rapport-box{background:var(--paper2);border-left:4px solid var(--red);padding:.9rem 1rem;font-family:var(--tw);font-size:.79rem;line-height:1.9;color:var(--ink2);position:relative}
+.rapport-box{background:var(--paper2);border-left:4px solid var(--red);padding:.9rem 1rem;font-family:var(--tw);font-size:.79rem;line-height:1.9;color:var(--ink2)}
 
 /* PHOTOS */
 .photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.85rem}
-.crime-photo{background:var(--ink);border:2px solid #333;height:100px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.crime-photo{background:var(--ink);border:2px solid #333;height:100px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s}
 .crime-photo:hover{border-color:var(--gold)}
 .crime-photo.revealed{border-color:var(--gold)}
-.cp-icon{font-size:2rem;opacity:.5}
-.cp-corner{position:absolute;top:0;right:0;background:var(--red);color:#fff;font-family:var(--sp);font-size:.55rem;padding:2px 6px;letter-spacing:.1em}
-.cp-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.82);font-family:var(--sp);font-size:.58rem;color:#ccc;padding:3px 6px;text-align:center}
-.cp-tape{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:36px;height:12px;background:rgba(255,220,100,.25);border:1px solid rgba(255,220,100,.3)}
+.cp-corner{position:absolute;top:0;right:0;background:var(--red);color:#fff;font-family:var(--sp);font-size:.55rem;padding:2px 6px;z-index:2}
+.cp-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.82);font-family:var(--sp);font-size:.58rem;color:#ccc;padding:3px 6px;text-align:center;z-index:2}
+.cp-tape{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:36px;height:12px;background:rgba(255,220,100,.25);border:1px solid rgba(255,220,100,.3);z-index:2}
 
 /* VICTIM */
-.victim-ph{width:100%;height:120px;background:linear-gradient(135deg,#111,#1a0808);display:flex;align-items:center;justify-content:center;font-size:3rem;margin-bottom:.85rem;border:2px solid #333;position:relative}
-.victim-ph::after{content:'DÉCÉDÉ';position:absolute;bottom:5px;right:5px;font-family:var(--sp);font-size:.6rem;color:var(--red);border:1px solid var(--red);padding:2px 6px;background:rgba(0,0,0,.6)}
+.victim-ph{width:100%;height:130px;background:linear-gradient(135deg,#111,#1a0808);display:flex;align-items:center;justify-content:center;margin-bottom:.85rem;border:2px solid #333;position:relative;overflow:hidden}
+.victim-ph::after{content:'DÉCÉDÉ';position:absolute;bottom:5px;right:5px;font-family:var(--sp);font-size:.6rem;color:var(--red);border:1px solid var(--red);padding:2px 6px;background:rgba(0,0,0,.6);animation:stampIn .4s ease 1s both}
 
 /* MAP */
 .mapwrap{background:#0d0d0d;border:1px solid var(--border2);overflow:hidden;position:relative}
@@ -134,7 +161,6 @@ button{cursor:pointer;transition:all .2s}
 .map-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--sp);font-size:3rem;color:rgba(192,57,43,.04);letter-spacing:.5em;pointer-events:none;white-space:nowrap}
 .mapleg{display:flex;gap:1.2rem;padding:.6rem 1rem;border-top:1px solid var(--border);font-family:var(--sp);font-size:.65rem;color:var(--text3)}
 .legdot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
-#room-detail{display:none;margin-top:1.25rem}
 .rci{display:flex;align-items:center;gap:7px;padding:6px 9px;background:var(--paper3);border:1px solid #c8bfa8;margin-bottom:4px;font-family:var(--tw);font-size:.77rem;color:var(--ink2);cursor:pointer;transition:all .2s}
 .rci:hover{background:var(--paper2);border-color:var(--red)}
 .rci.col{background:var(--paper);color:var(--ink);cursor:default;border-color:rgba(201,168,76,.4)}
@@ -144,11 +170,11 @@ button{cursor:pointer;transition:all .2s}
 .suspect-card{background:var(--paper);border:1px solid #c8bfa8;overflow:hidden;position:relative;box-shadow:2px 2px 8px rgba(0,0,0,.3)}
 .suspect-card::after{content:'';position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 20px 20px 0;border-color:transparent var(--red) transparent transparent}
 .susp-head{padding:1rem;display:flex;gap:.85rem;align-items:flex-start;border-bottom:2px solid #c8bfa8;background:var(--paper2)}
-.susp-av{width:64px;height:64px;border:2px solid #8b7355;overflow:hidden;flex-shrink:0;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative}
-.susp-num{position:absolute;top:-1px;left:-1px;background:var(--red);color:#fff;font-family:var(--sp);font-size:.55rem;padding:1px 4px}
+.susp-av{width:70px;height:70px;border:2px solid #8b7355;overflow:hidden;flex-shrink:0;background:var(--ink);display:flex;align-items:center;justify-content:center;position:relative}
+.susp-num{position:absolute;top:-1px;left:-1px;background:var(--red);color:#fff;font-family:var(--sp);font-size:.55rem;padding:1px 4px;z-index:1}
 .susp-name{font-family:var(--ti);font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:2px;letter-spacing:.05em}
 .susp-role{font-family:var(--sp);font-size:.7rem;color:#6b5a3a;margin-bottom:.4rem}
-.susp-badge{font-family:var(--sp);font-size:.58rem;padding:2px 7px;border:1px solid;display:inline-block;margin:2px;letter-spacing:.08em}
+.susp-badge{font-family:var(--sp);font-size:.58rem;padding:2px 7px;border:1px solid;display:inline-block;margin:2px}
 .badge-warn{color:#e67e22;border-color:#e67e22}
 .susp-body{padding:1rem}
 .susp-field{margin-bottom:.7rem}
@@ -164,23 +190,31 @@ button{cursor:pointer;transition:all .2s}
 .pv-ref{font-family:var(--tw);font-size:.7rem;color:#6b5a3a;margin-bottom:.25rem}
 .pv-stamp{position:absolute;top:10px;right:15px;font-family:var(--sp);font-size:.8rem;color:var(--red);border:2px solid var(--red);padding:3px 10px;letter-spacing:.2em;transform:rotate(5deg);background:rgba(192,57,43,.05)}
 .sel-btns{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem}
-.sel-btn{font-family:var(--sp);background:var(--paper2);border:1px solid #c8bfa8;color:var(--ink2);padding:5px 12px;font-size:.74rem;display:flex;align-items:center;gap:6px}
+.sel-btn{font-family:var(--sp);background:var(--paper2);border:1px solid #c8bfa8;color:var(--ink2);padding:5px 12px;font-size:.74rem;display:flex;align-items:center;gap:6px;position:relative}
 .sel-btn:hover{border-color:var(--red);background:var(--paper)}
 .sel-btn.active-sus{border-color:var(--red);background:var(--paper);color:var(--ink)}
-.sel-btn-av{width:20px;height:20px;background:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-size:.8rem}
-.interro-room{background:var(--paper);border:2px solid #c8bfa8;overflow:hidden;box-shadow:2px 2px 10px rgba(0,0,0,.3)}
-.interro-head{background:var(--paper2);border-bottom:2px solid #c8bfa8;padding:.9rem 1rem;display:flex;align-items:center;gap:.9rem}
-.interro-av{width:56px;height:56px;border:2px solid #8b7355;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:2rem}
+.sel-btn.interroge-done::after{content:'✓';position:absolute;top:-5px;right:-5px;background:#27ae60;color:#fff;width:14px;height:14px;border-radius:50%;font-size:.6rem;display:flex;align-items:center;justify-content:center}
+.sel-btn-av{width:22px;height:22px;background:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;overflow:hidden}
+.interro-room{background:var(--paper);border:2px solid #c8bfa8;overflow:hidden;box-shadow:2px 2px 10px rgba(0,0,0,.3);transition:box-shadow .3s}
+.interro-room.tense{box-shadow:0 0 20px rgba(192,57,43,.3),2px 2px 10px rgba(0,0,0,.3)}
+.interro-head{background:var(--paper2);border-bottom:2px solid #c8bfa8;padding:.9rem 1rem;display:flex;align-items:center;gap:.9rem;position:relative}
+.interro-av{width:70px;height:70px;border:2px solid #8b7355;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:2.2rem;overflow:hidden;flex-shrink:0}
 .interro-name{font-family:var(--ti);font-size:1rem;font-weight:600;color:var(--ink);letter-spacing:.05em}
 .interro-sub{font-family:var(--sp);font-size:.65rem;color:#6b5a3a;margin-top:2px}
-.chat-area{height:260px;overflow-y:auto;padding:.9rem;display:flex;flex-direction:column;gap:.7rem;scroll-behavior:smooth;background:var(--paper)}
+/* BARRE DE STRESS */
+.stress-wrap{margin-top:.5rem}
+.stress-label{font-family:var(--sp);font-size:.58rem;color:#6b5a3a;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.stress-bar-bg{background:rgba(0,0,0,.1);height:6px;border:1px solid rgba(0,0,0,.1);overflow:hidden}
+.stress-bar-fill{height:100%;background:linear-gradient(90deg,#27ae60,#f39c12,var(--red));transition:width .6s ease;width:0%}
+.stress-val{font-family:var(--sp);font-size:.6rem;color:var(--red);margin-top:2px}
+.chat-area{height:280px;overflow-y:auto;padding:.9rem;display:flex;flex-direction:column;gap:.7rem;scroll-behavior:smooth;background:var(--paper)}
 .chat-area::-webkit-scrollbar{width:4px}
 .chat-area::-webkit-scrollbar-thumb{background:#c8bfa8}
 .msg{display:flex;gap:.65rem;align-items:flex-start}
 .msg.det{flex-direction:row-reverse}
-.msg-av{width:28px;height:28px;border:1px solid #c8bfa8;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.msg-av{width:28px;height:28px;border:1px solid #c8bfa8;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:.9rem;overflow:hidden;flex-shrink:0}
 .msg-av.det-av{background:var(--red);color:#fff;font-family:var(--sp);font-size:.65rem;font-weight:700}
-.bubble{max-width:80%;padding:.55rem .85rem;font-family:var(--tw);font-size:.78rem;line-height:1.6;position:relative}
+.bubble{max-width:80%;padding:.55rem .85rem;font-family:var(--tw);font-size:.78rem;line-height:1.6}
 .msg.sus .bubble{background:var(--paper2);border:1px solid #c8bfa8;color:var(--ink);border-radius:0 4px 4px 4px}
 .msg.det .bubble{background:var(--red);color:#fff;border-radius:4px 0 4px 4px}
 .qs-area{background:var(--paper2);border-top:1px solid #c8bfa8;padding:.75rem .9rem}
@@ -193,6 +227,10 @@ button{cursor:pointer;transition:all .2s}
 .dot{width:5px;height:5px;border-radius:50%;background:#8b7355;animation:blink 1.4s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* NOTIFICATION INDICE */
+.indice-notif{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--paper);border:2px solid var(--gold);padding:.75rem 1.5rem;font-family:var(--sp);font-size:.85rem;color:var(--ink);z-index:900;opacity:0;transition:all .4s;white-space:nowrap;box-shadow:0 4px 20px rgba(201,168,76,.3)}
+.indice-notif.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* INDICES */
 .indice-card{background:var(--paper);border:1px solid #c8bfa8;padding:.95rem;display:flex;gap:.9rem;margin-bottom:.8rem;box-shadow:1px 1px 4px rgba(0,0,0,.2);position:relative}
@@ -214,7 +252,6 @@ button{cursor:pointer;transition:all .2s}
 .susp-table{width:100%;border-collapse:collapse;font-family:var(--tw);font-size:.78rem}
 .susp-table th{font-family:var(--sp);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#6b5a3a;padding:.5rem .75rem;border-bottom:2px solid #c8bfa8;text-align:left;background:var(--paper2)}
 .susp-table td{padding:.6rem .75rem;border-bottom:1px solid rgba(0,0,0,.08);color:var(--ink2);vertical-align:middle}
-.susp-table tr:hover td{background:rgba(0,0,0,.03)}
 .stars{display:flex;gap:2px}
 .star{font-size:.9rem;color:#c8bfa8;cursor:pointer}
 .star.lit{color:var(--red)}
@@ -249,11 +286,10 @@ button{cursor:pointer;transition:all .2s}
 .acc-suspects{display:flex;flex-wrap:wrap;gap:.85rem;justify-content:center}
 .acc-btn{font-family:var(--sp);background:var(--paper2);border:2px solid #c8bfa8;color:var(--ink);padding:.65rem 1.25rem;font-size:.78rem;display:flex;align-items:center;gap:.65rem;transition:all .3s;letter-spacing:.08em}
 .acc-btn:hover{border-color:var(--red);background:rgba(192,57,43,.05);transform:scale(1.03)}
-.acc-av{width:28px;height:28px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.acc-av{width:30px;height:30px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden}
 .ev-table{width:100%;border-collapse:collapse;font-family:var(--tw);font-size:.82rem}
 .ev-table td{padding:.45rem .75rem;border-bottom:1px solid rgba(0,0,0,.08);color:var(--ink2)}
 .ev-table td:last-child{text-align:right;font-weight:700;color:var(--ink)}
-.ev-table tr:last-child td{border:none;font-size:.92rem;color:var(--red)}
 
 /* VERDICT */
 #s-verdict{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;padding:2rem;text-align:center;position:relative;z-index:5;background:var(--bg)}
@@ -273,6 +309,10 @@ button{cursor:pointer;transition:all .2s}
 .btn-play{font-family:var(--ti);background:var(--red);color:#fff;padding:.85rem 2.5rem;font-size:1rem;font-weight:600;letter-spacing:.15em;border:none;text-transform:uppercase}
 .btn-play:hover{background:var(--red2);transform:scale(1.03)}
 
+/* CONFETTI */
+.confetti-piece{position:fixed;width:8px;height:8px;top:-10px;animation:confettiFall linear forwards;z-index:1000;pointer-events:none}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
 /* MODAL */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center}
 .modal-ov.open{display:flex}
@@ -280,17 +320,16 @@ button{cursor:pointer;transition:all .2s}
 .modal-box::before{content:'PIÈCE À CONVICTION';position:absolute;top:-10px;left:20px;background:var(--paper);padding:0 8px;font-family:var(--sp);font-size:.58rem;color:var(--red);letter-spacing:.2em}
 .modal-close{position:absolute;top:.75rem;right:.75rem;background:var(--ink);border:none;color:var(--paper);width:24px;height:24px;font-size:.85rem}
 .modal-close:hover{background:var(--red)}
-.modal-icon{width:100%;height:100px;background:linear-gradient(135deg,#111,#1a0808);display:flex;align-items:center;justify-content:center;font-size:3.5rem;margin-bottom:.85rem;border:1px solid #333}
+.modal-icon{width:100%;height:100px;background:linear-gradient(135deg,#111,#1a0808);display:flex;align-items:center;justify-content:center;font-size:3.5rem;margin-bottom:.85rem;border:1px solid #333;overflow:hidden;position:relative}
 .modal-title{font-family:var(--ti);font-size:1rem;color:var(--ink);margin-bottom:.5rem}
 .modal-desc{font-family:var(--tw);font-size:.8rem;color:var(--ink2);line-height:1.7}
 .modal-clue{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);padding:.65rem;margin-top:.85rem;font-family:var(--sp);font-size:.75rem;color:var(--red);line-height:1.6}
 .modal-clue::before{content:'🔍 INDICE CLÉ : '}
-
-@media(max-width:650px){.sidebar{display:none}.photos-grid{grid-template-columns:repeat(2,1fr)}.suspects-grid{grid-template-columns:1fr}.qs-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="fx"></div>
+<div class="indice-notif" id="indice-notif"></div>
 
 <!-- INTRO -->
 <div id="s-intro">
@@ -326,11 +365,32 @@ button{cursor:pointer;transition:all .2s}
   <div style="text-align:center;padding:2rem"><button class="tb-btn" onclick="showIntro()">← Retour</button></div>
 </div>
 
+<!-- MODE SELECT -->
+<div class="mode-ov" id="mode-ov">
+  <div class="mode-title" id="mode-case-title"></div>
+  <div class="mode-sub">Choisissez votre style d'enquête</div>
+  <div class="mode-cards">
+    <div class="mode-card detective" onclick="startGameMode('detective')">
+      <div class="mode-icon">⏱️</div>
+      <div class="mode-name">MODE DÉTECTIVE</div>
+      <p class="mode-desc">Le temps tourne. Chaque minute perdue diminue votre score. Résolvez l'affaire avant que le coupable efface ses traces.</p>
+      <span class="mode-badge">SCORE COMPÉTITIF</span>
+    </div>
+    <div class="mode-card enqueteur" onclick="startGameMode('enqueteur')">
+      <div class="mode-icon">🔍</div>
+      <div class="mode-name">MODE ENQUÊTEUR</div>
+      <p class="mode-desc">Prenez le temps qu'il vous faut. Explorez chaque indice, interrogez chaque suspect sans pression.</p>
+      <span class="mode-badge">EXPLORATION LIBRE</span>
+    </div>
+  </div>
+</div>
+
 <!-- JEU -->
 <div id="s-game" style="display:none;flex-direction:column;height:100vh">
   <div class="topbar">
     <div><div class="tb-logo">MORTIS</div><div style="font-family:var(--sp);font-size:.65rem;color:var(--text3)" id="tb-case"></div></div>
     <div class="tb-right">
+      <span class="mode-indicator" id="mode-ind"></span>
       <span style="font-family:var(--sp);font-size:.75rem;color:var(--text2)">Score : <b style="color:var(--gold)" id="score-el">1000</b></span>
       <div class="timer" id="timer">20:00</div>
       <button class="tb-btn" id="music-btn" onclick="toggleMusic()" style="min-width:60px">♪ OFF</button>
@@ -356,14 +416,12 @@ button{cursor:pointer;transition:all .2s}
       </div>
     </div>
     <div class="main-area">
-
-      <!-- DOSSIER -->
       <div class="panel active" id="panel-dossier">
         <div class="conf-bar">⚠ DOSSIER CONFIDENTIEL — ACCÈS RESTREINT ⚠</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem">
           <div class="paper-card">
             <div class="paper-title">Identité de la victime</div>
-            <div class="victim-ph" id="vphoto"><span style="font-size:3rem">👤</span></div>
+            <div class="victim-ph" id="vphoto"></div>
             <div class="paper-field"><div class="pf-label">Nom complet</div><div class="pf-val" id="f-nom"></div></div>
             <div class="paper-field"><div class="pf-label">Âge</div><div class="pf-val" id="f-age"></div></div>
             <div class="paper-field"><div class="pf-label">Profession</div><div class="pf-val" id="f-prof"></div></div>
@@ -380,7 +438,7 @@ button{cursor:pointer;transition:all .2s}
           </div>
         </div>
         <div class="paper-card">
-          <div class="paper-title">Photos de scène de crime <span style="font-family:var(--tw);font-size:.65rem;color:#8b7355;text-transform:none;letter-spacing:0">(cliquez pour analyser)</span></div>
+          <div class="paper-title">Photos de scène <span style="font-family:var(--tw);font-size:.65rem;color:#8b7355;text-transform:none;letter-spacing:0">(cliquez pour analyser)</span></div>
           <div class="photos-grid" id="crime-photos"></div>
         </div>
         <div class="paper-card" style="margin-top:1.25rem">
@@ -389,7 +447,6 @@ button{cursor:pointer;transition:all .2s}
         </div>
       </div>
 
-      <!-- CARTE -->
       <div class="panel" id="panel-carte">
         <div class="paper-card" style="padding:.75rem 1rem;margin-bottom:1.25rem">
           <div class="paper-title">Carte du lieu — <span id="carte-lieu" style="font-family:var(--tw);font-size:.75rem;text-transform:none;letter-spacing:0;color:#6b5a3a"></span></div>
@@ -406,7 +463,6 @@ button{cursor:pointer;transition:all .2s}
         <div id="room-detail"></div>
       </div>
 
-      <!-- SUSPECTS -->
       <div class="panel" id="panel-suspects">
         <div class="paper-card" style="padding:.75rem 1rem;margin-bottom:1.25rem">
           <div class="paper-title">Fichier suspects — <span id="susp-count" style="font-family:var(--tw);font-size:.75rem;text-transform:none;letter-spacing:0;color:#6b5a3a"></span></div>
@@ -414,7 +470,6 @@ button{cursor:pointer;transition:all .2s}
         <div class="suspects-grid" id="sgrid"></div>
       </div>
 
-      <!-- INTERROGATOIRE -->
       <div class="panel" id="panel-interro">
         <div class="pv-header">
           <div class="pv-title">Procès-verbal d'interrogatoire</div>
@@ -426,9 +481,14 @@ button{cursor:pointer;transition:all .2s}
         <div class="interro-room" id="iroom" style="display:none">
           <div class="interro-head">
             <div class="interro-av" id="iavatar"></div>
-            <div>
+            <div style="flex:1">
               <div class="interro-name" id="iname"></div>
-              <div class="interro-sub">Interrogé sous caution — Enregistrement en cours</div>
+              <div class="interro-sub" id="irole">Interrogé sous caution</div>
+              <div class="stress-wrap">
+                <div class="stress-label">Niveau de stress</div>
+                <div class="stress-bar-bg"><div class="stress-bar-fill" id="stress-bar"></div></div>
+                <div class="stress-val" id="stress-val"></div>
+              </div>
             </div>
           </div>
           <div class="chat-area" id="chat"></div>
@@ -440,7 +500,6 @@ button{cursor:pointer;transition:all .2s}
         <div id="iph" style="font-family:var(--sp);color:var(--text3);font-size:.82rem;padding:2rem;text-align:center">Sélectionnez un suspect pour commencer l'interrogatoire.</div>
       </div>
 
-      <!-- INDICES -->
       <div class="panel" id="panel-indices">
         <div class="paper-card" style="padding:.75rem 1rem;margin-bottom:1.25rem">
           <div class="paper-title">Pièces à conviction collectées</div>
@@ -449,7 +508,6 @@ button{cursor:pointer;transition:all .2s}
         <div id="ind-list"></div>
       </div>
 
-      <!-- CARNET -->
       <div class="panel" id="panel-carnet">
         <div class="carnet-tabs">
           <button class="ctab active" onclick="switchTab('notes',this)">📌 Notes</button>
@@ -458,7 +516,7 @@ button{cursor:pointer;transition:all .2s}
         </div>
         <div class="ctab-content active" id="tab-notes">
           <p style="font-family:var(--sp);font-size:.65rem;color:#8b7355;margin-bottom:.5rem;letter-spacing:.1em">VOS NOTES PERSONNELLES</p>
-          <textarea class="notes-area" id="notes" placeholder="Vos théories ici...&#10;Qui est le coupable ? Pourquoi ?&#10;Quels indices semblent liés ?"></textarea>
+          <textarea class="notes-area" id="notes" placeholder="Vos théories ici..."></textarea>
         </div>
         <div class="ctab-content" id="tab-tableau">
           <p style="font-family:var(--sp);font-size:.65rem;color:#8b7355;margin-bottom:.85rem;letter-spacing:.1em">ÉVALUEZ CHAQUE SUSPECT</p>
@@ -468,13 +526,13 @@ button{cursor:pointer;transition:all .2s}
           <p style="font-family:var(--sp);font-size:.65rem;color:#8b7355;margin-bottom:.85rem;letter-spacing:.1em">ÉTAT DE L'ENQUÊTE</p>
           <div class="prog-section">
             <div class="prog-title">Collecte de preuves</div>
-            <div class="prog-item"><div class="prog-check" id="pc-photos"></div><div class="prog-label">Photos analysées</div><div class="prog-count" id="cnt-photos">0 / 0</div></div>
-            <div class="prog-item"><div class="prog-check" id="pc-pieces"></div><div class="prog-label">Pièces explorées</div><div class="prog-count" id="cnt-pieces">0 / 0</div></div>
-            <div class="prog-item"><div class="prog-check" id="pc-indices"></div><div class="prog-label">Indices collectés</div><div class="prog-count" id="cnt-indices">0 / 0</div></div>
+            <div class="prog-item"><div class="prog-check" id="pc-photos"></div><div class="prog-label">Photos analysées</div><div class="prog-count" id="cnt-photos">0/0</div></div>
+            <div class="prog-item"><div class="prog-check" id="pc-pieces"></div><div class="prog-label">Pièces explorées</div><div class="prog-count" id="cnt-pieces">0/0</div></div>
+            <div class="prog-item"><div class="prog-check" id="pc-indices"></div><div class="prog-label">Indices collectés</div><div class="prog-count" id="cnt-indices">0/0</div></div>
           </div>
           <div class="prog-section">
             <div class="prog-title">Interrogatoires</div>
-            <div class="prog-item"><div class="prog-check" id="pc-sus"></div><div class="prog-label">Suspects interrogés</div><div class="prog-count" id="cnt-sus">0 / 0</div></div>
+            <div class="prog-item"><div class="prog-check" id="pc-sus"></div><div class="prog-label">Suspects interrogés</div><div class="prog-count" id="cnt-sus">0/0</div></div>
             <div class="prog-item"><div class="prog-check" id="pc-qs"></div><div class="prog-label">Questions posées</div><div class="prog-count" id="cnt-qs">0</div></div>
           </div>
           <div style="margin-top:1rem">
@@ -485,14 +543,10 @@ button{cursor:pointer;transition:all .2s}
         </div>
       </div>
 
-      <!-- RÉPUTATION -->
       <div class="panel" id="panel-reputation">
         <div class="rep-card">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem">
-            <div>
-              <div class="rep-rank-title" id="rep-rank">Apprenti Détective</div>
-              <div class="rep-xp" id="rep-xp">0 XP</div>
-            </div>
+            <div><div class="rep-rank-title" id="rep-rank">Apprenti Détective</div><div class="rep-xp" id="rep-xp">0 XP</div></div>
           </div>
           <div class="rep-bar-wrap"><div class="rep-bar" id="rep-bar-el" style="width:0%"></div></div>
           <div id="rep-badges" style="margin-top:.85rem"></div>
@@ -503,7 +557,6 @@ button{cursor:pointer;transition:all .2s}
         </div>
       </div>
 
-      <!-- ACCUSATION -->
       <div class="panel" id="panel-accusation">
         <div class="acc-box">
           <div class="acc-title">Désigner le coupable</div>
@@ -554,496 +607,452 @@ button{cursor:pointer;transition:all .2s}
 </div>
 
 <script>
-// ══════════════════════════════════════
-// ICÔNES pour photos (emojis)
-// ══════════════════════════════════════
 const BASE='https://raw.githubusercontent.com/redmortis48/mortis/main/images';
-const IMG_CASES=[
-  `${BASE}/cases/case-01-hotel.jpg.jpg`,`${BASE}/cases/case-02-musee.jpg.jpg`,`${BASE}/cases/case-03-yacht.jpg.jpg`,
-  `${BASE}/cases/case-04-manoir.jpg.jpg`,`${BASE}/cases/case-05-labo.jpg.jpg`,`${BASE}/cases/case-06-casino.jpg.jpg`,
-  `${BASE}/cases/case-07-chateau.jpg.jpg`,`${BASE}/cases/case-08-train.jpg.jpg`,`${BASE}/cases/case-09-galerie.jpg.jpg`,
-  `${BASE}/cases/case-10-villa.jpg.jpg`,`${BASE}/cases/case-11-universite.jpg.jpg`,`${BASE}/cases/case-12-restaurant.jpg.jpg`,
-  `${BASE}/cases/case-13-opera.jpg.jpg`,`${BASE}/cases/case-14-ile.jpg.jpg`,`${BASE}/cases/case-15-ambassade.jpg.jpg`,
-  `${BASE}/cases/case-16-sousmarin.jpg.jpg`,`${BASE}/cases/case-17-ski.jpg.jpg`,`${BASE}/cases/case-18-cathedrale.jpg.jpg`,
-  `${BASE}/cases/case-19-espace.jpg.jpg`,`${BASE}/cases/case-20-tribunal.jpg.jpg`,
-];
-const IMG_SUSPECTS_H=[
-  `${BASE}/suspects/suspect-homme-01.jpg.jpg`,`${BASE}/suspects/suspect-homme-02.jpg.jpg`,
-  `${BASE}/suspects/suspect-homme-03.jpg.jpg`,`${BASE}/suspects/suspect-homme-04.jpg.jpg`,
-  `${BASE}/suspects/suspect-homme-05.jpg.jpg`,
-];
-const IMG_SUSPECTS_F=[
-  `${BASE}/suspects/suspect-femme-01.jpg.jpg`,`${BASE}/suspects/suspect-femme-02.jpg.jpg`,
-  `${BASE}/suspects/suspect-femme-03.jpg.jpg`,`${BASE}/suspects/suspect-femme-04.jpg.jpg`,
-  `${BASE}/suspects/suspect-femme-05.jpg.jpg`,
-];
-const IMG_CRIMES=[
-  `${BASE}/crimes/crime-verre.jpg.jpg`,`${BASE}/crimes/crime-porte.jpg.jpg`,`${BASE}/crimes/crime-couteau.jpg.jpg`,
-  `${BASE}/crimes/crime-fenetre.jpg.jpg`,`${BASE}/crimes/crime-seringue.jpg.jpg`,`${BASE}/crimes/crime-documents.jpg.jpg`,
-  `${BASE}/crimes/crime-collier.jpg.jpg`,`${BASE}/crimes/crime-lettre.jpg.jpg`,`${BASE}/crimes/crime-camera.jpg.jpg`,
-  `${BASE}/crimes/crime-corde.jpg.jpg`,
-];
+const AUDIO_BASE='https://raw.githubusercontent.com/redmortis48/mortis/main/audio';
+const IMG_CASES=[`${BASE}/cases/case-01-hotel.jpg.jpg`,`${BASE}/cases/case-02-musee.jpg.jpg`,`${BASE}/cases/case-03-yacht.jpg.jpg`,`${BASE}/cases/case-04-manoir.jpg.jpg`,`${BASE}/cases/case-05-labo.jpg.jpg`,`${BASE}/cases/case-06-casino.jpg.jpg`,`${BASE}/cases/case-07-chateau.jpg.jpg`,`${BASE}/cases/case-08-train.jpg.jpg`,`${BASE}/cases/case-09-galerie.jpg.jpg`,`${BASE}/cases/case-10-villa.jpg.jpg`,`${BASE}/cases/case-11-universite.jpg.jpg`,`${BASE}/cases/case-12-restaurant.jpg.jpg`,`${BASE}/cases/case-13-opera.jpg.jpg`,`${BASE}/cases/case-14-ile.jpg.jpg`,`${BASE}/cases/case-15-ambassade.jpg.jpg`,`${BASE}/cases/case-16-sousmarin.jpg.jpg`,`${BASE}/cases/case-17-ski.jpg.jpg`,`${BASE}/cases/case-18-cathedrale.jpg.jpg`,`${BASE}/cases/case-19-espace.jpg.jpg`,`${BASE}/cases/case-20-tribunal.jpg.jpg`];
+const IMG_SUSPECTS_H=[`${BASE}/suspects/suspect-homme-01.jpg.jpg`,`${BASE}/suspects/suspect-homme-02.jpg.jpg`,`${BASE}/suspects/suspect-homme-03.jpg.jpg`,`${BASE}/suspects/suspect-homme-04.jpg.jpg`,`${BASE}/suspects/suspect-homme-05.jpg.jpg`];
+const IMG_SUSPECTS_F=[`${BASE}/suspects/suspect-femme-01.jpg.jpg`,`${BASE}/suspects/suspect-femme-02.jpg.jpg`,`${BASE}/suspects/suspect-femme-03.jpg.jpg`,`${BASE}/suspects/suspect-femme-04.jpg.jpg`,`${BASE}/suspects/suspect-femme-05.jpg.jpg`];
+const IMG_CRIMES=[`${BASE}/crimes/crime-verre.jpg.jpg`,`${BASE}/crimes/crime-porte.jpg.jpg`,`${BASE}/crimes/crime-couteau.jpg.jpg`,`${BASE}/crimes/crime-fenetre.jpg.jpg`,`${BASE}/crimes/crime-seringue.jpg.jpg`,`${BASE}/crimes/crime-documents.jpg.jpg`,`${BASE}/crimes/crime-collier.jpg.jpg`,`${BASE}/crimes/crime-lettre.jpg.jpg`,`${BASE}/crimes/crime-camera.jpg.jpg`,`${BASE}/crimes/crime-corde.jpg.jpg`];
 const IMG_VICTIM_H=`${BASE}/victims/victim-homme.jpg.jpg`;
 const IMG_VICTIM_F=`${BASE}/victims/victim-femme.jpg.jpg`;
 const ICONS_CRIMES=['🥃','🚪','🔪','🪟','💉','📄','📿','✉️','📷','🪢'];
 const ICONS_SUSPECTS=['👨‍💼','👩‍💼','👨','👩','🧔','👩‍⚕️','👩‍💻','👴','🧑‍⚖️','👮‍♀️'];
 
 // ══════════════════════════════════════
-// 20 SCÉNARIOS
+// AUDIO
+// ══════════════════════════════════════
+const sounds={};let musicOn=false;let currentTrack=null;
+function loadSounds(){
+  if(sounds.theme)return;
+  sounds.theme=new Audio(`${AUDIO_BASE}/mortis-theme.mp3.mp3`);sounds.theme.loop=true;sounds.theme.volume=.25;
+  sounds.interro=new Audio(`${AUDIO_BASE}/mortis-interrogation.mp3.mp3`);sounds.interro.loop=true;sounds.interro.volume=.2;
+  sounds.victory=new Audio(`${AUDIO_BASE}/mortis-victory.mp3.mp3`);sounds.victory.volume=.5;
+  sounds.failure=new Audio(`${AUDIO_BASE}/mortis-failure.mp3.mp3`);sounds.failure.volume=.5;
+}
+function playMusic(track){
+  loadSounds();
+  if(!musicOn)return;
+  if(currentTrack===track)return;
+  ['theme','interro'].forEach(k=>{try{sounds[k].pause();}catch(e){}});
+  currentTrack=track;
+  try{sounds[track].currentTime=sounds[track].currentTime||0;sounds[track].play();}catch(e){}
+}
+function playSfx(track){loadSounds();try{sounds[track].currentTime=0;sounds[track].play();}catch(e){}}
+function toggleMusic(){
+  loadSounds();musicOn=!musicOn;
+  const btn=document.getElementById('music-btn');
+  if(musicOn){btn.textContent='♪ ON';btn.style.color='var(--gold)';if(currentTrack)try{sounds[currentTrack].play();}catch(e){}}
+  else{btn.textContent='♪ OFF';btn.style.color='';['theme','interro'].forEach(k=>{try{sounds[k].pause();}catch(e){}});}
+}
+
+// ══════════════════════════════════════
+// 3 SCÉNARIOS COMPLETS AMÉLIORÉS
 // ══════════════════════════════════════
 const SCENARIOS=[
+// ─── AFFAIRE 1 ───
 {id:0,titre:"L'Hôtel de la Mort",num:"AFFAIRE N°001",diff:"Difficile",featured:true,
 lieu:"Grand Palais Hôtel — Paris 8e",
 victime:{nom:"Victor Delacroix",age:58,prof:"PDG de NeoTech Corp",gi:0,lieu:"Suite Impériale — porte verrouillée de l'intérieur"},
 cause:"Empoisonnement au cyanure de potassium",heure:"Entre 23h30 et 01h00",
-rapport:"Concentrations létales de cyanure. Aucune lutte. Empreinte main gauche taille S sur la carafe.",
-resume:"Victor Delacroix retrouvé mort dans sa suite le lundi 14 octobre. Porte verrouillée de l'intérieur. Fenêtre entrouverte. Quatre personnes avaient accès à l'étage.",
+rapport:"Concentrations létales de cyanure dans le sang. Aucune trace de lutte. Empreinte partielle main gauche taille S sur la carafe. Décès estimé entre 23h45 et 00h30.",
+resume:"Victor Delacroix, PDG milliardaire, retrouvé mort dans sa suite verrouillée le lundi 14 octobre à 07h12. Fenêtre de service entrouverte. Quatre personnes avaient accès à l'étage cette nuit-là. L'une d'elles a planifié ce meurtre avec précision.",
 photos:[
-  {t:"Verre de whisky",d:"Résidus blancs au fond. Toxicologie positive au cyanure. Empreinte main gauche taille S.",c:"Élimine Marc Fontaine (main droite, taille XL). Pointe vers Antoine ou Clara.",ic:0},
-  {t:"Porte verrouillée",d:"Verrou intérieur. Log : clé maître utilisée à 00h12.",c:"Quelqu'un possédait la clé maître — seuls le directeur et Clara y avaient accès.",ic:1},
-  {t:"Fenêtre de service",d:"Entrouverte de 8cm. Trace de semelle taille 38 sur le rebord.",c:"Taille 38 : seule Clara Messing porte du 38.",ic:3},
-  {t:"Téléphone victime",d:"Dernier appel 23h47 numéro masqué. Message : 'Tu ne mérites pas ce que tu as volé. — A'.",c:"'A' comme Antoine Roux. Message menace.",ic:8},
-  {t:"Sachet suspect",d:"Sachet translucide vide — traces de cyanure.",c:"Le poison a été introduit dans la suite.",ic:4},
-  {t:"Registre d'accès",d:"Log : clé maître 00h12. Carte directeur scannée — il dit ne pas être monté.",c:"La carte du directeur utilisée à minuit. Copiée ou volée ?",ic:6},
+  {t:"Verre de whisky",d:"Résidus blancs cristallisés au fond du verre. Toxicologie positive au cyanure de potassium. Empreinte partielle main gauche taille S — index et majeur visibles.",c:"Élimine Marc Fontaine qui est droitier et porte du XL. Pointe directement vers Antoine ou Clara.",ic:0},
+  {t:"Porte verrouillée",d:"Verrou enclenché de l'intérieur. Log électronique : clé maître scannée à 00h12. La carte du directeur a été utilisée — il affirme ne pas être monté.",c:"Quelqu'un a utilisé la clé maître à minuit. Seuls le directeur et Clara y avaient officiellement accès.",ic:1},
+  {t:"Fenêtre de service",d:"Entrouverte de 8cm côté nord. Trace de semelle taille 38 sur le rebord extérieur. Légère poussière déplacée sur l'échelle de service.",c:"Accès par l'échelle de service depuis le toit. Taille 38 — une seule personne dans cette affaire porte du 38.",ic:3},
+  {t:"Téléphone de la victime",d:"Dernier appel reçu à 23h47 depuis un numéro masqué — durée 4 minutes. Brouillon non envoyé : 'Je dois tout révéler demain matin à 9h. Réunion conseil confirmée.' Message reçu : 'Tu ne mérites pas ce que tu as volé. — A'",c:"La lettre A désigne Antoine Roux. Le brouillon explique pourquoi le meurtre devait avoir lieu cette nuit précisément.",ic:8},
+  {t:"Sachet translucide",d:"Sachet vide retrouvé sous le flacon d'anxiolytiques de Victor dans la salle de bain. Traces de poudre blanche — cyanure de potassium confirmé. Fermé avec un nœud coulissant.",c:"Le poison a été introduit dans la suite. Quelqu'un connaissait l'emplacement des médicaments de Victor.",ic:4},
+  {t:"Registre d'accès",d:"Log complet de la nuit : Victor entre 22h15, Clara scannée 18h30 puis plus rien, directeur 20h00 hall uniquement. Clé maître utilisée 00h12 au 12e étage. Caméra couloir désactivée 23h28.",c:"La clé maître a été utilisée à minuit. La caméra a été coupée 2 minutes avant. Quelqu'un connaissait le système.",ic:6},
 ],
 suspects:[
-  {nom:"Sophie Delacroix",role:"Épouse",age:41,gi:1,alibi:"Chambre d'amis toute la nuit. Aucun témoin.",casier:["Aucun antécédent","Divorce entamé en secret"],motif:"Assurance-vie 5M€ signée 3 semaines avant le décès.",coupable:false,
+  {nom:"Sophie Delacroix",role:"Épouse — 41 ans",age:41,gi:1,
+   alibi:"Chambre d'amis du 12e étage toute la nuit. Aucun témoin.",
+   casier:["Aucun antécédent judiciaire","Divorce entamé en secret — avocat consulté 3 semaines avant"],
+   motif:"Assurance-vie de 5 millions d'euros signée 3 semaines avant le décès.",
+   coupable:false,stress:15,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais dans la chambre d'amis du 12e étage. Nous dormions séparément depuis quelques semaines."},
-     {q:"Votre alibi ?",r:"J'ai dormi seule. Personne ne peut le confirmer. Mais j'étais là, je vous l'assure."},
-     {q:"L'assurance-vie de 5 millions ?",r:"Mon conseiller me l'avait recommandée. Une précaution normale pour un homme dans sa position."},
-     {q:"Vous divorciez ?",r:"Oui, j'avais consulté un avocat. Mais un divorce me rapporte bien moins que rester mariée."},
-     {q:"Connaissiez-vous le cyanure ?",r:"Je ne sais même pas où on achète ça. C'est une question absurde."},
-     {q:"Votre relation avec Victor ?",r:"Notre mariage était compliqué. Mais je l'aimais, à ma façon."},
-     {q:"Avez-vous la clé maître ?",r:"Non. Je n'avais aucun accès à sa suite cette nuit-là."},
-     {q:"Avez-vous un mobile ?",r:"Sa mort me complique la vie. Je n'avais aucune raison de le tuer."},
+     {q:"Où étiez-vous entre 23h et 01h ?",r:"Dans la chambre d'amis au bout du couloir. Victor et moi dormions séparément depuis un mois — des tensions professionnelles, rien de dramatique. Personne ne peut confirmer mais je n'ai pas bougé de là."},
+     {q:"L'assurance-vie de 5 millions — c'est récent non ?",r:"Mon conseiller financier me l'avait recommandée. Un homme dans la position de Victor doit être couvert. Si vous trouvez ça suspect, parlez-en à mon conseiller — c'est lui qui a insisté."},
+     {q:"Vous êtiez en train de divorcer ?",r:"J'avais consulté un avocat, oui. Mais réfléchissez — un divorce bien négocié m'aurait rapporté bien plus que cet héritage encombré de dettes d'entreprise. Sa mort me complique sincèrement la vie."},
+     {q:"Avez-vous la clé maître de la suite ?",r:"Non. Je n'avais aucune raison d'en avoir une. Si vous cherchez qui avait cette clé, interrogez donc cette assistante si dévouée qui traînait partout avec Victor."},
+     {q:"Connaissiez-vous le cyanure ?",r:"Je suis architecte d'intérieur, inspecteur. Le cyanure ne fait pas partie de mes outils de travail. Je ne saurais même pas où m'en procurer."},
+     {q:"Avez-vous entendu quelque chose cette nuit ?",r:"Vers minuit j'ai entendu un bruit dans le couloir — des pas feutrés. Sur le moment j'ai pensé que c'était le service de nuit. Maintenant je me demande."},
+     {q:"Votre relation avec Antoine Roux ?",r:"Mon beau-fils ? Un garçon charmant qui a dilapidé sa jeunesse dans les casinos. Victor en était épuisé. La semaine dernière il m'a dit qu'il coupait définitivement les vivres à Antoine."},
+     {q:"Que savez-vous sur Marc Fontaine ?",r:"Marc savait que Victor allait le licencier et signaler ses fraudes à l'AMF. Il avait tout à perdre. Mais son alibi semble solide — trop solide peut-être."},
+     {q:"Pointure de chaussures ?",r:"Du 39. Pourquoi cette question ? Vous avez trouvé une empreinte quelque part ?"},
+     {q:"Un dernier mot ?",r:"Cherchez qui avait le plus à perdre cette nuit précisément. Antoine devait recevoir une coupure définitive le lendemain matin. Moi j'avais encore des années de mariage devant moi."},
    ]},
-  {nom:"Marc Fontaine",role:"Associé commercial",age:52,gi:0,alibi:"Dîner au Grand Véfour jusqu'à 23h — confirmé.",casier:["Fraude fiscale 2019 classée","Deux procédures civiles"],motif:"Victor allait le renvoyer et signaler la fraude à l'AMF.",coupable:false,
+  {nom:"Marc Fontaine",role:"Associé — 52 ans",age:52,gi:0,
+   alibi:"Dîner au Grand Véfour 20h-23h15 — addition et trois témoins.",
+   casier:["Fraude fiscale 2019 — classée sans suite","Deux procédures civiles pour abus de confiance"],
+   motif:"Victor allait le licencier et signaler ses fraudes à l'AMF. Fin de carrière assurée.",
+   coupable:false,stress:35,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais au restaurant Le Grand Véfour jusqu'à 23h15. Trois collègues peuvent confirmer."},
-     {q:"Votre alibi ?",r:"Dîner d'affaires de 20h à 23h15. J'ai l'addition et les noms des convives."},
-     {q:"La fraude fiscale de 2019 ?",r:"Cette affaire a été classée sans suite. Vous n'avez aucun droit de l'évoquer."},
-     {q:"Victor allait vous renvoyer ?",r:"Victor adorait menacer. C'était son style. Il ne m'aurait jamais vraiment viré."},
-     {q:"Votre mobile ?",r:"Sa mort est une catastrophe financière pour moi. J'avais tout intérêt à ce qu'il reste en vie."},
-     {q:"Êtes-vous retourné à l'hôtel ?",r:"Non. Après le dîner, je suis rentré directement chez moi en taxi."},
-     {q:"Votre pointure ?",r:"Du 44. Pourquoi cette question ?"},
-     {q:"Connaissiez-vous le cyanure ?",r:"Je suis homme d'affaires, pas chimiste. Je ne saurais même pas où trouver ça."},
+     {q:"Où étiez-vous entre 23h et 01h ?",r:"Au restaurant Le Grand Véfour jusqu'à 23h15, ensuite directement en taxi chez moi. J'ai l'addition, le reçu du taxi, et trois collègues qui peuvent confirmer chaque minute."},
+     {q:"Victor allait vous dénoncer à l'AMF ?",r:"Victor adorait agiter des menaces comme d'autres font du golf — pour le plaisir. Il ne m'aurait jamais vraiment dénoncé, on avait trop de secrets partagés. Cette affaire classée en 2019 vous dit quelque chose ?"},
+     {q:"Vos fraudes fiscales — vous en avez d'autres ?",r:"Je vous déconseille fortement d'aller dans cette direction sans avocat présent. Ce qui a été classé est classé. Concentrez-vous sur ceux qui n'ont pas d'alibi."},
+     {q:"Connaissiez-vous Antoine Roux ?",r:"Ce gamin m'a appelé deux fois la semaine dernière pour me demander d'intercéder auprès de son père. Je lui ai dit d'aller se faire voir. Et là il avait l'air vraiment désespéré — pas juste l'habituel 'papa est méchant'."},
+     {q:"Étiez-vous de retour à l'hôtel après le dîner ?",r:"Non. Taxi direct, porte fermée, whisky, lit. Dans cet ordre. Si vous ne me croyez pas, vérifiez les caméras de mon immeuble."},
+     {q:"Votre pointure ?",r:"Du 44. Je pèse 95 kilos et je mesure 1m85. L'empreinte taille 38 que vous avez trouvée ne vient clairement pas de moi."},
+     {q:"Vous saviez que Victor préparait quelque chose pour le lendemain ?",r:"Oui. Une réunion du conseil à 9h. Il m'avait dit qu'il allait 'faire le ménage'. J'ai compris que j'étais dans la liste. Mais quelqu'un a réglé le problème avant moi — et ça ne m'arrange pas du tout."},
+     {q:"Avez-vous vu Antoine ce soir-là ?",r:"Non. Mais j'ai vu sa voiture garée en face de l'hôtel vers 23h quand je suis passé en taxi. Une Golf noire immatriculée 75. C'est la sienne — je la connais."},
+     {q:"Que pensez-vous de Clara Messing ?",r:"Cette fille était dévouée au point d'en être inquiétante. Elle avait accès à tout — agenda, suite, documents. Si quelqu'un connaissait les habitudes de Victor mieux que Victor lui-même, c'était elle."},
+     {q:"Un dernier mot ?",r:"Vérifiez où était Antoine entre 23h et 01h. Pas globalement — précisément. Ces 90 minutes inexpliquées, c'est pas rien. Et demandez-lui ce qu'il faisait avec une voiture garée en face de l'hôtel."},
    ]},
-  {nom:"Clara Messing",role:"Assistante personnelle",age:29,gi:5,alibi:"Chez elle, seule. Aucun témoin.",casier:["Aucun antécédent"],motif:"Avait la clé maître. Recherches sur le cyanure sur son ordinateur.",coupable:false,
+  {nom:"Clara Messing",role:"Assistante personnelle — 29 ans",age:29,gi:5,
+   alibi:"Chez elle à Neuilly. Aucun témoin. Netflix et SMS.",
+   casier:["Aucun antécédent judiciaire"],
+   motif:"Détenait la clé maître. Recherches sur le cyanure trouvées sur son ordinateur professionnel.",
+   coupable:false,stress:55,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais chez moi à Neuilly. J'ai regardé une série jusqu'à 1h du matin."},
-     {q:"Votre alibi ?",r:"Je vis seule. Mais mes connexions Netflix et mes SMS prouvent que j'étais chez moi."},
-     {q:"Pourquoi aviez-vous la clé maître ?",r:"Victor me l'avait confiée pour les urgences professionnelles."},
-     {q:"Les recherches sur le cyanure ?",r:"J'écris un roman policier depuis 18 mois. Ces recherches sont pour mon livre."},
-     {q:"Votre pointure de chaussures ?",r:"Je fais du 38. Pourquoi cette question ? C'est important ?"},
-     {q:"Êtes-vous allée à l'hôtel cette nuit ?",r:"Non. Je n'ai pas quitté mon appartement."},
-     {q:"Votre relation avec Victor ?",r:"Victor était exigeant mais juste. Il m'avait donné ma chance."},
-     {q:"Avez-vous un mobile ?",r:"Je n'avais aucune raison de lui vouloir du mal. Aucune."},
+     {q:"Où étiez-vous entre 23h et 01h ?",r:"Chez moi à Neuilly. J'avais commandé des sushis — livraison confirmée à 21h47. Ensuite j'ai regardé une série. Mes connexions Netflix et mes SMS avec ma sœur prouvent que j'étais là."},
+     {q:"Pourquoi aviez-vous la clé maître ?",r:"Victor me l'avait confiée il y a deux ans pour les urgences professionnelles — récupérer des documents, anticiper ses besoins. C'est une marque de confiance, pas une opportunité criminelle."},
+     {q:"Les recherches sur le cyanure sur votre ordinateur ?",r:"J'écris un roman policier depuis dix-huit mois. J'ai des centaines de recherches de ce genre — poisons, scènes de crime, méthodes d'investigation. Mon manuscrit fait 200 pages si vous voulez le lire."},
+     {q:"Votre pointure de chaussures ?",r:"Du 38. Je... je comprends où vous allez avec ça. Mais je n'étais pas à cet hôtel cette nuit. Mon téléphone n'a pas bougé de Neuilly — vérifiez la géolocalisation."},
+     {q:"Connaissiez-vous les habitudes de Victor le soir ?",r:"Bien sûr, c'est mon travail. Il prenait toujours un whisky avant de dormir — carafe dans le salon privé, deux glaçons. Tout le monde à l'hôtel le savait."},
+     {q:"Victor avait-il des ennemis sérieux ?",r:"Antoine l'appelait en criant tous les jours. La semaine dernière j'ai entendu Antoine lui dire — je cite — 'tu vas le regretter'. Victor m'a demandé de noter ça dans son journal."},
+     {q:"Saviez-vous qu'il y avait une réunion le lendemain matin ?",r:"Oui, j'ai moi-même organisé cette réunion. Victor allait annoncer le licenciement de Marc et couper l'argent d'Antoine définitivement. Les deux avaient des raisons de vouloir l'arrêter."},
+     {q:"Avez-vous copié la clé maître pour quelqu'un ?",r:"Absolument pas. Cette clé n'a jamais quitté mon trousseau. Si quelqu'un l'a utilisée, c'est qu'il l'a copiée à mon insu — ou qu'il a utilisé une autre source."},
+     {q:"Avez-vous vu Antoine récemment ?",r:"Il est passé au bureau jeudi pour parler à son père. Victor l'a refusé. Antoine est resté dans le hall en demandant à tout le monde si quelqu'un pouvait intercéder. Il était dans un état... effrayant."},
+     {q:"Un dernier mot ?",r:"Regardez les caméras de mon immeuble à Neuilly. Regardez ma géolocalisation. Regardez mes relevés bancaires — je n'ai rien à cacher. Et pendant que vous cherchez, demandez à Antoine comment il a passé ses 90 minutes."},
    ]},
-  {nom:"Antoine Roux",role:"Fils héritier",age:33,gi:2,alibi:"Soirée à Montmartre — 90 minutes inexpliquées.",casier:["Dette de jeu : 280 000€","Altercation physique 2021"],motif:"Dettes massives. Victor refusait de payer. Hérite de tout. Message menaçant envoyé.",coupable:true,
+  {nom:"Antoine Roux",role:"Fils héritier — 33 ans",age:33,gi:2,
+   alibi:"Soirée à Montmartre — 90 minutes inexpliquées entre 23h15 et 00h45.",
+   casier:["Dette de jeu : 280 000€ auprès de personnes peu recommandables","Altercation physique 2021 — classée"],
+   motif:"Dettes massives. Victor refusait de payer. Hérite de tout. Message menaçant envoyé la veille.",
+   coupable:true,stress:20,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais à une soirée privée à Montmartre chez un ami. Une vingtaine de personnes."},
-     {q:"Les 90 minutes inexpliquées ?",r:"Je... je me suis promené. J'avais besoin d'air frais."},
-     {q:"Le message menaçant ?",r:"Je l'ai envoyé dans un moment de colère. Je ne le pensais pas vraiment."},
-     {q:"Vos dettes de 280 000€ ?",r:"J'avais des dettes mais j'allais les régler autrement. J'avais des contacts."},
-     {q:"L'héritage vous intéressait-il ?",r:"Je savais que j'héritais un jour comme tout fils. Ça ne veut pas dire que j'ai précipité les choses."},
-     {q:"Votre relation avec votre père ?",r:"C'était mon père. On se disputait souvent mais c'était mon père quand même."},
-     {q:"Avez-vous un mobile ?",r:"Je n'ai pas tué mon père pour de l'argent. C'est monstrueux."},
-     {q:"Connaissez-vous le cyanure ?",r:"Je n'ai jamais acheté ni manipulé ce genre de substance. Jamais."},
+     {q:"Où étiez-vous entre 23h et 01h ?",r:"À une soirée privée chez mon ami Julien à Montmartre. Une vingtaine de personnes, bonne ambiance. Je suis resté là toute la nuit, enfin presque — j'avais besoin d'air vers minuit."},
+     {q:"Vous avez parlé à Marc Fontaine ce soir-là à la soirée ?",r:"À Marc ? Non, il n'était pas là. Je ne l'ai pas vu depuis... attendez, je crois qu'on s'est croisés vers 23h dans le hall en partant. Oui c'est ça, on a échangé deux mots."},
+     {q:"Les 90 minutes inexpliquées entre 23h15 et 00h45 ?",r:"Je me suis promené. Seul. J'avais besoin de réfléchir à ma situation avec mon père. Ce n'est pas un crime de marcher la nuit."},
+     {q:"Votre voiture était garée en face de l'hôtel vers 23h ?",r:"Je... non. Enfin pas que je me souvienne. J'ai peut-être fait un détour par là en marchant. Le quartier est grand."},
+     {q:"Le message menaçant envoyé à votre père — 'tu ne mérites pas ce que tu as volé' ?",r:"Je l'ai envoyé dans un moment de colère après qu'il a refusé mon appel encore une fois. Je ne le pensais pas littéralement. On dit des choses qu'on regrette."},
+     {q:"Vos dettes de 280 000€ — qui vous les réclame ?",r:"Des... des investisseurs. C'est compliqué. Mon père avait dit qu'il réglerait ça. Je comptais sur lui pour demain matin justement."},
+     {q:"Vous saviez qu'il allait couper définitivement l'argent demain ?",r:"Clara a dû vous dire ça. Non, je... j'espérais qu'il changerait d'avis. On avait prévu de parler. Il ne m'aurait pas abandonné comme ça."},
+     {q:"Connaissiez-vous les habitudes de votre père le soir ?",r:"Bien sûr, c'est mon père. Le whisky avant de dormir, la fenêtre entrouverte parce qu'il avait toujours trop chaud... pourquoi vous me demandez ça ?"},
+     {q:"Marc Fontaine dit avoir vu votre voiture en face de l'hôtel vers 23h ?",r:"Marc... Marc dit n'importe quoi. Il cherche à détourner l'attention. Sa carrière était finie à cause de mon père, il avait cent fois plus de raisons que moi."},
+     {q:"Un dernier mot ?",r:"Je n'ai pas tué mon père. Vous n'avez aucune preuve. Une promenade nocturne n'est pas un meurtre. Je demande un avocat."},
    ]},
 ],
 pieces:[
-  {id:"suite",nom:"Suite Impériale",x:280,y:45,w:230,h:140,crime:true,desc:"Corps sur le canapé. Verre contaminé. Montre arrêtée à 00h03.",indices:["Verre de whisky (cyanure)","Montre arrêtée 00h03","Billet Paris-Genève pour le lendemain"]},
-  {id:"salon",nom:"Salon Privé",x:525,y:45,w:200,h:140,crime:false,desc:"Carafe de whisky sur le bar. Empreinte sur rebord terrasse.",indices:["Carafe whisky (trace de poudre)","Empreinte rebord terrasse"]},
-  {id:"cuisine",nom:"Cuisine Service",x:52,y:45,w:185,h:140,crime:false,desc:"Fenêtre entrouverte. Trace semelle taille 38. Accès escalier.",indices:["Semelle taille 38","Sachet vide — traces cyanure"]},
-  {id:"couloir",nom:"Couloir 12e",x:170,y:240,w:310,h:95,crime:false,desc:"Caméra désactivée 23h30-01h15.",indices:["Caméra désactivée","Log : clé maître 00h12"]},
-  {id:"bureau",nom:"Bureau Suite",x:498,y:240,w:200,h:95,crime:false,desc:"Coffre-fort ouvert et refermé cette nuit.",indices:["Documents manquants","Clé USB dans le port"]},
-  {id:"hall",nom:"Hall Hôtel",x:52,y:240,w:105,h:95,crime:false,desc:"Concierge : silhouette en manteau noir vers minuit.",indices:["Témoignage concierge"]},
+  {id:"suite",nom:"Suite Impériale",x:280,y:45,w:230,h:140,crime:true,desc:"Corps retrouvé sur le canapé. Verre de whisky contaminé sur la table basse. Montre de Victor arrêtée à 00h03 — probablement pendant une convulsion.",indices:["Verre de whisky (cyanure confirmé)","Montre arrêtée 00h03","Billet Paris-Genève pour le lendemain matin","Fenêtre nord entrouverte"]},
+  {id:"salon",nom:"Salon Privé",x:525,y:45,w:200,h:140,crime:false,desc:"Carafe de whisky sur le bar — résidus de poudre blanche détectés. Empreinte de main gauche taille S sur le rebord de la terrasse.",indices:["Carafe whisky (trace de poudre blanche)","Empreinte main gauche taille S sur terrasse","Verre propre — pas utilisé ce soir"]},
+  {id:"cuisine",nom:"Cuisine Service",x:52,y:45,w:185,h:140,crime:false,desc:"Fenêtre entrouverte côté nord. Trace de semelle taille 38 sur le rebord extérieur. Accès direct à l'échelle de service menant au toit.",indices:["Semelle taille 38 (rebord fenêtre)","Sachet vide traces cyanure (poubelle)","Échelle de service — poussière déplacée"]},
+  {id:"couloir",nom:"Couloir 12e étage",x:170,y:240,w:310,h:95,crime:false,desc:"Caméra de surveillance désactivée de 23h28 à 01h15. Quelqu'un connaissait le système de sécurité.",indices:["Caméra désactivée 23h28-01h15","Log : clé maître utilisée 00h12","Trace légère de semelle sur moquette"]},
+  {id:"bureau",nom:"Bureau de la Suite",x:498,y:240,w:200,h:95,crime:false,desc:"Coffre-fort ouvert puis refermé dans la nuit. Documents manquants selon l'inventaire.",indices:["Documents manquants — contrats NeoTech","Clé USB connectée puis retirée","Note manuscrite : 'Réunion 9h — tout révéler'"]},
+  {id:"hall",nom:"Hall de l'Hôtel",x:52,y:240,w:105,h:95,crime:false,desc:"Le concierge de nuit a vu une silhouette en manteau sombre entrer par l'entrée de service vers 23h50 et ressortir vers 00h40.",indices:["Témoignage concierge — manteau sombre","Registre entrée service 23h52","Caméra extérieure — silhouette capuchon"]},
 ],
 coupable:"Antoine Roux",
-solution:"Antoine Roux a copié la clé maître via une employée complice, est entré par la fenêtre de service, et a dissous le cyanure dans la carafe de whisky. Ses 90 minutes inexpliquées coïncident avec le créneau du meurtre. Le message menaçant et ses dettes de 280 000€ complètent le tableau."},
+solution:"Antoine Roux avait préparé le meurtre plusieurs jours à l'avance. Connaissant les habitudes de son père (whisky du soir, fenêtre entrouverte), il a dissous le cyanure dans la carafe lors d'une visite précédente. Cette nuit-là, il a quitté la soirée à 23h15, s'est rendu à l'hôtel en voiture (vu par Marc Fontaine), est monté par l'échelle de service après avoir copié la clé maître de Clara, a désactivé la caméra, et a verrouillé la porte de l'intérieur avant de repartir. La contradiction clé : il affirme ne pas avoir vu Marc ce soir-là (Q3) puis dit que Marc dit n'importe quoi (Q9) — reconnaissant implicitement que Marc l'a bien vu. Sa voiture garée en face, la semelle taille 38 sur l'échelle, et sa connaissance des habitudes de Victor l'accablent."},
 
+// ─── AFFAIRE 2 ───
 {id:1,titre:"Minuit au Musée",num:"AFFAIRE N°002",diff:"Moyen",featured:true,
 lieu:"Musée des Arts Obscurs — Lyon",
 victime:{nom:"Émile Caron",age:64,prof:"Conservateur en chef",gi:0,lieu:"Salle des Sculptures — entre deux statues africaines"},
-cause:"Coup de couteau unique — lame fine 18cm dans le dos",heure:"Entre 00h15 et 01h00",
-rapport:"Un seul coup précis dans le dos. Victime non méfiante. Lame compatible avec un scalpel de restaurateur. Aucun cri entendu.",
-resume:"Émile Caron retrouvé poignardé le 15 novembre. Caméras coupées 12 minutes avant le meurtre. Quatre personnes avec accès au musée ce soir-là.",
+cause:"Coup de couteau unique — scalpel de restaurateur, lame 18cm dans le dos",heure:"Entre 00h15 et 01h00",
+rapport:"Un seul coup précis entre les omoplates — geste professionnel, connaissance anatomique évidente. Lame compatible avec scalpel de restaurateur. Victime surprise par-derrière, aucun cri. Décès en moins de 3 minutes.",
+resume:"Émile Caron retrouvé poignardé le 15 novembre à 01h47. Caméras de surveillance coupées 12 minutes avant le meurtre. Le code utilisé appartient à la gardienne Nadia Cheikh — qui le nie. Quatre personnes avaient accès au musée cette nuit-là.",
 photos:[
-  {t:"Scalpel retrouvé",d:"Scalpel 18cm à 3m du corps. Appartient au laboratoire de restauration.",c:"Seuls Émile, Isabelle et Thomas avaient accès au labo.",ic:2},
-  {t:"Caméras coupées",d:"Désactivées depuis la salle de contrôle à 00h03.",c:"Le coupable connaissait le code de la salle de contrôle.",ic:8},
-  {t:"Statue déplacée",d:"Statue N°7 bougée de 40cm, cachant un passage vers la réserve.",c:"Seul le personnel senior connaissait ce passage.",ic:9},
-  {t:"Contrat falsifié",d:"Contrat 2M€ signé par Émile mais daté du lendemain du meurtre.",c:"Tentative d'authentification frauduleuse postmortem.",ic:6},
-  {t:"Lettre dans la poche",d:"'Je sais ce que vous faites. Vous avez jusqu'à demain.' Non signée.",c:"Émile avait découvert quelque chose.",ic:7},
-  {t:"Badge post-mortem",d:"Badge d'Émile utilisé à 00h48 au niveau -2 — après sa mort.",c:"Le meurtrier a récupéré son badge pour accéder à la réserve.",ic:1},
+  {t:"Scalpel retrouvé",d:"Scalpel professionnel 18cm retrouvé à 3 mètres du corps. Appartient au laboratoire de restauration — numéro de série gravé. Aucune empreinte — essuyé soigneusement.",c:"L'arme vient du labo d'Isabelle. Elle avait déclaré son scalpel 'disparu' deux semaines avant — ou l'avait mis de côté pour cette nuit.",ic:2},
+  {t:"Système caméras",d:"Désactivation depuis la salle de contrôle à 00h03. Code d'accès utilisé : celui de Nadia Cheikh. Tasse de café encore chaude trouvée dans la salle — Nadia dit ne pas y être allée.",c:"Soit Nadia a menti, soit quelqu'un a utilisé son code à son insu. Isabelle était dans le même bâtiment.",ic:8},
+  {t:"Statue déplacée",d:"Statue africaine N°7 déplacée de 42cm — révèle une porte dissimulée vers la réserve. Marques au sol récentes. Seulement 3 personnes connaissaient ce passage.",c:"Isabelle connaissait ce passage — elle l'avait découvert lors de la restauration de la statue en 2021.",ic:9},
+  {t:"Contrat falsifié",d:"Contrat d'expertise de 2 millions d'euros — signé du nom d'Émile mais daté du lendemain de sa mort. Écriture imitée avec précision.",c:"Quelqu'un avait besoin qu'Émile signe ce document — ou qu'il ait l'air de l'avoir signé après sa mort.",ic:6},
+  {t:"Lettre dans la poche",d:"Billet plié dans la poche intérieure : 'Je sais exactement ce que vous faites depuis 2 ans. Vous avez jusqu'à demain matin pour vous expliquer. — E.C.'",c:"Émile avait confronté quelqu'un par écrit ce soir même. Le destinataire avait une bonne raison de ne pas attendre demain matin.",ic:7},
+  {t:"Badge utilisé post-mortem",d:"Badge d'Émile Caron utilisé à 00h48 pour accéder à la réserve niveau -2 — Émile était déjà mort à ce moment. Accès de 8 minutes puis ressortie.",c:"Le meurtrier a récupéré le badge sur le corps pour accéder à la réserve et effacer des preuves.",ic:1},
 ],
 suspects:[
-  {nom:"Isabelle Renard",role:"Restauratrice chef",age:38,gi:5,alibi:"Dans son atelier niveau -2 toute la soirée.",casier:["Aucun antécédent"],motif:"Falsifiait des expertises pour un réseau frauduleux. Émile venait de le découvrir.",coupable:true,
+  {nom:"Isabelle Renard",role:"Restauratrice chef — 38 ans",age:38,gi:5,
+   alibi:"Dans son atelier au niveau -2 toute la soirée selon elle.",
+   casier:["Aucun antécédent judiciaire"],
+   motif:"Falsifiait des expertises artistiques depuis 2 ans. Émile venait de découvrir le réseau frauduleux.",
+   coupable:true,stress:25,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais dans mon atelier au niveau -2. Je restaure une toile du XVIIe siècle."},
-     {q:"Votre alibi ?",r:"Le gardien peut confirmer qu'il m'a entendue travailler. J'étais là toute la soirée."},
-     {q:"Le scalpel disparu ?",r:"Mon scalpel a disparu il y a deux semaines. Je l'avais signalé à Émile lui-même."},
-     {q:"Les falsifications d'expertises ?",r:"Des falsifications ? C'est diffamatoire. Émile et moi avions des désaccords professionnels."},
-     {q:"Le badge d'Émile utilisé après sa mort ?",r:"Je n'avais pas son badge. Pourquoi l'aurais-je eu ?"},
-     {q:"Connaissiez-vous le passage secret ?",r:"Quel passage ? Je ne sais pas de quoi vous parlez."},
-     {q:"Votre relation avec Émile ?",r:"Émile était mon supérieur. Nous travaillions ensemble depuis 6 ans."},
-     {q:"Avez-vous un mobile ?",r:"Je n'avais aucune raison de lui nuire. Sa mort me prive d'un allié."},
+     {q:"Où étiez-vous entre 00h et 01h ?",r:"Dans mon atelier au niveau -2. Je travaille souvent la nuit sur les restaurations délicates — la lumière artificielle est plus stable. Plusieurs personnes peuvent confirmer que j'étais là en début de soirée."},
+     {q:"Émile vous avait-il envoyé une lettre ce soir ?",r:"Une lettre ? Non. Émile et moi communiquions par email comme tout le monde. Pourquoi aurait-il écrit une lettre ?"},
+     {q:"Votre scalpel déclaré 'disparu' — c'était il y a deux semaines exactement ?",r:"Oui, je l'ai signalé à Émile par écrit. Ces instruments coûtent cher, j'ai fait la démarche normale. Si vous l'avez retrouvé quelque part, je serais curieuse de savoir où."},
+     {q:"Connaissiez-vous le passage derrière la statue N°7 ?",r:"Je... il y a des passages de service dans tout le bâtiment. Je me concentre sur mon travail, pas sur l'architecture des coulisses."},
+     {q:"Le contrat d'expertise à 2 millions — vous le connaissiez ?",r:"Henri Vasseur cherchait depuis des mois à faire authentifier son acquisition. Émile refusait. Ce contrat ne me concerne pas directement."},
+     {q:"Avez-vous accès au code de la salle de contrôle des caméras ?",r:"Non. Je suis restauratrice, pas technicienne de sécurité. Pourquoi me posez-vous cette question ?"},
+     {q:"Le badge d'Émile a été utilisé à 00h48 dans la réserve — vous y étiez ?",r:"Absolument pas. J'étais dans mon atelier. La réserve est au niveau -2 aussi mais à l'opposé de mon labo. Je n'aurais aucune raison d'y aller."},
+     {q:"Nadia dit avoir entendu votre imprimante tourner vers 23h45 — c'était quoi ?",r:"Des... des notes de travail. Des références pour la restauration. Rien d'important."},
+     {q:"Vos expertises des 2 dernières années — toutes authentiques ?",r:"Chaque expertise que j'ai signée reflète mon analyse professionnelle. Si Émile pensait autrement, il avait tort."},
+     {q:"Un dernier mot ?",r:"Je n'ai rien à me reprocher. Trouvez qui a réellement utilisé le code de Nadia cette nuit. Moi j'avais autre chose à faire."},
    ]},
-  {nom:"Thomas Girard",role:"Assistant conservateur",age:27,gi:2,alibi:"Anniversaire — 15 témoins photographiés.",casier:["Aucun antécédent"],motif:"Émile bloquait sa promotion depuis 3 ans.",coupable:false,
+  {nom:"Thomas Girard",role:"Assistant conservateur — 27 ans",age:27,gi:2,
+   alibi:"Anniversaire d'un ami — 15 témoins, photos Instagram horodatées à 23h.",
+   casier:["Aucun antécédent judiciaire"],
+   motif:"Émile bloquait sa promotion depuis 3 ans par jalousie professionnelle.",
+   coupable:false,stress:30,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais à l'anniversaire d'un ami dans le 3e. 15 personnes présentes."},
-     {q:"Votre alibi ?",r:"15 témoins, des photos, des stories Instagram postées à 23h. Incontestable."},
-     {q:"Émile bloquait votre promotion ?",r:"Oui il me freinait. Mais je cherchais un autre poste. Sa mort ne m'aide pas."},
-     {q:"Connaissiez-vous le code des caméras ?",r:"Non. Seuls les responsables ont accès à la salle de contrôle."},
-     {q:"Avez-vous un mobile ?",r:"Sa mort ne me donne pas la promotion. Quelqu'un d'autre prendra sa place."},
-     {q:"Étiez-vous au musée cette nuit ?",r:"Non. Mon alibi est béton. Vérifiez par vous-même."},
-     {q:"Connaissiez-vous le passage secret ?",r:"Quel passage ? Émile ne m'avait jamais parlé de ça."},
-     {q:"Votre relation avec Isabelle Renard ?",r:"On se croisait. Une relation correcte."},
+     {q:"Où étiez-vous entre 00h et 01h ?",r:"À l'anniversaire de mon ami Pierre dans le 3e arrondissement. Je suis parti vers 01h15. 15 personnes présentes dont plusieurs ont posté des photos avec moi sur Instagram — horodatées 22h à 23h30."},
+     {q:"Émile bloquait votre promotion depuis 3 ans ?",r:"C'est vrai et je ne le cache pas. Il trouvait que j'étais 'trop ambitieux' — sa façon de dire qu'il avait peur que je le dépasse. Mais sa mort ne m'aide pas — quelqu'un d'autre va prendre sa place et peut-être me bloquer encore plus."},
+     {q:"Connaissiez-vous le passage derrière la statue N°7 ?",r:"Non. Émile ne partageait jamais les secrets du bâtiment avec moi justement. Isabelle par contre — elle a restauré cette statue en 2021, elle connaît chaque recoin de cette salle."},
+     {q:"Votre relation avec Isabelle Renard ?",r:"Cordiale en surface. Mais Isabelle joue un jeu que je ne comprends pas totalement. Elle avait des rendez-vous tardifs avec des collectionneurs que je ne connaissais pas. Henri Vasseur notamment."},
+     {q:"Saviez-vous qu'Émile avait découvert quelque chose sur quelqu'un ?",r:"La semaine dernière il était tendu, fermé. Il m'a dit 'Thomas, si quelqu'un te demande de faire quelque chose d'inhabituel, refuse et viens me voir'. Je n'ai pas compris sur le moment."},
+     {q:"Connaissiez-vous le code de la salle de contrôle ?",r:"Non. Seuls les responsables l'ont. Nadia l'a depuis qu'elle est gardienne. Et Isabelle... je l'ai vue entrer dans cette salle un soir il y a 3 semaines. Je n'ai pas posé de questions."},
+     {q:"Avez-vous vu quelque chose d'inhabituel récemment ?",r:"Isabelle a commandé des produits chimiques inhabituels la semaine dernière — j'ai vu le bon de commande sur son bureau. Pas pour la restauration, les références ne correspondaient pas."},
+     {q:"Henri Vasseur vous est connu ?",r:"De réputation. Collectionneur richissime avec des méthodes discutables. Il venait souvent après les heures de fermeture — Isabelle l'accueillait personnellement."},
+     {q:"Pensez-vous qu'Isabelle est impliquée ?",r:"Je pense qu'Isabelle et Vasseur avaient un accord que personne d'autre ne devait connaître. Et Émile l'avait découvert. Faites le lien vous-même."},
+     {q:"Un dernier mot ?",r:"Vérifiez mes photos Instagram — la géolocalisation, l'heure, tout. Et demandez à Isabelle ce qu'elle imprimait à 23h45 dans un musée vide."},
    ]},
-  {nom:"Henri Vasseur",role:"Mécène collectionneur",age:67,gi:3,alibi:"Dîner de gala Hôtel de Ville Lyon — photographié.",casier:["Plainte escroquerie 2015 abandonnée"],motif:"Émile refusait d'authentifier son acquisition à 2M€.",coupable:false,
+  {nom:"Henri Vasseur",role:"Mécène collectionneur — 67 ans",age:67,gi:3,
+   alibi:"Dîner de gala Hôtel de Ville de Lyon — présent sur photos officielles.",
+   casier:["Plainte pour escroquerie artistique 2015 — abandonnée","Enquête fiscale 2019 — close"],
+   motif:"Émile refusait depuis un an d'authentifier son acquisition à 2 millions d'euros.",
+   coupable:false,stress:40,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais au dîner de gala de la mairie de Lyon. Le maire lui-même peut confirmer."},
-     {q:"Votre alibi ?",r:"Des dizaines de photos de moi à ce dîner. Je suis rentré à 01h30."},
-     {q:"L'acquisition à 2M€ ?",r:"Émile était trop prudent. Ce tableau est authentique, j'en suis certain."},
-     {q:"Avez-vous un mobile ?",r:"Sa mort complique mon acquisition. J'avais tout intérêt à ce qu'il vive."},
-     {q:"Connaissiez-vous Isabelle Renard ?",r:"Vaguement. Je savais qu'elle travaillait là. Rien de plus."},
-     {q:"Le réseau de falsification ?",r:"Je ne sais pas de quoi vous parlez. J'achète des œuvres légalement."},
-     {q:"Étiez-vous au musée cette nuit ?",r:"Non. J'étais au gala. Des centaines de personnes m'ont vu."},
-     {q:"Votre relation avec Émile ?",r:"Nous avions des désaccords professionnels. Rien de plus."},
+     {q:"Où étiez-vous entre 00h et 01h ?",r:"Au dîner de gala de la mairie de Lyon. J'y suis arrivé à 19h et je suis parti à 01h30. Le maire, le préfet et une centaine d'invités peuvent confirmer ma présence continue."},
+     {q:"L'acquisition à 2 millions — Émile refusait de l'authentifier ?",r:"Émile était excessivement prudent. Ce tableau est authentique — trois autres experts l'ont confirmé. Son refus était personnel, pas professionnel. Nos relations s'étaient tendues."},
+     {q:"Vous rendiez visite au musée après les heures de fermeture ?",r:"Isabelle m'accordait parfois des consultations privées pour examiner des pièces. C'est habituel dans le milieu. Ces visites étaient... professionnelles."},
+     {q:"Connaissiez-vous les falsifications d'Isabelle ?",r:"Je ne sais pas de quoi vous parlez. Si Isabelle a commis des irrégularités professionnelles, je l'ignorais totalement."},
+     {q:"Le contrat daté du lendemain du meurtre — vous l'aviez commandé ?",r:"Ce contrat aurait réglé définitivement la question de l'authenticité. Mais je n'ai jamais demandé à quiconque de le falsifier. Si c'est le cas, c'est une initiative indépendante."},
+     {q:"Votre relation avec Isabelle Renard ?",r:"Une relation professionnelle basée sur le respect mutuel. Elle comprend l'art mieux que la plupart. Nous partagions une vision."},
+     {q:"Savez-vous ce qu'Émile avait découvert ?",r:"Je suppose qu'il avait découvert les termes de certains arrangements privés. Émile était idéaliste — il ne comprenait pas que le marché de l'art a ses propres règles."},
+     {q:"Ces 'arrangements privés' — légaux ?",r:"Je me déconseille fortement de répondre à cette question sans conseil juridique. Disons que tout ce que j'ai fait opère dans les zones grises que la loi tolère."},
+     {q:"Avez-vous contacté quelqu'un cette nuit ?",r:"J'ai appelé Isabelle à 23h pour savoir si la réunion avec Émile s'était bien passée. Elle n'a pas répondu. Je lui ai laissé un message."},
+     {q:"Un dernier mot ?",r:"Je n'ai pas quitté ce gala. Vous pouvez vérifier chaque minute de ma soirée. Mais je vous suggère de demander à Isabelle pourquoi elle n'a pas répondu à mon appel cette nuit-là."},
    ]},
-  {nom:"Nadia Cheikh",role:"Gardienne de nuit",age:44,gi:9,alibi:"Rondes — 40 minutes inexpliquées.",casier:["Licenciement pour vol 2018"],motif:"Complice possible — aurait désactivé les caméras.",coupable:false,
+  {nom:"Nadia Cheikh",role:"Gardienne de nuit — 44 ans",age:44,gi:9,
+   alibi:"Rondes de nuit — 40 minutes non documentées entre 23h20 et 00h00.",
+   casier:["Licenciement pour vol 2018 dans une galerie privée","Procédure prud'hommale 2019 — perdue"],
+   motif:"Complice présumée — son code a été utilisé pour désactiver les caméras.",
+   coupable:false,stress:60,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"Je faisais mes rondes habituelles. Niveau -1, niveau -2, rez-de-chaussée."},
-     {q:"Les 40 minutes inexpliquées ?",r:"J'étais aux toilettes puis j'ai fait une pause café. Ce n'est pas un crime."},
-     {q:"Les caméras coupées ?",r:"Je n'ai pas touché aux caméras. Quelqu'un est entré dans la salle de contrôle."},
-     {q:"Votre ancien licenciement pour vol ?",r:"C'était une erreur il y a 6 ans. J'ai payé et je travaille honnêtement."},
-     {q:"Connaissiez-vous le code des caméras ?",r:"Oui, on me l'a donné pour les urgences. Mais je ne l'ai pas utilisé."},
-     {q:"Avez-vous vu quelqu'un de suspect ?",r:"Non. Tout semblait normal jusqu'à ce que je trouve le corps."},
-     {q:"Connaissiez-vous Isabelle Renard ?",r:"On se croisait. Elle gardait ses distances."},
-     {q:"Avez-vous un mobile ?",r:"Je n'avais aucune raison de nuire à M. Caron. Mon travail dépendait de lui."},
+     {q:"Où étiez-vous entre 23h20 et 00h00 ?",r:"Je faisais mes rondes habituelles. Les 40 minutes... j'étais aux toilettes du sous-sol puis j'ai fait une pause café en cuisine. Je sais que ça semble suspect mais c'est la vérité."},
+     {q:"Votre code a été utilisé pour couper les caméras — comment l'expliquez-vous ?",r:"Je ne l'explique pas. Ce code, je ne l'ai jamais donné à personne. Mais il était affiché sur un Post-it sous mon bureau depuis des mois — je sais, c'est stupide. N'importe qui pouvait l'avoir copié."},
+     {q:"Avez-vous vu Isabelle Renard cette nuit ?",r:"Elle était dans son labo en début de soirée — je lui ai apporté un café vers 22h. Après ça je ne l'ai plus vue. Ce qui est bizarre parce que sa lumière était allumée toute la nuit."},
+     {q:"Votre licenciement pour vol en 2018 ?",r:"J'ai pris 50 euros dans la caisse de la galerie pour payer des médicaments pour ma mère. Je les ai remboursés la semaine suivante mais le directeur avait déjà appelé la police. J'ai payé pour cette erreur pendant 3 ans."},
+     {q:"Connaissiez-vous les activités d'Isabelle avec Vasseur ?",r:"Je savais qu'elle recevait des gens après les heures. Je fermais les yeux parce qu'Émile avait l'air au courant. Maintenant je me demande s'il était vraiment au courant ou si on lui cachait."},
+     {q:"La tasse de café dans la salle de contrôle — c'était la vôtre ?",r:"Non. Je n'entre jamais dans cette salle sauf urgence. Quelqu'un a utilisé mon code ET s'est installé dans cette salle comme chez lui. Cette personne connaissait mes habitudes."},
+     {q:"Avez-vous entendu quelque chose d'inhabituel cette nuit ?",r:"Vers 00h15 j'ai entendu un bruit sourd venant de la salle des sculptures — comme quelque chose qui tombe. J'ai cru que c'était les systèmes de climatisation. Je m'en veux de ne pas avoir vérifié."},
+     {q:"Pensez-vous qu'Isabelle a utilisé votre code ?",r:"Elle connaissait l'existence du Post-it — elle m'avait taquinée à ce sujet il y a deux semaines en disant que c'était un risque de sécurité. Sur le moment j'ai pensé qu'elle plaisantait."},
+     {q:"Avez-vous une théorie sur ce qui s'est passé ?",r:"Isabelle avait quelque chose à cacher. Émile l'avait découvert. Et cette nuit, tout le monde était soit occupé ailleurs soit endormi. Sauf elle."},
+     {q:"Un dernier mot ?",r:"Je n'ai pas tué M. Caron. Mon code a été volé par quelqu'un qui savait exactement ce qu'il faisait. Vérifiez les empreintes sur la tasse de café dans la salle de contrôle."},
    ]},
 ],
 pieces:[
-  {id:"sculpt",nom:"Salle Sculptures",x:275,y:45,w:240,h:140,crime:true,desc:"Corps entre les statues. Sang sur le marbre.",indices:["Mare de sang","Statue N°7 déplacée","Empreinte taille 42"]},
-  {id:"labo2",nom:"Laboratoire Restauration",x:52,y:45,w:185,h:140,crime:false,desc:"Atelier d'Isabelle. Support de scalpel vide.",indices:["Support scalpel vide","Appels effacés sur téléphone"]},
-  {id:"secu2",nom:"Salle Contrôle",x:530,y:45,w:185,h:140,crime:false,desc:"Caméras désactivées à 00h03.",indices:["Log : code de Nadia utilisé","Tasse café encore chaude"]},
-  {id:"reserve2",nom:"Réserve Niveau -2",x:170,y:240,w:230,h:95,crime:false,desc:"Caisse ouverte. Badge Émile utilisé 00h48.",indices:["Caisse ouverte","Badge utilisé post-mortem"]},
-  {id:"bureau2",nom:"Bureau Émile",x:415,y:240,w:200,h:95,crime:false,desc:"Email non envoyé : 'Je dois contacter Interpol demain'.",indices:["Email Interpol","Dossier photos annotées FAUX"]},
-  {id:"entree2",nom:"Entrée Principale",x:52,y:240,w:100,h:95,crime:false,desc:"Digicode utilisé à 23h52.",indices:["Digicode — 4 personnes","Parapluie mouillé sans pluie"]},
+  {id:"sculpt",nom:"Salle des Sculptures",x:275,y:45,w:240,h:140,crime:true,desc:"Corps retrouvé entre deux statues africaines. Mare de sang sur le marbre blanc. Statue N°7 déplacée révélant un passage dissimulé.",indices:["Mare de sang (groupe A+)","Statue N°7 déplacée — passage découvert","Empreinte semelle taille 39 dans le sang","Fil de soie noire (vêtement féminin)"]},
+  {id:"labo2",nom:"Laboratoire de Restauration",x:52,y:45,w:185,h:140,crime:false,desc:"Atelier d'Isabelle. Support à scalpels — emplacement N°3 vide. Imprimante encore chaude. Documents partiellement brûlés dans la corbeille.",indices:["Support scalpel N°3 vide","Documents brûlés (partiellement lisibles)","Imprimante chaude à 02h00","Produits chimiques inhabituels commandés"]},
+  {id:"secu2",nom:"Salle de Contrôle",x:530,y:45,w:185,h:140,crime:false,desc:"Caméras désactivées à 00h03 avec le code de Nadia. Tasse de café encore tiède à 02h00. Chaise déplacée — quelqu'un s'est installé.",indices:["Code de Nadia utilisé 00h03","Tasse café (ADN en cours)","Chaise déplacée — position inhabituelle","Log : 47 minutes de désactivation"]},
+  {id:"reserve2",nom:"Réserve Niveau -2",x:170,y:240,w:230,h:95,crime:false,desc:"Badge d'Émile utilisé à 00h48. Caisse d'archives ouverte puis refermée. Plusieurs dossiers déplacés.",indices:["Caisse archives ouverte","Badge utilisé post-mortem 00h48","Dossiers expertises 2022-2024 déplacés","Empreinte digitale partielle sur caisse"]},
+  {id:"bureau2",nom:"Bureau d'Émile Caron",x:415,y:240,w:200,h:95,crime:false,desc:"Email non envoyé dans les brouillons : 'Je dois contacter l'Interpol et l'OCBC demain sans faute. J'ai toutes les preuves.' Agenda : RDV mystérieux 23h avec initiales I.R.",indices:["Email Interpol non envoyé","Agenda : RDV 23h avec I.R.","Dossier photos annotées FAUX en rouge","Enveloppe vide — lettre déjà envoyée"]},
+  {id:"entree2",nom:"Entrée Principale",x:52,y:240,w:100,h:95,crime:false,desc:"Digicode utilisé à 23h52 — 4 personnes avaient le code. Parapluie mouillé dans le sas alors qu'il ne pleuvait pas cette nuit-là.",indices:["Digicode 23h52 — 4 personnes","Parapluie mouillé (eau de robinet?)","Caméra extérieure — angle mort exploité"]},
 ],
 coupable:"Isabelle Renard",
-solution:"Isabelle falsifiait des expertises depuis 2 ans. Émile l'avait découvert et prévenue par lettre. Elle a désactivé les caméras avec le code copié à Nadia, tué Émile avec son scalpel, puis utilisé son badge pour effacer les preuves dans la réserve."},
+solution:"Isabelle Renard falsifiait des expertises artistiques depuis 2 ans en partenariat avec Henri Vasseur, empochant des commissions sur des authentifications frauduleuses. Émile l'avait découvert et l'avait confrontée par lettre ce soir-là. Isabelle a copié le code de Nadia (affiché sur un Post-it), désactivé les caméras, tué Émile avec son propre scalpel qu'elle avait mis de côté, récupéré son badge pour effacer les dossiers dans la réserve, et brûlé les preuves dans son labo. La contradiction clé : elle dit ne pas connaître le passage derrière la statue (Q4) mais c'est elle qui avait restauré cette statue en 2021 et donc découvert ce passage. L'agenda d'Émile avec les initiales I.R. à 23h scelle son sort."},
 
+// ─── AFFAIRE 3 ───
 {id:2,titre:"Meurtre en Haute Mer",num:"AFFAIRE N°003",diff:"Expert",featured:true,
-lieu:"Yacht Éternité — Méditerranée",
-victime:{nom:"Capitaine Luca Ferrara",age:55,prof:"Capitaine de yacht privé",gi:0,lieu:"Cabine principale — noyé hors de l'eau"},
-cause:"Noyade simulée — poumons remplis d'eau de mer en cabine sèche",heure:"Entre 02h00 et 03h30",
-rapport:"Inhalation forcée d'eau de mer. Victime sédatée au zolpidem x3. Traces de lutte limitées.",
-resume:"Ferrara retrouvé mort en cabine à 07h00. Yacht en pleine mer. Personne ne pouvait fuir. L'un des quatre passagers est le meurtrier.",
+lieu:"Yacht Éternité — Méditerranée, 47 nautiques de Marseille",
+victime:{nom:"Capitaine Luca Ferrara",age:55,prof:"Capitaine de yacht privé — 20 ans de service",gi:0,lieu:"Cabine principale — noyé sans eau"},
+cause:"Noyade forcée — poumons remplis d'eau de mer en cabine sèche après sédation",heure:"Entre 02h00 et 03h30",
+rapport:"Inhalation forcée d'eau de mer salée en cabine sèche — méthode extrêmement rare. Taux de zolpidem : 3x la dose létale dans le sang. Pas de lutte — victime totalement inconsciente. Sophistication médicale évidente.",
+resume:"Ferrara retrouvé mort dans sa cabine sèche avec les poumons pleins d'eau de mer à 07h00. Yacht isolé en pleine Méditerranée — impossible de fuir. L'un des quatre passagers a planifié ce meurtre avec une précision chirurgicale.",
 photos:[
-  {t:"Noyade sans eau",d:"Poumons pleins d'eau de mer, cabine sèche. Entonnoir de cuisine disparu.",c:"Le cuisinier confirme ne pas avoir utilisé l'entonnoir.",ic:0},
-  {t:"Verre de somnifère",d:"Verre de vin : zolpidem x3. Ferrara drogué avant le meurtre.",c:"Le coffret médical était accessible à tous.",ic:4},
-  {t:"Journal de bord",d:"01h45 : 'Ce que j'ai vu est inacceptable.' Page suivante arrachée.",c:"Ferrara avait vu quelque chose de compromettant.",ic:7},
-  {t:"Coffre forcé",d:"Coffre personnel forcé. Une enveloppe scellée a disparu.",c:"Ferrara gardait des preuves compromettantes.",ic:1},
-  {t:"Radio sabotée",d:"Câble radio sectionné à 01h30. Yacht isolé.",c:"Sabotage par quelqu'un connaissant les systèmes maritimes.",ic:8},
-  {t:"Empreinte taille 45",d:"Semelle mouillée sur le pont. Pointure 45.",c:"Pointure 45 : ne correspond qu'à un seul passager.",ic:3},
+  {t:"Noyade en cabine sèche",d:"Poumons contenant 2,3 litres d'eau de mer salée. Cabine parfaitement sèche. Entonnoir de cuisine disparu de son crochet. Sol sans aucune trace d'éclaboussure — victime totalement passive.",c:"Méthode nécessitant des connaissances médicales précises et du matériel spécifique. La victime était totalement inconsciente.",ic:0},
+  {t:"Verre de vin contaminé",d:"Verre de vin rouge — zolpidem détecté à concentration 3x létale. Dissolution parfaite, aucune trace visuelle. Comprimés écrasés très finement.",c:"Quelqu'un avec des connaissances pharmaceutiques a préparé cette dose. Accès au coffret médical nécessaire.",ic:4},
+  {t:"Journal de bord",d:"Dernière entrée 01h45 : 'Ce que j'ai vu ce soir est inacceptable et illégal. Je ne peux pas continuer à faire comme si de rien n'était. Demain matin j'appelle les autorités portuaires.' Page suivante arrachée.",c:"Ferrara avait été témoin de quelque chose cette nuit même. L'arrachage de page indique que le meurtrier a lu ce journal après le meurtre.",ic:7},
+  {t:"Coffre personnel forcé",d:"Coffre sous la couchette forcé proprement — outil spécialisé, pas de dommages. Enveloppe kraft scellée disparue selon l'inventaire que Ferrara avait donné à Camille Brun.",c:"Ferrara gardait des preuves documentées. Le meurtrier avait besoin de ces preuves disparaissent.",ic:1},
+  {t:"Radio sabotée",d:"Câble d'alimentation principale sectionné proprement à 01h30 — coupe nette, outil tranchant précis. Coupure avant le meurtre — préméditation évidente.",c:"Le sabotage a eu lieu 30 minutes avant le meurtre estimé. Quelqu'un connaissait les systèmes du yacht ou avait fait des recherches.",ic:8},
+  {t:"Empreinte pont principal",d:"Semelle mouillée sur le pont menant à la cabine — pointure 45, semelle de chaussure de sport haut de gamme. Largeur et pression indiquent un homme de grande taille.",c:"Pointure 45 — un seul homme parmi les passagers correspond à cette pointure et à cette corpulence.",ic:3},
 ],
 suspects:[
-  {nom:"Valentina Cruz",role:"Propriétaire yacht",age:49,gi:6,alibi:"Dans sa cabine avec Paulo — confirmé mutuellement.",casier:["Deux poursuites escroquerie","Blanchiment enquête Espagne"],motif:"Ferrara avait découvert l'usage illicite du yacht.",coupable:false,
+  {nom:"Valentina Cruz",role:"Propriétaire du yacht — 49 ans",age:49,gi:6,
+   alibi:"Dans sa cabine avec Paulo toute la nuit — alibi croisé.",
+   casier:["Deux poursuites pour escroquerie financière","Enquête blanchiment — Espagne 2021"],
+   motif:"Ferrara avait découvert l'usage illicite du yacht pour des transferts illégaux.",
+   coupable:false,stress:45,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais dans ma cabine avec Paulo. Nous travaillions sur des documents."},
-     {q:"Votre alibi ?",r:"Paulo peut confirmer. Nous avons travaillé jusqu'à 04h du matin."},
-     {q:"L'usage illicite du yacht ?",r:"Ce yacht est un investissement légal. Toute suggestion contraire est diffamatoire."},
-     {q:"Votre pointure ?",r:"Du 38. Pourquoi cette question absurde ?"},
-     {q:"Connaissiez-vous les systèmes radio ?",r:"Non. Je laisse ça au capitaine et à son équipage."},
-     {q:"Votre relation avec Ferrara ?",r:"Professionnelle. Il était compétent et discret."},
-     {q:"L'enveloppe disparue du coffre ?",r:"Je n'ai aucune idée de ce que contenait ce coffre."},
-     {q:"Avez-vous un mobile ?",r:"Ferrara était un excellent capitaine. Sa mort m'est préjudiciable."},
+     {q:"Où étiez-vous entre 01h30 et 03h30 ?",r:"Dans ma cabine avec Paulo. Nous travaillions sur des documents contractuels urgents. Paulo peut confirmer chaque heure."},
+     {q:"L'usage illicite de votre yacht ?",r:"Ce yacht est un investissement personnel parfaitement légal. Si Ferrara a cru voir quelque chose d'illégal, il a mal interprété des opérations commerciales complexes."},
+     {q:"Connaissiez-vous les systèmes radio du yacht ?",r:"Je suis propriétaire, pas mécanicienne. Ferrara gérait tout le technique. Je ne saurais pas distinguer un câble radio d'un câble électrique."},
+     {q:"Votre pointure ?",r:"Du 38. Je mesure 1m65. L'empreinte dont vous parlez ne peut pas être la mienne."},
+     {q:"L'enveloppe disparue du coffre de Ferrara ?",r:"Je n'ai aucune idée de ce que Ferrara gardait dans son coffre personnel. C'est son espace privé."},
+     {q:"Ferrara vous avait-il fait part de ses inquiétudes ?",r:"Non. Ferrara était discret et professionnel. S'il avait des inquiétudes, il ne me les a pas exprimées."},
+     {q:"Le Dr. Holz — vous le connaissiez avant ce voyage ?",r:"Stefan est... un partenaire commercial de longue date. Nous avons des intérêts communs dans plusieurs projets pharmaceutiques."},
+     {q:"Partenaire commercial en quoi exactement ?",r:"Des investissements dans le secteur médical. Rien qui concerne cette enquête."},
+     {q:"Ferrara a écrit dans son journal avoir vu quelque chose d'inacceptable ce soir — quoi ?",r:"Je l'ignore. Peut-être a-t-il mal interprété une conversation privée. Les gens entendent ce qu'ils veulent entendre."},
+     {q:"Un dernier mot ?",r:"Paulo et moi avons des alibis réciproques. Cherchez du côté de celui qui avait les compétences médicales pour faire ça — et la pointure 45."},
    ]},
-  {nom:"Paulo Mendez",role:"Associé commercial",age:52,gi:4,alibi:"Avec Valentina — alibi croisé.",casier:["Fraude fiscale 2017 sursis"],motif:"Ferrara menaçait d'exposer leurs activités.",coupable:false,
+  {nom:"Paulo Mendez",role:"Associé commercial — 52 ans",age:52,gi:4,
+   alibi:"Avec Valentina — alibi croisé réciproque.",
+   casier:["Fraude fiscale 2017 — sursis","Faillite frauduleuse 2015"],
+   motif:"Ferrara menaçait d'exposer leurs activités de blanchiment via le yacht.",
+   coupable:false,stress:50,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais dans la cabine de Valentina. On travaillait sur des contrats."},
-     {q:"Votre alibi ?",r:"Valentina était avec moi. On peut vérifier les caméras du couloir."},
-     {q:"Votre pointure ?",r:"Je chausse du 44."},
-     {q:"Connaissiez-vous les systèmes radio ?",r:"Non. Ces systèmes ne m'intéressent pas."},
-     {q:"Valentina vous a-t-elle demandé quelque chose ?",r:"Non. Rien d'inhabituel cette nuit."},
-     {q:"Votre relation avec Ferrara ?",r:"Correct. On se parlait peu."},
-     {q:"Avez-vous un mobile ?",r:"Ferrara nous était utile. Sa mort est une complication."},
-     {q:"L'enveloppe disparue ?",r:"Je ne sais pas de quoi vous parlez."},
+     {q:"Où étiez-vous entre 01h30 et 03h30 ?",r:"Avec Valentina dans sa cabine. On travaillait, je sais que ça semble bizarre à cette heure mais on avait des délais contractuels."},
+     {q:"Votre pointure ?",r:"Du 44. Je fais du 44 depuis 30 ans. Vérifiez mes chaussures si vous voulez."},
+     {q:"Ferrara avait-il parlé de ses inquiétudes à quelqu'un ?",r:"Il avait l'air tendu toute la soirée. J'ai vu Camille lui parler longuement sur le pont vers 22h. Ils chuchotaient. Ferrara avait l'air soulagé après."},
+     {q:"Votre relation avec le Dr. Holz ?",r:"Un homme brillant et distant. Je le connais via Valentina. On se parle peu."},
+     {q:"Connaissiez-vous les systèmes radio du yacht ?",r:"Non. Ces systèmes ne m'intéressent pas. Je suis dans la finance, pas dans la navigation."},
+     {q:"L'enveloppe dans le coffre de Ferrara — vous saviez qu'elle existait ?",r:"Non. Mais maintenant que vous en parlez, Ferrara avait glissé quelque chose à Camille au dîner — une enveloppe je crois. Camille l'a mise dans sa veste."},
+     {q:"Avez-vous entendu quelque chose cette nuit ?",r:"Vers 02h j'ai entendu des pas sur le pont. J'ai cru que c'était Ferrara en ronde. Valentina dormait déjà à ce moment."},
+     {q:"Valentina et Holz — quelle est leur vraie relation ?",r:"Je préfère ne pas répondre à ça. Ce que je sais, c'est que Stefan Holz a une mallette noire qu'il ne lâche jamais. Ferrara l'a remarqué aussi — je les ai vus échanger un regard ce soir."},
+     {q:"Avez-vous vu quelqu'un sortir cette nuit ?",r:"Les pas vers 02h — pas de Ferrara en fait, trop légers pour lui. Et la direction venait du côté de la cabine de Holz, pas du pont avant."},
+     {q:"Un dernier mot ?",r:"Je ne suis pas un assassin. Mais quelqu'un sur ce yacht avait des raisons très sérieuses d'empêcher Ferrara d'appeler les autorités le lendemain matin."},
    ]},
-  {nom:"Dr. Stefan Holz",role:"Médecin passager",age:61,gi:3,alibi:"Dans sa cabine à lire. Pointure 45.",casier:["Radiation temporaire 2020","Prescriptions frauduleuses"],motif:"Ferrara avait trouvé sa trousse avec substances illégales.",coupable:true,
+  {nom:"Dr. Stefan Holz",role:"Médecin passager — 61 ans",age:61,gi:3,
+   alibi:"Dans sa cabine à lire — personne pour confirmer. Pointure 45.",
+   casier:["Radiation temporaire de l'ordre des médecins 2020","Prescriptions frauduleuses de somnifères"],
+   motif:"Ferrara avait découvert sa trousse contenant des substances illégales et des documents compromettants.",
+   coupable:true,stress:20,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais dans ma cabine. Je lisais un ouvrage médical."},
-     {q:"Votre alibi ?",r:"Je lisais seul. Je n'avais aucune raison de sortir en pleine nuit."},
-     {q:"Votre trousse médicale ?",r:"Ma trousse contient des médicaments légaux pour mes patients."},
-     {q:"Le zolpidem dans le verre ?",r:"Je prescris du zolpidem légalement. Que Ferrara en ait eu ne me concerne pas."},
-     {q:"Votre pointure de chaussures ?",r:"Du 45, oui. Comme beaucoup d'hommes de ma taille."},
-     {q:"Connaissiez-vous les systèmes radio ?",r:"Je ne connais rien aux systèmes de communication maritimes."},
-     {q:"Votre relation avec Ferrara ?",r:"On s'est à peine parlé pendant la traversée."},
-     {q:"Avez-vous un mobile ?",r:"Je n'avais aucun problème avec le capitaine. Aucun."},
+     {q:"Où étiez-vous entre 01h30 et 03h30 ?",r:"Dans ma cabine. Je lisais un traité d'anesthésiologie — j'ai du mal à dormir en mer. Je n'ai parlé à personne et personne ne m'a vu, c'est vrai."},
+     {q:"Votre trousse médicale — qu'est-ce qu'elle contient ?",r:"Des médicaments légaux pour les urgences médicales. En tant que médecin à bord, c'est ma responsabilité d'être équipé. Le zolpidem fait partie de tout kit médical standard."},
+     {q:"Le zolpidem dans le verre de Ferrara — c'est du vôtre ?",r:"Le zolpidem est un médicament très répandu. L'idée que le mien spécifiquement... c'est une conclusion hâtive."},
+     {q:"Ferrara avait regardé dans votre trousse ?",r:"Pas que je sache. J'ai peut-être mal rangé mes affaires dans le salon commun à un moment. Il est possible qu'il ait vu quelque chose."},
+     {q:"Votre pointure de chaussures ?",r:"Du 45, oui. Comme des millions d'hommes de ma taille. Une pointure n'est pas une preuve."},
+     {q:"La méthode de noyade en cabine sèche — vous connaissez ?",r:"C'est une méthode décrite dans certains manuels de médecine légale. Théoriquement possible avec un sédatif puissant et un entonnoir. Je l'ai lue quelque part mais... je ne vois pas où vous voulez en venir."},
+     {q:"Votre radiation temporaire en 2020 — pour quoi exactement ?",r:"Une affaire de prescriptions mal documentées. Réglée administrativement. Ça n'a rien à voir avec cette situation."},
+     {q:"Valentina Cruz dit que vous êtes des 'partenaires commerciaux' — dans quoi ?",r:"Valentina et moi partageons des intérêts dans la distribution de produits pharmaceutiques dans certains pays. Tout à fait légal."},
+     {q:"Ferrara a écrit dans son journal avoir vu quelque chose d'illégal ce soir — c'était quoi ?",r:"Je ne sais pas ce que Ferrara a cru voir. Les gens mal informés peuvent mal interpréter des situations médicales complexes."},
+     {q:"Paulo dit avoir entendu des pas vers 02h venant du côté de votre cabine ?",r:"Paulo s'est trompé de direction. Ou il ment. Je n'ai pas bougé de ma cabine. Je ne sais pas comment être plus clair."},
    ]},
-  {nom:"Camille Brun",role:"Journaliste d'investigation",age:34,gi:7,alibi:"Sur le pont à écrire — emails envoyés à 02h30 horodatés.",casier:["Aucun antécédent"],motif:"Enquêtait sur Valentina. Ferrara était sa source.",coupable:false,
+  {nom:"Camille Brun",role:"Journaliste d'investigation — 34 ans",age:34,gi:7,
+   alibi:"Sur le pont supérieur à écrire — emails envoyés à 02h17 et 02h43 avec horodatage serveur.",
+   casier:["Aucun antécédent judiciaire"],
+   motif:"Enquêtait sur Valentina. Ferrara était sa source principale et lui avait remis des preuves.",
+   coupable:false,stress:70,
    qs:[
-     {q:"Où étiez-vous cette nuit ?",r:"J'étais sur le pont supérieur à écrire. J'ai envoyé des emails à 02h30."},
-     {q:"Votre alibi ?",r:"Les serveurs de mon journal enregistrent l'heure d'envoi. Vérifiez."},
-     {q:"Ferrara était votre source ?",r:"Il était ma source principale. Sa mort détruit mon enquête."},
-     {q:"Votre enquête sur Valentina ?",r:"Je ne peux pas vous parler de mon enquête. Déontologie."},
-     {q:"Votre pointure ?",r:"Du 37. Ça ne correspond pas à l'empreinte, je suppose."},
-     {q:"Avez-vous vu quelque chose cette nuit ?",r:"J'ai entendu des pas vers 02h45 mais je n'ai pas vu qui c'était."},
-     {q:"Connaissiez-vous le Dr. Holz ?",r:"On s'est vus au dîner. Il m'a semblé étrange. Trop calme."},
-     {q:"Avez-vous un mobile ?",r:"Ma source est morte. J'ai tout perdu. Quel intérêt aurais-je eu ?"},
+     {q:"Où étiez-vous entre 01h30 et 03h30 ?",r:"Sur le pont supérieur à écrire mon article. J'ai envoyé deux emails à mon rédacteur en chef — à 02h17 et 02h43, horodatés par les serveurs de mon journal. Je suis descendue vers 04h."},
+     {q:"Ferrara était votre source ?",r:"Oui. Il avait passé 3 ans à documenter les activités de Valentina et Holz. Ce qu'il avait était explosif. Sa mort détruit des années de travail et met des gens dangereux en liberté."},
+     {q:"L'enveloppe qu'il vous a glissée au dîner ?",r:"Il m'a donné une copie de ses preuves en me disant 'si quelque chose m'arrive cette nuit, vous savez quoi faire'. J'ai pensé qu'il était paranoïaque. J'aurais dû le prendre plus au sérieux."},
+     {q:"Votre pointure ?",r:"Du 37. Et je pèse 58 kilos — l'empreinte taille 45 ne vient pas de moi."},
+     {q:"Vous avez entendu quelque chose cette nuit ?",r:"Vers 02h45 j'ai entendu des pas lourds sur le pont inférieur — pas la démarche légère de Valentina ou de Paulo. Des pas décidés qui allaient vers la proue. J'ai regardé mais je n'ai vu personne."},
+     {q:"Que contient l'enveloppe de Ferrara ?",r:"Des photos, des relevés bancaires, des logs de communication. Holz utilisait le yacht pour transporter des substances pharmaceutiques illégales en profitant du statut médical du bateau. Valentina facilitait les passages."},
+     {q:"Holz savait que Ferrara vous avait remis des preuves ?",r:"Probablement pas. Ferrara était discret. Mais il savait que Ferrara allait appeler les autorités le lendemain — c'est suffisant comme motif."},
+     {q:"Connaissiez-vous la méthode utilisée ?",r:"C'est une méthode médicale. Il faut savoir exactement quelle dose utiliser, comment pratiquer une noyade passive. Ça n'est pas à la portée de quelqu'un sans formation médicale approfondie."},
+     {q:"Pourquoi Ferrara vous faisait-il confiance ?",r:"Il avait lu mes articles sur le trafic pharmaceutique. Il savait que je comprendrais et que je ne lâcherais pas. Il avait raison — je ne lâcherai pas."},
+     {q:"Un dernier mot ?",r:"Holz a la pointure, les compétences médicales, le mobile et aucun alibi vérifiable. L'enveloppe de Ferrara est en sécurité et sera remise aux autorités quoi qu'il arrive maintenant."},
    ]},
 ],
 pieces:[
-  {id:"cabine3",nom:"Cabine Capitaine",x:280,y:45,w:230,h:140,crime:true,desc:"Corps sur le lit. Sol sec. Verre de vin.",indices:["Verre vin (zolpidem x3)","Journal — page arrachée","Coffre forcé"]},
-  {id:"cui3",nom:"Cuisine de bord",x:52,y:45,w:190,h:140,crime:false,desc:"Entonnoir manquant. Coffret médical ouvert.",indices:["Entonnoir manquant","Zolpidem manquant","Eau de mer dans évier"]},
-  {id:"radio3",nom:"Communications",x:525,y:45,w:185,h:140,crime:false,desc:"Câble radio sectionné proprement.",indices:["Câble sectionné","Empreinte tableau de bord"]},
-  {id:"pont3",nom:"Pont Principal",x:170,y:240,w:265,h:95,crime:false,desc:"Empreinte semelle mouillée taille 45.",indices:["Empreinte taille 45","Mégot — ADN en cours"]},
-  {id:"holz3",nom:"Cabine Dr. Holz",x:450,y:240,w:205,h:95,crime:false,desc:"Trousse médicale avec substances non étiquetées.",indices:["Substances non identifiées","Gants latex usagés","Livre Anesthésie d'urgence"]},
-  {id:"proue3",nom:"Proue Yacht",x:52,y:240,w:100,h:95,crime:false,desc:"Bidon d'eau de mer vide retrouvé.",indices:["Bidon 10L eau de mer"]},
+  {id:"cabine3",nom:"Cabine Capitaine",x:280,y:45,w:230,h:140,crime:true,desc:"Corps sur la couchette, sol parfaitement sec. Verre de vin vide sur la table. Journal de bord ouvert — dernière page arrachée.",indices:["Verre vin (zolpidem x3)","Journal — dernière page arrachée","Coffre sous couchette forcé","Montre Ferrara arrêtée 02h47"]},
+  {id:"cui3",nom:"Cuisine de Bord",x:52,y:45,w:190,h:140,crime:false,desc:"Entonnoir de cuisine manquant. Coffret médical ouvert — zolpidem manquant. Bidon de 10L d'eau de mer retrouvé vide sous l'évier.",indices:["Entonnoir cuisine manquant","Zolpidem manquant (boîte ouverte)","Bidon 10L eau de mer (vide)","Gants latex usagés poubelle"]},
+  {id:"radio3",nom:"Salle des Communications",x:525,y:45,w:185,h:140,crime:false,desc:"Câble radio principal sectionné à 01h30 — coupe nette et précise. Le yacht était totalement isolé.",indices:["Câble sectionné (coupe nette)","Empreinte gant latex sur tableau","Outil tranchant professionnel utilisé","Log : coupure radio 01h32"]},
+  {id:"pont3",nom:"Pont Principal",x:170,y:240,w:265,h:95,crime:false,desc:"Semelle mouillée taille 45 menant de la cuisine à la cabine du capitaine. Eau de mer identifiée.",indices:["Empreinte taille 45 (eau de mer)","Trace passage cuisine→cabine","Mégot — ADN correspondant"]},
+  {id:"holz3",nom:"Cabine Dr. Holz",x:450,y:240,w:205,h:95,crime:false,desc:"Mallette noire verrouillée. Chaussures de sport taille 45 avec traces d'humidité. Livre Anesthésiologie d'Urgence ouvert à la page des sédatifs.",indices:["Chaussures taille 45 (humides)","Livre anesthésie (page sédatifs)","Mallette noire verrouillée","Gants latex boîte ouverte (2 manquants)"]},
+  {id:"proue3",nom:"Proue du Yacht",x:52,y:240,w:100,h:95,crime:false,desc:"Entonnoir retrouvé dissimulé sous une bâche à l'avant. Traces d'eau de mer. Partiellement rincé mais traces ADN possibles.",indices:["Entonnoir (eau de mer)","Bâche déplacée récemment","Vue directe sur cabine capitaine"]},
 ],
 coupable:"Dr. Stefan Holz",
-solution:"Holz transportait des substances illégales avec la complicité de Valentina. Ferrara l'avait découvert. Holz a drogué son vin, introduit l'eau de mer via l'entonnoir, et saboté la radio. Pointure 45 et gants usagés avec traces d'eau de mer dans sa poubelle."},
+solution:"Stefan Holz transportait des substances pharmaceutiques illégales via le yacht de Valentina, profitant du statut médical du bateau pour passer les contrôles. Cette nuit, Ferrara avait vu Holz manipuler la cargaison illégale et avait écrit dans son journal son intention d'alerter les autorités le lendemain. Holz a agi avec précision : il a dissous du zolpidem dans le vin de Ferrara lors du dernier verre du soir, attendu que le sédatif agisse, sectionné le câble radio, récupéré l'entonnoir et un bidon d'eau de mer, et noyé Ferrara endormi. Ses chaussures taille 45 mouillées, les gants latex dans sa poubelle, sa connaissance précise de la méthode (Q6), et la contradiction flagrante entre 'je n'ai pas bougé' (Q10) et les pas entendus par Paulo vers 02h depuis sa cabine le désignent. La contradiction clé : il dit que Ferrara n'a pas vu sa trousse (Q4) mais admet en Q6 connaître exactement la méthode de noyade décrite dans des manuels — une connaissance très spécialisée pour quelqu'un qui prétend n'avoir rien à voir avec ça.",},
 
-// Affaires 4-20 : structure complète
-...[
-  {id:3,titre:"Le Manoir des Ombres",num:"AFFAIRE N°004",diff:"Moyen",featured:false,lieu:"Manoir Blackwood — Bretagne",gi:0,giV:1,age:72,prof:"Aristocrate collectionneur",lieu_v:"Bibliothèque — retrouvé dans son fauteuil",nom_v:"Gérard Blackwood",cause:"Strangulation avec une cordelette de soie rouge",heure:"Entre 22h00 et 23h30",rapport:"Strangulation par-derrière. Cordelette à moitié brûlée dans la cheminée. Alcool et sédatif dans le sang.",resume:"Gérard Blackwood retrouvé mort lors d'une soirée familiale. Tous les suspects se trouvaient dans le manoir. Quelqu'un ment.",coupable_nom:"Margaux Blackwood",solution:"Margaux a additionné un sédatif dans le cognac de son père, attendu qu'il s'endorme, et l'a étranglé avec la cordelette de soie. Elle a laissé des traces de talons dans le jardin et perdu un gant taille M.",
-   suspects_d:[
-    {nom:"Margaux Blackwood",role:"Fille héritière",gi:1,motif:"Allait être déshéritée",coupable:true,
-     qs:[{q:"Où étiez-vous ?",r:"Au salon jusqu'à 22h15, puis j'ai fait un tour au jardin."},{q:"Les 45 minutes inexpliquées ?",r:"J'ai pris l'air. Seule. Je n'avais pas à me justifier."},{q:"Le testament ?",r:"Mon père avait des idées changeantes."},{q:"Ce gant taille M ?",r:"Ce gant n'est pas à moi. Je porte du S."},{q:"Connaissiez-vous la cordelette ?",r:"Je ne sais pas où mon père gardait ces affaires."},{q:"Des traces de talons dans le jardin ?",r:"J'ai peut-être marché près de la fenêtre."},{q:"Le coffre fouillé ?",r:"Je ne connaissais pas l'existence de ce coffre."},{q:"Votre relation avec votre père ?",r:"Je viens de perdre mon père. Ce questionnement est indécent."}]},
-    {nom:"Édouard Plantier",role:"Notaire",gi:3,motif:"Gérard allait le congédier",coupable:false,
-     qs:[{q:"Où étiez-vous ?",r:"J'étais à table dans la salle à manger. Les époux Dumont confirment."},{q:"Avez-vous un mobile ?",r:"Je n'ai aucun intérêt à voir mon client mourir."},{q:"Connaissiez-vous le coffre ?",r:"Non. C'est le coffre personnel de Gérard."},{q:"La cordelette ?",r:"Je n'ai aucun accès aux affaires personnelles du comte."},{q:"Vous a-t-on vu sortir ?",r:"Non, je suis resté à table toute la soirée."},{q:"Votre relation avec Gérard ?",r:"Professionnelle. Je gérais ses affaires depuis 10 ans."},{q:"L'abus de confiance en 2016 ?",r:"Affaire classée. Complètement sans rapport."},{q:"Margaux sortie de la pièce ?",r:"Je n'ai pas surveillé ses allées et venues."}]},
-    {nom:"Jacques Moreau",role:"Majordome",gi:7,motif:"Retraite sans pension",coupable:false,
-     qs:[{q:"Où étiez-vous ?",r:"Je servais les invités au salon et salle à manger."},{q:"Les 10 minutes inexpliquées ?",r:"Je passais en cuisine préparer les boissons."},{q:"Connaissiez-vous la cordelette ?",r:"Je connais l'existence de ce tiroir, oui."},{q:"Connaissiez-vous le coffre ?",r:"Oui. Je rangeais parfois des documents pour Monsieur."},{q:"La retraite sans pension ?",r:"Monsieur avait annoncé ma retraite pour le printemps."},{q:"Votre relation avec Gérard ?",r:"Monsieur avait ses défauts mais je le respectais."},{q:"Avez-vous vu quelque chose ?",r:"Non. Tout semblait normal jusqu'au drame."},{q:"Avez-vous un mobile ?",r:"J'ai servi cette famille 40 ans. Je leur dois tout."}]},
-    {nom:"Céline Aubert",role:"Secrétaire et maîtresse",gi:6,motif:"Gérard allait rompre",coupable:false,
-     qs:[{q:"Où étiez-vous ?",r:"J'avais une migraine terrible. Dans ma chambre dès 21h30."},{q:"Votre alibi ?",r:"Je vis seule dans ma chambre. J'ai pris des médicaments."},{q:"La promesse du testament ?",r:"Gérard m'avait promis quelque chose et il allait tout reprendre."},{q:"Votre taille de gant ?",r:"Je fais du S. Cette question est bizarre."},{q:"Avez-vous entendu quelque chose ?",r:"J'ai entendu du bruit vers 23h mais je n'ai pas bougé."},{q:"Connaissiez-vous la cordelette ?",r:"Non. Je ne connaissais pas les affaires personnelles de Gérard."},{q:"Votre relation avec Gérard ?",r:"Notre relation était complexe. Il m'aimait à sa façon."},{q:"Avez-vous un mobile ?",r:"Je l'aimais. On ne tue pas quelqu'un qu'on aime."}]},
-   ]},
-  {id:4,titre:"L'Expérience Finale",num:"AFFAIRE N°005",diff:"Expert",featured:false,lieu:"Laboratoire NeuroPharma — Strasbourg",gi:5,giV:1,age:47,prof:"Chercheuse neurosciences",lieu_v:"Chambre d'isolation sensorielle",nom_v:"Dr. Éléonore Voss",cause:"Injection neurotoxine NX-7",heure:"Entre 03h00 et 04h30",rapport:"Injection intramusculaire dans la nuque. Mort en 8 minutes. Accès NX-7 réservé aux chercheurs senior.",resume:"Dr. Voss retrouvée morte dans la chambre d'isolation à 07h00. Trois autres personnes avaient accès au bâtiment.",coupable_nom:"Dr. Marcus Klein",solution:"Dr. Klein falsifiait des résultats de recherche et Voss menaçait de le dénoncer. Il a utilisé sa clé d'accès au laboratoire sécurisé pour préparer l'injection la nuit du meurtre.",
-   suspects_d:[
-    {nom:"Dr. Marcus Klein",role:"Directeur recherche",gi:0,motif:"Voss allait dénoncer ses fraudes",coupable:true,qs:[{q:"Où étiez-vous ?",r:"Dans mon bureau, à réviser des données."},{q:"Votre alibi ?",r:"Seul malheureusement. Mais j'avais du travail urgent."},{q:"Les fraudes ?",r:"Des fraudes ? Absurde. Ma carrière est irréprochable."},{q:"L'accès à NX-7 ?",r:"Oui j'y avais accès, comme tous les chercheurs senior."},{q:"Votre relation avec Voss ?",r:"Professionnelle. Elle était brillante."},{q:"La NX-7 ?",r:"C'est un produit expérimental sous haute surveillance."},{q:"Votre mobile ?",r:"Aucun. Perdre Voss est une catastrophe pour nos recherches."},{q:"Avez-vous vu quelque chose de suspect ?",r:"Non. Tout semblait normal."}]},
-    {nom:"Lena Brandt",role:"Assistante de recherche",gi:8,motif:"Jalousie professionnelle intense",coupable:false,qs:[{q:"Où étiez-vous ?",r:"Dans la salle commune, à lire."},{q:"Votre alibi ?",r:"La caméra du couloir m'a vue à 03h15."},{q:"L'accès à NX-7 ?",r:"Je n'avais pas accès aux produits senior."},{q:"Votre relation avec Voss ?",r:"Tendue. Elle prenait tout le crédit."},{q:"Avez-vous un mobile ?",r:"La jalousie n'est pas un mobile de meurtre."},{q:"Avez-vous vu Klein cette nuit ?",r:"Je l'ai croisé dans le couloir vers 02h30."},{q:"Votre pointure ?",r:"Du 37."},{q:"Avez-vous entendu quelque chose ?",r:"Non. Les chambres sont insonorisées."}]},
-    {nom:"Dr. Peter Haas",role:"Technicien senior",gi:2,motif:"Renvoi imminent",coupable:false,qs:[{q:"Où étiez-vous ?",r:"En salle de maintenance jusqu'à 04h."},{q:"Votre alibi ?",r:"Les logs de maintenance confirment ma présence."},{q:"L'accès à NX-7 ?",r:"Oui mais je n'ai pas les codes de la chambre d'isolation."},{q:"Votre renvoi ?",r:"Klein avait parlé de réduire l'équipe. Mais Voss m'appréciait."},{q:"Votre relation avec Voss ?",r:"Bonne. Elle défendait mon travail."},{q:"Avez-vous un mobile ?",r:"Voss était mon alliée. Sa mort me condamne."},{q:"Avez-vous vu Klein ?",r:"Je l'ai vu entrer dans le labo sécurisé vers 03h00."},{q:"Ce que vous avez vu ?",r:"Klein avec une mallette noire qu'il n'avait pas d'habitude."}]},
-    {nom:"Sophie Renner",role:"Coordinatrice administrative",gi:1,motif:"Litige financier avec Voss",coupable:false,qs:[{q:"Où étiez-vous ?",r:"Chez moi. Je ne travaille pas la nuit."},{q:"Votre alibi ?",r:"Mes relevés téléphoniques prouvent que j'étais chez moi."},{q:"Le litige financier ?",r:"Voss m'accusait d'avoir détourné des fonds de labo. C'est faux."},{q:"L'accès au bâtiment ?",r:"J'ai un badge mais je ne l'ai pas utilisé cette nuit."},{q:"Votre relation avec Voss ?",r:"Exécrable. Elle me rendait la vie impossible."},{q:"Avez-vous un mobile ?",r:"Oui j'avais des raisons d'être en colère. Pas de tuer."},{q:"Connaissiez-vous NX-7 ?",r:"Vaguement. Je gère l'administratif, pas les produits."},{q:"Avez-vous un mobile ?",r:"Je voulais un transfert, pas sa mort."}]},
-   ]},
-  {id:5,titre:"La Nuit du Casino",num:"AFFAIRE N°006",diff:"Difficile",featured:false,lieu:"Casino Royale — Monaco",gi:0,giV:0,age:61,prof:"Banquier joueur professionnel",lieu_v:"Salon VIP — retrouvé dans son fauteuil",nom_v:"Lorenzo Marchetti",cause:"Venin de cobra synthétique — injection discrète",heure:"Entre 01h00 et 02h30",rapport:"Substance rarissime injectée via micropiqûre sur la nuque. Mort en 20 minutes. Victime ressentait une légère fatigue.",resume:"Marchetti retrouvé mort en pleine nuit de jeu. Le casino était bondé — et pourtant personne n'a rien vu.",coupable_nom:"Elena Sorel",solution:"Elena, croupière chevronnée, avait été ruinée par Marchetti lors d'une escroquerie. Elle a utilisé un stylo injecteur déguisé pour l'empoisonner discrètement pendant qu'il jouait.",
-   suspects_d:[
-    {nom:"Elena Sorel",role:"Croupière VIP",gi:5,motif:"Marchetti l'avait ruinée",coupable:true,qs:[{q:"Où étiez-vous ?",r:"À ma table de jeu toute la nuit. Des dizaines de clients m'ont vue."},{q:"Votre alibi ?",r:"Les caméras du casino confirment ma présence à la table."},{q:"L'arnaque de Marchetti ?",r:"Il a détruit ma famille financièrement il y a 3 ans."},{q:"Le venin synthétique ?",r:"Je ne sais même pas ce que c'est."},{q:"Un stylo suspect ?",r:"J'utilise un stylo pour noter mes fiches. C'est normal."},{q:"Avez-vous approché Marchetti ?",r:"Je l'ai croisé au bar. Brièvement."},{q:"Votre relation avec Marchetti ?",r:"Je le connaissais de vue. Rien de plus."},{q:"Avez-vous un mobile ?",r:"Il a détruit ma vie mais je ne ferais jamais une chose pareille."}]},
-    {nom:"Marco Zanetti",role:"Associé de Marchetti",gi:3,motif:"Contrat litigieux 3M€",coupable:false,qs:[{q:"Où étiez-vous ?",r:"Au bar VIP jusqu'à 02h puis dans ma chambre."},{q:"Votre alibi ?",r:"Le barman peut confirmer. J'ai une note d'hôtel."},{q:"Le contrat litigieux ?",r:"Lorenzo et moi avions des différends commerciaux. Rien d'exceptionnel."},{q:"Avez-vous un mobile ?",r:"Sa mort me prive d'un associé précieux."},{q:"Connaissiez-vous le venin ?",r:"Non. Je suis homme d'affaires."},{q:"Avez-vous vu quelque chose ?",r:"J'ai vu Lorenzo parler à une femme au bar vers 01h."},{q:"Cette femme ?",r:"Grande, cheveux noirs, tenue de croupière."},{q:"Votre relation avec Marchetti ?",r:"Complexe mais lucrative pour les deux."}]},
-    {nom:"Isabelle Montaigne",role:"Épouse séparée",gi:1,motif:"Divorce et héritage",coupable:false,qs:[{q:"Où étiez-vous ?",r:"Dans ma suite. J'ai commandé le room service à 01h30."},{q:"Votre alibi ?",r:"Le serveur et la facture confirment. Je n'ai pas bougé."},{q:"Le divorce ?",r:"Lorenzo et moi étions en procédure depuis 2 ans."},{q:"L'héritage ?",r:"Je toucherais moins en héritant qu'en divorcant avec un bon avocat."},{q:"Avez-vous un mobile ?",r:"Un divorce m'était plus favorable. Sa mort me complique la vie."},{q:"Votre relation avec Lorenzo ?",r:"C'était mon mari. Nos problèmes étaient légaux, pas personnels."},{q:"Connaissiez-vous le venin ?",r:"Non. Absolument pas."},{q:"Avez-vous vu quelque chose ce soir ?",r:"Non. J'ai évité les salles de jeu."}]},
-    {nom:"Viktor Orlov",role:"Rival aux cartes",gi:4,motif:"Marchetti l'avait humilié publiquement",coupable:false,qs:[{q:"Où étiez-vous ?",r:"À ma table de poker jusqu'à 03h. Plusieurs joueurs confirment."},{q:"Votre alibi ?",r:"15 personnes m'ont vu jouer sans interruption."},{q:"L'humiliation publique ?",r:"Marchetti m'a accusé de tricher devant tout le monde. C'était faux."},{q:"Avez-vous un mobile ?",r:"J'aurais voulu lui faire face publiquement pour me venger."},{q:"Connaissiez-vous le venin ?",r:"Non. Je ne connais rien à ce genre de substance."},{q:"Avez-vous vu Elena Sorel ?",r:"Oui, elle s'est absentée de sa table 10 minutes vers 01h15."},{q:"Votre relation avec Marchetti ?",r:"De la haine mutuelle, c'est vrai. Mais pas de meurtre."},{q:"Quoi d'autre ?",r:"Elena semblait très agitée cette nuit."}]},
-   ]},
-].map(s=>({
-  id:s.id,titre:s.titre,num:s.num,diff:s.diff,featured:s.featured,
-  lieu:s.lieu,
-  victime:{nom:s.nom_v,age:s.age,prof:s.prof,gi:s.giV,lieu:s.lieu_v},
-  cause:s.cause,heure:s.heure,rapport:s.rapport,resume:s.resume,
-  photos:[
-    {t:"Scène principale",d:"Scène de crime — traces d'une présence.",c:"Indice physique principal.",ic:0},
-    {t:"Indice clé",d:"Objet retrouvé près du corps.",c:"Cet objet pointe vers un suspect.",ic:1},
-    {t:"Trace physique",d:"Empreinte ou marque retrouvée.",c:"Correspond à l'un des suspects.",ic:3},
-    {t:"Document suspect",d:"Document retrouvé sur la victime.",c:"Révèle un secret compromettant.",ic:5},
-    {t:"Accès non autorisé",d:"Trace d'entrée non autorisée.",c:"Seules certaines personnes pouvaient entrer.",ic:8},
-    {t:"Témoin indirect",d:"Déclaration d'un témoin présent.",c:"Les contradictions sont révélatrices.",ic:7},
-  ],
-  suspects:s.suspects_d.map((sd,i)=>({
-    nom:sd.nom,role:sd.role,age:30+i*7,gi:sd.gi,
-    alibi:sd.coupable?"Alibi non vérifiable.":"Alibi confirmé par un tiers.",
-    casier:sd.coupable?["Antécédents discrets"]:["Aucun antécédent"],
-    motif:sd.motif,coupable:sd.coupable,qs:sd.qs
-  })),
-  pieces:[
-    {id:"p1"+s.id,nom:"Lieu du crime",x:278,y:45,w:240,h:140,crime:true,desc:"Scène de crime principale.",indices:["Indice principal","Trace de pas"]},
-    {id:"p2"+s.id,nom:"Pièce adjacente",x:530,y:45,w:195,h:140,crime:false,desc:"Zone connectée.",indices:["Trace suspecte","Document froissé"]},
-    {id:"p3"+s.id,nom:"Accès secondaire",x:52,y:45,w:185,h:140,crime:false,desc:"Voie d'accès secondaire.",indices:["Empreinte partielle","Fenêtre ouverte"]},
-    {id:"p4"+s.id,nom:"Zone commune",x:170,y:240,w:225,h:95,crime:false,desc:"Zone de passage.",indices:["Caméra désactivée","Témoignage"]},
-    {id:"p5"+s.id,nom:"Espace privé",x:408,y:240,w:215,h:95,crime:false,desc:"Bureau ou espace privé.",indices:["Documents sensibles","Note manuscrite"]},
-    {id:"p6"+s.id,nom:"Entrée",x:52,y:240,w:100,h:95,crime:false,desc:"Entrée principale.",indices:["Log d'accès","Badge retrouvé"]},
-  ],
-  coupable:s.coupable_nom,
-  solution:s.solution
-})),
-// Affaires 7-20 (simplifiées)
-...Array.from({length:14},(_, i)=>{
-  const defs=[
-    {id:6,titre:"Le Secret du Château",num:"AFFAIRE N°007",diff:"Moyen",lieu:"Château de Beaumont — Périgord",nom_v:"Comte Arnaud de Beaumont",cause:"Chute depuis la tour Nord",heure:"Entre 21h00 et 22h30",coupable:"Frédéric de Beaumont",sol:"Frédéric, le neveu, avait falsifié un testament. Il a poussé le comte depuis la tour lors d'une altercation."},
-    {id:7,titre:"Meurtre sur l'Orient",num:"AFFAIRE N°008",diff:"Difficile",lieu:"Train Paris-Istanbul — Wagon-lit 4",nom_v:"Prof. Helena Kessler",cause:"Poignardée avec un stylet en ivoire",heure:"Entre 23h00 et 01h00",coupable:"Antoine Mercier",sol:"Antoine, antiquaire, avait volé les découvertes archéologiques de Kessler. Elle l'avait reconnu dans le train."},
-    {id:8,titre:"La Galerie des Ombres",num:"AFFAIRE N°009",diff:"Expert",lieu:"Galerie Obscura — Paris 11e",nom_v:"Xavier Moreau",cause:"Électrocution via installation piégée",heure:"Entre 22h00 et 23h30",coupable:"Diane Leclair",sol:"Diane, galeriste rivale, avait modifié l'installation électrique lors du montage. Elle avait les clés et les connaissances techniques."},
-    {id:9,titre:"La Villa Maudite",num:"AFFAIRE N°010",diff:"Moyen",lieu:"Villa Les Rochers — Côte d'Azur",nom_v:"Diane Beauchamp",cause:"Noyade — alcool et coup au crâne",heure:"Entre 02h00 et 04h00",coupable:"Nicolas Faure",sol:"Nicolas, ex-associé, l'a assommée puis noyée dans la piscine après qu'elle eut refusé de lui rembourser sa dette."},
-    {id:10,titre:"L'Affaire du Professeur",num:"AFFAIRE N°011",diff:"Facile",lieu:"Université Lumière — Lyon",nom_v:"Professeur Michel Leroy",cause:"Empoisonnement au ricin dans son café",heure:"Entre 09h00 et 10h30",coupable:"Étudiant Romain Chatel",sol:"Romain avait été renvoyé de thèse par Leroy. Il avait préparé l'extrait de ricin lors de ses cours de chimie et contaminé le café."},
-    {id:11,titre:"Dernier Repas",num:"AFFAIRE N°012",diff:"Facile",lieu:"Restaurant Le Cygne Noir — Paris 1er",nom_v:"Robert Chassagne",cause:"Intoxication à l'aconitine",heure:"Vers 21h30",coupable:"Chef Arnaud Blanc",sol:"Arnaud, chef étoilé, avait eu sa carrière détruite par une critique dévastatrice de Chassagne. Il a préparé sa sauce avec de l'aconitine extraite de plantes du jardin."},
-    {id:12,titre:"Le Fantôme de l'Opéra",num:"AFFAIRE N°013",diff:"Difficile",lieu:"Opéra Garnier — Paris",nom_v:"Maestro Giacomo Ferretti",cause:"Chute — corde de sécurité sectionnée",heure:"Entre 23h30 et 01h00",coupable:"Violoniste Camille Roy",sol:"Camille, écarté de l'orchestre par Ferretti, a sectionné partiellement la corde de sécurité. La chute lors de la répétition était programmée."},
-    {id:13,titre:"L'Île des Disparus",num:"AFFAIRE N°014",diff:"Expert",lieu:"Île privée Santarini — Méditerranée",nom_v:"Hugo Stern",cause:"Balle unique — arme non retrouvée",heure:"Entre 01h00 et 03h00",coupable:"Conrad Webb",sol:"Conrad, ancien associé spolié, avait préparé le meurtre depuis des mois. L'arme était dissimulée dans un compartiment secret de sa valise."},
-    {id:14,titre:"Secrets d'Ambassade",num:"AFFAIRE N°015",diff:"Difficile",lieu:"Ambassade de Kravonie — Paris 7e",nom_v:"Ambassadeur Viktor Sorokin",cause:"Strangulation avec câble téléphonique",heure:"Entre 20h00 et 21h30",coupable:"Attaché Nikolaï Petrov",sol:"Nikolaï, agent double, avait reçu l'ordre d'éliminer Sorokin qui avait découvert sa trahison. Il était le seul avec accès au bureau ce soir-là."},
-    {id:15,titre:"Abîmes",num:"AFFAIRE N°016",diff:"Expert",lieu:"Sous-marin Triton IV — Atlantique Nord",nom_v:"Commandant Jean-Pierre Dumas",cause:"Asphyxie — ventilation sabotée",heure:"Entre 03h00 et 05h00",coupable:"Ingénieur Carlos Vega",sol:"Carlos avait saboté la ventilation pour cacher ses malversations financières sur les contrats de maintenance du sous-marin."},
-    {id:16,titre:"Blanc comme Neige",num:"AFFAIRE N°017",diff:"Moyen",lieu:"Chalet Altitude — Les Arcs 2000",nom_v:"Sylvie Marchand",cause:"Hypothermie forcée — sédatée et exposée",heure:"Entre 02h00 et 05h00",coupable:"Maxime Aubert",sol:"Maxime, accusé dans un dossier défendu par Marchand, l'a sédatée et exposée au froid de -18°C en ouvrant la fenêtre de sa chambre."},
-    {id:17,titre:"La Cathédrale Maudite",num:"AFFAIRE N°018",diff:"Difficile",lieu:"Cathédrale Saint-Julien — Le Mans",nom_v:"Père Matthieu Delorme",cause:"Défenestration depuis la galerie",heure:"Entre 22h00 et 23h30",coupable:"Archiprêtre Bernard Morin",sol:"Morin cachait un trafic d'œuvres sacrées volées. Delorme avait retrouvé des archives prouvant le trafic et l'avait confronté ce soir-là."},
-    {id:18,titre:"Gravité Zéro",num:"AFFAIRE N°019",diff:"Expert",lieu:"Station spatiale ARES-7 — Orbite basse",nom_v:"Commandante Natasha Volkov",cause:"Dépressurisation — combinaison sabotée",heure:"Entre 04h00 et 06h00 GMT",coupable:"Dr. James Okafor",sol:"Okafor, saboteur industriel, avait été infiltré dans l'équipage. Volkov avait découvert ses transmissions illicites. Il a incisé le joint de sa combinaison."},
-    {id:19,titre:"L'Ultime Verdict",num:"AFFAIRE N°020",diff:"Expert",lieu:"Palais de Justice de Paris",nom_v:"Juge Isabelle Renaud",cause:"Empoisonnement au thallium dans le café",heure:"Entre 14h30 et 16h00",coupable:"Greffier Paul Tessier",sol:"Tessier, corrompu par une organisation criminelle condamnée ce matin, avait additionné du thallium dans le café de la juge pendant la pause délibération."},
-  ][i];
-  return {
-    id:defs.id,titre:defs.titre,num:defs.num,diff:defs.diff,featured:false,
-    lieu:defs.lieu,
-    victime:{nom:defs.nom_v,age:45+i*2,prof:"Personnalité reconnue",gi:i%2===0?0:1,lieu:"Lieu principal"},
-    cause:defs.cause,heure:defs.heure,rapport:"Rapport médico-légal en cours d'analyse. Indices préliminaires disponibles sur la scène.",
-    resume:`Affaire complexe à ${defs.lieu}. La victime a été retrouvée dans des circonstances mystérieuses. Quatre personnes avaient accès aux lieux.`,
-    photos:[
-      {t:"Scène principale",d:"Scène de crime — traces d'une présence.",c:"Indice physique principal.",ic:0},
-      {t:"Indice clé",d:"Objet retrouvé près du corps.",c:"Cet objet pointe vers un suspect.",ic:1},
-      {t:"Trace physique",d:"Empreinte ou marque retrouvée.",c:"Correspond à l'un des suspects.",ic:3},
-      {t:"Document suspect",d:"Document retrouvé.",c:"Révèle un secret.",ic:5},
-      {t:"Accès non autorisé",d:"Trace d'entrée non autorisée.",c:"Seules certaines personnes pouvaient entrer.",ic:8},
-      {t:"Témoin indirect",d:"Déclaration d'un témoin.",c:"Les contradictions sont révélatrices.",ic:7},
-    ],
-    suspects:[
-      {nom:defs.coupable,role:"Proche de la victime",age:42,gi:i%10,alibi:"Alibi non vérifiable.",casier:["Antécédents discrets"],motif:"Mobile puissant lié à la victime.",coupable:true,
-       qs:[{q:"Où étiez-vous ?",r:"J'étais chez moi. Seul. Personne ne peut le confirmer."},{q:"Votre alibi ?",r:"Je vous dis la vérité. J'étais chez moi."},{q:"Votre relation avec la victime ?",r:"Une relation professionnelle et tendue."},{q:"Avez-vous un mobile ?",r:"Absolument pas. Aucune raison de faire ça."},{q:"Où exactement ?",r:"Je... j'ai peut-être fait un tour dehors. Brièvement."},{q:"Connaissiez-vous les lieux ?",r:"Oui. J'y suis allé plusieurs fois."},{q:"Avez-vous vu quelque chose ?",r:"Non. Rien d'inhabituel."},{q:"Autre chose à ajouter ?",r:"Non. Je n'ai rien fait."}]},
-      {nom:"Suspect B",role:"Collègue",age:38,gi:(i+1)%10,alibi:"Confirmé par un tiers.",casier:["Aucun antécédent"],motif:"Désaccord professionnel.",coupable:false,
-       qs:[{q:"Où étiez-vous ?",r:"J'étais avec mon collègue. Il peut confirmer."},{q:"Votre alibi ?",r:"Mon alibi est solide. Demandez autour de vous."},{q:"Votre relation avec la victime ?",r:"Tendue parfois, mais professionnellement correcte."},{q:"Avez-vous un mobile ?",r:"Des raisons d'être en colère, oui. Passer à l'acte, non."},{q:"Étiez-vous sur les lieux ?",r:"Non. Je suis parti avant 20h."},{q:"Avez-vous vu quelque chose ?",r:"Non. Rien."},{q:"Que pensez-vous ?",r:"Je n'accuse personne sans preuves."},{q:"Votre réaction ?",r:"Choqué. Vraiment choqué."}]},
-      {nom:"Suspect C",role:"Ancien partenaire",age:50,gi:(i+2)%10,alibi:"Partiel — 30 minutes inexpliquées.",casier:["Litige civil en 2020"],motif:"Conflit financier non résolu.",coupable:false,
-       qs:[{q:"Où étiez-vous ?",r:"J'étais dans les parages. J'ai des trous dans mon emploi du temps."},{q:"Les 30 minutes inexpliquées ?",r:"Je fumais dehors. Seul."},{q:"Votre relation avec la victime ?",r:"Compliquée. Mais je ne l'aurais jamais blessée."},{q:"Avez-vous vu quelque chose ?",r:"Peut-être quelqu'un qui passait mais je n'ai pas vu le visage."},{q:"Votre mobile ?",r:"Je ne vois pas pourquoi vous me regardez comme ça."},{q:"Étiez-vous sur les lieux ?",r:"Oui mais pas au moment du crime."},{q:"Votre litige ?",r:"Réglé à l'amiable. C'est du passé."},{q:"Autre chose ?",r:"Non. Je veux juste partir d'ici."}]},
-      {nom:"Suspect D",role:"Témoin",age:33,gi:(i+3)%10,alibi:"Alibi solide.",casier:["Aucun antécédent"],motif:"Aucun apparent.",coupable:false,
-       qs:[{q:"Qui êtes-vous ?",r:"Je travaille ici. Je passais par là."},{q:"Votre alibi ?",r:"J'étais avec mes collègues jusqu'à 22h."},{q:"Connaissiez-vous la victime ?",r:"De vue seulement. On ne s'est jamais parlé."},{q:"Avez-vous vu quelque chose ?",r:"J'ai vu une silhouette en courant. Mais sans voir le visage."},{q:"Que faisiez-vous là ?",r:"Je cherchais la sortie. Je m'étais perdu."},{q:"Avez-vous un mobile ?",r:"Aucun. Je ne la connaissais même pas."},{q:"La personne que vous avez vue ?",r:"Elle portait quelque chose de sombre et pressait le pas."},{q:"Autre chose ?",r:"Elle semblait connaître parfaitement les lieux."}]},
-    ],
-    pieces:[
-      {id:"p1_"+defs.id,nom:"Scène principale",x:278,y:45,w:240,h:140,crime:true,desc:"Lieu du crime principal.",indices:["Indice principal","Trace de pas","Objet oublié"]},
-      {id:"p2_"+defs.id,nom:"Pièce adjacente",x:530,y:45,w:195,h:140,crime:false,desc:"Zone adjacente.",indices:["Trace suspecte","Document froissé"]},
-      {id:"p3_"+defs.id,nom:"Accès secondaire",x:52,y:45,w:185,h:140,crime:false,desc:"Voie d'accès.",indices:["Empreinte partielle","Passage forcé"]},
-      {id:"p4_"+defs.id,nom:"Zone commune",x:170,y:240,w:225,h:95,crime:false,desc:"Zone de passage.",indices:["Caméra désactivée","Témoignage"]},
-      {id:"p5_"+defs.id,nom:"Espace privé",x:408,y:240,w:215,h:95,crime:false,desc:"Espace privé.",indices:["Documents sensibles","Note manuscrite"]},
-      {id:"p6_"+defs.id,nom:"Entrée",x:52,y:240,w:100,h:95,crime:false,desc:"Entrée principale.",indices:["Log d'accès","Badge retrouvé"]},
-    ],
-    coupable:defs.coupable,
-    solution:defs.sol
-  };
+// Affaires 4-20 simplifiées
+...Array.from({length:17},(_,i)=>{
+const defs=[
+  {id:3,titre:"Le Manoir des Ombres",num:"AFFAIRE N°004",diff:"Moyen",lieu:"Manoir Blackwood — Bretagne",nom_v:"Gérard Blackwood",cause:"Strangulation — cordelette de soie rouge",heure:"Entre 22h00 et 23h30",coupable:"Margaux Blackwood",sol:"Margaux a drogué le cognac de son père puis l'a étranglé avec la cordelette de soie. Traces de talons dans le jardin et gant taille M perdu."},
+  {id:4,titre:"L'Expérience Finale",num:"AFFAIRE N°005",diff:"Expert",lieu:"Laboratoire NeuroPharma — Strasbourg",nom_v:"Dr. Éléonore Voss",cause:"Injection neurotoxine NX-7",heure:"Entre 03h00 et 04h30",coupable:"Dr. Marcus Klein",sol:"Klein falsifiait des résultats de recherche. Voss menaçait de le dénoncer. Il a utilisé son accès au laboratoire sécurisé pour préparer l'injection."},
+  {id:5,titre:"La Nuit du Casino",num:"AFFAIRE N°006",diff:"Difficile",lieu:"Casino Royale — Monaco",nom_v:"Lorenzo Marchetti",cause:"Venin de cobra synthétique — micropiqûre",heure:"Entre 01h00 et 02h30",coupable:"Elena Sorel",sol:"Elena avait été ruinée par Marchetti. Elle a utilisé un stylo injecteur déguisé pendant qu'il jouait à sa table."},
+  {id:6,titre:"Le Secret du Château",num:"AFFAIRE N°007",diff:"Moyen",lieu:"Château de Beaumont — Périgord",nom_v:"Comte Arnaud de Beaumont",cause:"Chute depuis la Tour Nord",heure:"Entre 21h00 et 22h30",coupable:"Frédéric de Beaumont",sol:"Frédéric avait falsifié un testament. Il a poussé le comte depuis la tour lors d'une altercation nocturne."},
+  {id:7,titre:"Meurtre sur l'Orient",num:"AFFAIRE N°008",diff:"Difficile",lieu:"Train Paris-Istanbul — Wagon-lit 4",nom_v:"Prof. Helena Kessler",cause:"Poignardée avec un stylet en ivoire",heure:"Entre 23h00 et 01h00",coupable:"Antoine Mercier",sol:"Mercier avait volé les découvertes archéologiques de Kessler. Elle l'avait reconnu dans le train et le confrontait."},
+  {id:8,titre:"La Galerie des Ombres",num:"AFFAIRE N°009",diff:"Expert",lieu:"Galerie Obscura — Paris 11e",nom_v:"Xavier Moreau",cause:"Électrocution — installation piégée",heure:"Entre 22h00 et 23h30",coupable:"Diane Leclair",sol:"Diane, galeriste rivale, avait modifié l'installation électrique lors du montage de l'exposition."},
+  {id:9,titre:"La Villa Maudite",num:"AFFAIRE N°010",diff:"Moyen",lieu:"Villa Les Rochers — Côte d'Azur",nom_v:"Diane Beauchamp",cause:"Noyade — alcool et coup au crâne",heure:"Entre 02h00 et 04h00",coupable:"Nicolas Faure",sol:"Nicolas l'a assommée puis noyée dans la piscine après qu'elle eut refusé de rembourser sa dette."},
+  {id:10,titre:"L'Affaire du Professeur",num:"AFFAIRE N°011",diff:"Facile",lieu:"Université Lumière — Lyon",nom_v:"Professeur Michel Leroy",cause:"Empoisonnement au ricin dans le café",heure:"Entre 09h00 et 10h30",coupable:"Romain Chatel",sol:"Romain avait été renvoyé de thèse. Il a extrait le ricin en cours de chimie et contaminé le café du professeur."},
+  {id:11,titre:"Dernier Repas",num:"AFFAIRE N°012",diff:"Facile",lieu:"Restaurant Le Cygne Noir — Paris 1er",nom_v:"Robert Chassagne",cause:"Intoxication à l'aconitine",heure:"Vers 21h30",coupable:"Chef Arnaud Blanc",sol:"Arnaud avait eu sa carrière détruite par une critique. Il a intégré l'aconitine dans la sauce du plat principal."},
+  {id:12,titre:"Le Fantôme de l'Opéra",num:"AFFAIRE N°013",diff:"Difficile",lieu:"Opéra Garnier — Paris",nom_v:"Maestro Giacomo Ferretti",cause:"Chute — corde de sécurité sabotée",heure:"Entre 23h30 et 01h00",coupable:"Camille Roy",sol:"Camille avait été écarté de l'orchestre par Ferretti. Il a sectionné partiellement la corde de sécurité lors de la répétition."},
+  {id:13,titre:"L'Île des Disparus",num:"AFFAIRE N°014",diff:"Expert",lieu:"Île privée Santarini — Méditerranée",nom_v:"Hugo Stern",cause:"Balle unique — suppresseur utilisé",heure:"Entre 01h00 et 03h00",coupable:"Conrad Webb",sol:"Conrad, associé spolié, avait planifié le meurtre depuis des mois. L'arme était dans un compartiment secret de sa valise."},
+  {id:14,titre:"Secrets d'Ambassade",num:"AFFAIRE N°015",diff:"Difficile",lieu:"Ambassade de Kravonie — Paris 7e",nom_v:"Ambassadeur Viktor Sorokin",cause:"Strangulation — câble téléphonique",heure:"Entre 20h00 et 21h30",coupable:"Nikolaï Petrov",sol:"Nikolaï, agent double, a éliminé Sorokin qui avait découvert sa trahison. Seul lui avait accès au bureau ce soir-là."},
+  {id:15,titre:"Abîmes",num:"AFFAIRE N°016",diff:"Expert",lieu:"Sous-marin Triton IV — Atlantique Nord",nom_v:"Commandant Jean-Pierre Dumas",cause:"Asphyxie — ventilation sabotée",heure:"Entre 03h00 et 05h00",coupable:"Carlos Vega",sol:"Carlos avait saboté la ventilation pour cacher ses malversations sur les contrats de maintenance."},
+  {id:16,titre:"Blanc comme Neige",num:"AFFAIRE N°017",diff:"Moyen",lieu:"Chalet Altitude — Les Arcs 2000",nom_v:"Sylvie Marchand",cause:"Hypothermie forcée — sédatée et exposée",heure:"Entre 02h00 et 05h00",coupable:"Maxime Aubert",sol:"Maxime, accusé dans un dossier de Marchand, l'a sédatée et exposée au froid de -18°C en ouvrant la fenêtre."},
+  {id:17,titre:"La Cathédrale Maudite",num:"AFFAIRE N°018",diff:"Difficile",lieu:"Cathédrale Saint-Julien — Le Mans",nom_v:"Père Matthieu Delorme",cause:"Défenestration — galerie supérieure",heure:"Entre 22h00 et 23h30",coupable:"Bernard Morin",sol:"Morin cachait un trafic d'œuvres sacrées. Delorme avait retrouvé des archives prouvant le trafic."},
+  {id:18,titre:"Gravité Zéro",num:"AFFAIRE N°019",diff:"Expert",lieu:"Station spatiale ARES-7 — Orbite basse",nom_v:"Commandante Natasha Volkov",cause:"Dépressurisation — combinaison sabotée",heure:"Entre 04h00 et 06h00 GMT",coupable:"Dr. James Okafor",sol:"Okafor, saboteur industriel infiltré, avait incisé le joint de la combinaison après que Volkov découvre ses transmissions illicites."},
+  {id:19,titre:"L'Ultime Verdict",num:"AFFAIRE N°020",diff:"Expert",lieu:"Palais de Justice de Paris",nom_v:"Juge Isabelle Renaud",cause:"Empoisonnement au thallium — café",heure:"Entre 14h30 et 16h00",coupable:"Paul Tessier",sol:"Tessier, corrompu par une organisation criminelle condamnée ce matin, a additionné du thallium dans le café de la juge."},
+][i];
+return{id:defs.id,titre:defs.titre,num:defs.num,diff:defs.diff,featured:false,lieu:defs.lieu,
+victime:{nom:defs.nom_v,age:45+i*2,prof:"Personnalité reconnue",gi:i%2===0?0:1,lieu:"Lieu principal de l'affaire"},
+cause:defs.cause,heure:defs.heure,rapport:"Rapport médico-légal préliminaire. Analyses en cours.",
+resume:`Affaire ${defs.num} — ${defs.titre}. ${defs.lieu}. Circonstances mystérieuses. Quatre suspects principaux.`,
+photos:Array.from({length:6},(_,pi)=>({t:["Scène principale","Indice clé","Trace physique","Document","Accès","Témoin"][pi],d:"Élément forensique en cours d'analyse.",c:"Cet indice pourrait être déterminant.",ic:pi%10})),
+suspects:[
+  {nom:defs.coupable,role:"Suspect principal",age:42,gi:i%10,alibi:"Alibi non vérifiable.",casier:["Antécédents discrets"],motif:"Mobile puissant.",coupable:true,stress:20,
+   qs:[{q:"Où étiez-vous ?",r:"Chez moi. Seul. Je sais que ça ne m'aide pas mais c'est la vérité."},{q:"Votre alibi ?",r:"Je n'en ai pas de solide. Mais ça ne fait pas de moi un meurtrier."},{q:"Votre relation avec la victime ?",r:"Tendue. On avait des désaccords importants. Mais jamais je n'aurais..."},{q:"Avez-vous un mobile ?",r:"Des raisons d'être en colère, oui. Des raisons de tuer ? Non."},{q:"Où exactement ce soir-là ?",r:"J'ai... peut-être fait un détour. Mais rien d'illégal."},{q:"Connaissiez-vous les lieux ?",r:"Oui, j'y suis allé plusieurs fois. Ça ne prouve rien."},{q:"Avez-vous vu quelque chose ?",r:"Non. Rien d'inhabituel."},{q:"Votre dernière conversation avec la victime ?",r:"Il y a 3 jours. Ça s'est mal passé. Des mots ont été échangés."},{q:"Avez-vous contacté quelqu'un ce soir-là ?",r:"Non. J'étais seul."},{q:"Un dernier mot ?",r:"Je n'ai rien fait. Trouvez les vraies preuves avant d'accuser."}]},
+  {nom:"Suspect B",role:"Proche",age:38,gi:(i+1)%10,alibi:"Confirmé.",casier:["Aucun antécédent"],motif:"Désaccord.",coupable:false,stress:30,
+   qs:[{q:"Où étiez-vous ?",r:"Avec mon partenaire toute la soirée. Il peut confirmer."},{q:"Votre alibi ?",r:"Solide. Deux témoins et une facture de restaurant."},{q:"Votre relation ?",r:"Correcte. Des désaccords normaux."},{q:"Avez-vous un mobile ?",r:"Non. Sa mort ne m'arrange pas du tout."},{q:"Étiez-vous sur les lieux ?",r:"Non. J'ai quitté le bâtiment à 20h."},{q:"Avez-vous vu quelque chose ?",r:"Rien d'inhabituel en partant."},{q:"Que pensez-vous du suspect principal ?",r:"Il avait des raisons d'en vouloir à la victime. Je ne dis pas qu'il a agi mais..."},{q:"Connaissiez-vous ses problèmes ?",r:"Tout le monde était au courant des tensions entre eux."},{q:"Avez-vous entendu quelque chose ?",r:"Non. Mais j'ai reçu un SMS bizarre ce soir-là — de la victime. 'Si quelque chose m'arrive...'"},{q:"Un dernier mot ?",r:"Vérifiez ce SMS. La victime avait peur de quelqu'un précisément."}]},
+  {nom:"Suspect C",role:"Rival",age:50,gi:(i+2)%10,alibi:"Partiel.",casier:["Litige 2020"],motif:"Conflit financier.",coupable:false,stress:55,
+   qs:[{q:"Où étiez-vous ?",r:"J'avais des rendez-vous toute la soirée. Mais il y a un trou d'une demi-heure."},{q:"La demi-heure inexpliquée ?",r:"Je fumais dehors. Seul. Je sais que ça ne sonne pas bien."},{q:"Votre conflit financier ?",r:"On avait un litige réglé à l'amiable. Du passé."},{q:"Avez-vous un mobile ?",r:"Sur le papier oui. Dans la réalité, non."},{q:"Étiez-vous sur les lieux ?",r:"Oui. Mais dans une autre aile, pour un rendez-vous légal."},{q:"Avez-vous vu quelque chose ?",r:"Une silhouette qui pressait le pas vers la sortie vers l'heure estimée du crime."},{q:"Cette silhouette — vous pouvez la décrire ?",r:"Manteau sombre, capuche. Taille moyenne. Pressé. Vers la sortie nord."},{q:"Votre relation avec le suspect principal ?",r:"Difficile. Mais je ne ferais pas ça."},{q:"Avez-vous entendu parler de menaces ?",r:"La victime avait reçu des menaces la semaine dernière. Elle me l'avait dit."},{q:"Un dernier mot ?",r:"Je n'ai rien à cacher. Fouille ma demi-heure et tu trouveras un vendeur de cigarettes qui m'a vu."}]},
+  {nom:"Suspect D",role:"Témoin clé",age:33,gi:(i+3)%10,alibi:"Solide.",casier:["Aucun"],motif:"Aucun apparent.",coupable:false,stress:65,
+   qs:[{q:"Qui êtes-vous dans cette affaire ?",r:"Je travaille ici depuis 5 ans. Je connaissais la victime professionnellement."},{q:"Votre alibi ?",r:"J'étais avec 6 collègues jusqu'à 22h30. Solide."},{q:"Avez-vous vu quelque chose d'inhabituel ?",r:"Oui. J'ai vu une personne entrer dans le bureau de la victime à 21h15 alors qu'elle était censée être partie."},{q:"Qui était cette personne ?",r:"Je n'ai pas vu le visage. Mais la démarche... je pense reconnaître quelqu'un."},{q:"Vous êtes sûr de ne pas avoir de mobile ?",r:"Absolument certain. La victime était quelqu'un que j'appréciais vraiment."},{q:"Cette personne que vous avez vue — c'était qui ?",r:"Je préfère ne pas accuser sans être certain. Mais si vous me montrez des photos..."},{q:"Vous avez peur de témoigner ?",r:"Un peu, oui. Cette personne a l'air capable de tout."},{q:"Avez-vous reçu des menaces ?",r:"Ce matin j'ai trouvé un mot sur mon bureau : 'Tu n'as rien vu'. Ça m'a glacé."},{q:"Vous gardez ce mot ?",r:"Oui. Je l'ai mis dans une enveloppe. Je vous le remets si vous pouvez me garantir une protection."},{q:"Un dernier mot ?",r:"La vérité finit toujours par sortir. Et je suis prêt à témoigner quand vous aurez sécurisé ma situation."}]},
+],
+pieces:[
+  {id:"p1_"+defs.id,nom:"Scène principale",x:278,y:45,w:240,h:140,crime:true,desc:"Scène de crime principale.",indices:["Indice principal","Trace physique","Objet oublié"]},
+  {id:"p2_"+defs.id,nom:"Zone adjacente",x:530,y:45,w:195,h:140,crime:false,desc:"Zone connectée à la scène.",indices:["Trace suspecte","Document froissé"]},
+  {id:"p3_"+defs.id,nom:"Accès secondaire",x:52,y:45,w:185,h:140,crime:false,desc:"Voie d'accès secondaire.",indices:["Empreinte partielle","Passage forcé"]},
+  {id:"p4_"+defs.id,nom:"Zone commune",x:170,y:240,w:225,h:95,crime:false,desc:"Zone de passage commun.",indices:["Caméra désactivée","Témoignage"]},
+  {id:"p5_"+defs.id,nom:"Espace privé",x:408,y:240,w:215,h:95,crime:false,desc:"Espace privé.",indices:["Documents sensibles","Note manuscrite"]},
+  {id:"p6_"+defs.id,nom:"Entrée",x:52,y:240,w:100,h:95,crime:false,desc:"Point d'entrée principal.",indices:["Log d'accès","Badge retrouvé"]},
+],coupable:defs.coupable,solution:defs.sol};
 })
 ];
 
 // ══════════════════════════════════════
 // ÉTAT
 // ══════════════════════════════════════
-let SC=null,timerInt=null,sLeft=1200,score=1000;
+let SC=null,timerInt=null,sLeft=1200,score=1000,gameMode='detective';
 let indicesCol=[],suspActif=null,totalInterro=0,totalQs=0;
 let piecesVisitees=new Set(),photosVues=new Set();
 let reputation={xp:0,history:[]};
-let suspData={};
-let usedQs={};
+let suspData={},usedQs={},chatHistory={},stressLevels={};
+let pendingGameId=null;
 
-function saveRep(){try{localStorage.setItem('mortis_rep2',JSON.stringify(reputation));}catch(e){}}
-function loadRep(){try{const d=localStorage.getItem('mortis_rep2');if(d)reputation=JSON.parse(d);}catch(e){}}
+function saveRep(){try{localStorage.setItem('mortis_v3',JSON.stringify(reputation));}catch(e){}}
+function loadRep(){try{const d=localStorage.getItem('mortis_v3');if(d)reputation=JSON.parse(d);}catch(e){}}
 loadRep();
-
-// ══════════════════════════════════════
-// AUDIO
-// ══════════════════════════════════════
-const AUDIO_BASE='https://raw.githubusercontent.com/redmortis48/mortis/main/audio';
-const sounds={};
-let musicOn=false;
-
-function loadSounds(){
-  sounds.theme=new Audio(`${AUDIO_BASE}/mortis-theme.mp3.mp3`);
-  sounds.theme.loop=true;sounds.theme.volume=.25;
-  sounds.interro=new Audio(`${AUDIO_BASE}/mortis-interrogation.mp3.mp3`);
-  sounds.interro.loop=true;sounds.interro.volume=.2;
-  sounds.victory=new Audio(`${AUDIO_BASE}/mortis-victory.mp3.mp3`);
-  sounds.victory.volume=.5;
-  sounds.failure=new Audio(`${AUDIO_BASE}/mortis-failure.mp3.mp3`);
-  sounds.failure.volume=.5;
-}
-
-function playMusic(track){
-  if(!sounds.theme)loadSounds();
-  // Stopper toutes les musiques
-  ['theme','interro'].forEach(k=>{try{sounds[k].pause();sounds[k].currentTime=0;}catch(e){}});
-  if(!musicOn)return;
-  try{sounds[track].play();}catch(e){}
-}
-
-function playSfx(track){
-  if(!sounds.theme)loadSounds();
-  try{sounds[track].currentTime=0;sounds[track].play();}catch(e){}
-}
-
-function toggleMusic(){
-  if(!sounds.theme)loadSounds();
-  musicOn=!musicOn;
-  const btn=document.getElementById('music-btn');
-  if(musicOn){
-    btn.textContent='♪ ON';
-    btn.style.color='var(--gold)';
-    try{sounds.theme.play();}catch(e){}
-  } else {
-    btn.textContent='♪ OFF';
-    btn.style.color='';
-    ['theme','interro'].forEach(k=>{try{sounds[k].pause();}catch(e){}});
-  }
-}
 
 // ══════════════════════════════════════
 // FX
 // ══════════════════════════════════════
 function buildFX(){
   const c=document.getElementById('fx');c.innerHTML='';
-  for(let i=0;i<6;i++){
-    const s=document.createElement('div');s.className='smoke';
-    const sz=60+Math.random()*150;
-    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;background:radial-gradient(ellipse,rgba(60,10,10,.04),transparent 70%);animation-duration:${18+Math.random()*20}s;animation-delay:${Math.random()*15}s`;
-    c.appendChild(s);
-  }
-  for(let i=0;i<2;i++){
-    const sh=document.createElement('div');sh.className='shadow-fig';
-    sh.style.cssText=`animation-duration:${28+Math.random()*18}s;animation-delay:${Math.random()*15}s;opacity:${.3+Math.random()*.3}`;
-    sh.innerHTML='<div class="sf-inner"></div>';
-    c.appendChild(sh);
-  }
+  for(let i=0;i<6;i++){const s=document.createElement('div');s.className='smoke';const sz=60+Math.random()*150;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;background:radial-gradient(ellipse,rgba(60,10,10,.04),transparent 70%);animation-duration:${18+Math.random()*20}s;animation-delay:${Math.random()*15}s`;c.appendChild(s);}
+  for(let i=0;i<2;i++){const sh=document.createElement('div');sh.className='shadow-fig';sh.style.cssText=`animation-duration:${28+Math.random()*18}s;animation-delay:${Math.random()*15}s;opacity:${.3+Math.random()*.3}`;sh.innerHTML='<div class="sf-inner"></div>';c.appendChild(sh);}
 }
 buildFX();
 
 // ══════════════════════════════════════
 // NAV
 // ══════════════════════════════════════
-function hideAll(){['s-intro','s-cases','s-game','s-verdict'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});}
+function hideAll(){['s-intro','s-cases','s-game','s-verdict'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});document.getElementById('mode-ov').classList.remove('open');}
 function showIntro(){hideAll();document.getElementById('s-intro').style.display='flex';clearInterval(timerInt);}
 function showCases(){hideAll();buildCaseGrid();document.getElementById('s-cases').style.display='block';clearInterval(timerInt);}
 
 // ══════════════════════════════════════
-// GRILLE AFFAIRES
+// MODE SELECT
+// ══════════════════════════════════════
+function openModeSelect(id){
+  pendingGameId=id;
+  const s=SCENARIOS.find(x=>x.id===id);
+  document.getElementById('mode-case-title').textContent=s.num+' — '+s.titre;
+  document.getElementById('mode-ov').classList.add('open');
+}
+function startGameMode(mode){
+  gameMode=mode;
+  document.getElementById('mode-ov').classList.remove('open');
+  startGame(pendingGameId);
+}
+
+// ══════════════════════════════════════
+// GRILLE
 // ══════════════════════════════════════
 let currentFilter='all';
-function filterCases(diff,btn){
-  currentFilter=diff;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  buildCaseGrid();
-}
+function filterCases(diff,btn){currentFilter=diff;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildCaseGrid();}
 function buildCaseGrid(){
-  const feat=document.getElementById('cases-featured');
-  const list=document.getElementById('cases-list');
-  feat.innerHTML='';list.innerHTML='';
+  const feat=document.getElementById('cases-featured');const list=document.getElementById('cases-list');feat.innerHTML='';list.innerHTML='';
+  const icons=['🏨','🏛️','⛵','🏰','🔬','🎰','🗼','🚂','🖼️','🏖️','🎓','🍽️','🎭','🏝️','🏛️','🤿','⛷️','⛪','🛸','⚖️'];
   const filtered=SCENARIOS.filter(s=>currentFilter==='all'||s.diff===currentFilter);
   let hasFeat=false;
   filtered.forEach(s=>{
     const dc=s.diff==='Expert'||s.diff==='Difficile'?'stamp-hard':s.diff==='Moyen'?'stamp-med':'stamp-easy';
-    const icons=['🏨','🏛️','⛵','🏰','🔬','🎰','🗼','🚂','🖼️','🏖️','🎓','🍽️','🎭','🏝️','🏛️','🤿','⛷️','⛪','🛸','⚖️'];
     if(s.featured&&currentFilter==='all'){
-      hasFeat=true;
-      const c=document.createElement('div');c.className='case-card-big';
-      const caseImg=IMG_CASES[s.id]||'';
+      hasFeat=true;const c=document.createElement('div');c.className='case-card-big';
+      const ci=IMG_CASES[s.id]||'';
       c.innerHTML=`<div class="case-stamp ${dc}">${s.diff}</div>
-      <div class="case-thumb-ph" style="position:relative;overflow:hidden">${imgOrEmoji(caseImg,icons[s.id]||'🔍','','width:100%;height:100%;object-fit:cover;filter:saturate(.2) brightness(.55);position:absolute;inset:0')}<span style="position:relative;z-index:1">${!caseImg?icons[s.id]||'🔍':''}</span></div>
-      <div class="case-info-big">
-        <div class="case-num">${s.num}</div>
-        <div class="case-title-big">${s.titre}</div>
-        <p class="case-desc">${s.resume.substring(0,100)}...</p>
-        <div class="case-meta"><span class="cmeta">${s.lieu.split('—')[0].trim()}</span><span class="cmeta">${s.diff}</span></div>
-      </div>`;
-      c.onclick=()=>startGame(s.id);feat.appendChild(c);
+      <div class="case-thumb-ph">${ci?`<img src="${ci}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.2) brightness(.55)" onerror="this.remove()">`:''}${icons[s.id]||'🔍'}</div>
+      <div class="case-info-big"><div class="case-num">${s.num}</div><div class="case-title-big">${s.titre}</div><p class="case-desc">${s.resume.substring(0,100)}...</p><div class="case-meta"><span class="cmeta">${s.lieu.split('—')[0].trim()}</span><span class="cmeta">${s.diff}</span></div></div>`;
+      c.onclick=()=>openModeSelect(s.id);feat.appendChild(c);
     } else {
       const c=document.createElement('div');c.className='case-card-sm';
-      c.innerHTML=`<div class="case-sm-num">${s.num}</div>
-      <div class="case-sm-title">${s.titre}</div>
-      <div class="case-sm-lieu">${s.lieu.split('—')[0].trim()}</div>
-      <div class="case-sm-diff ${dc}">${s.diff}</div>`;
-      c.onclick=()=>startGame(s.id);list.appendChild(c);
+      c.innerHTML=`<div class="case-sm-num">${s.num}</div><div class="case-sm-title">${s.titre}</div><div class="case-sm-lieu">${s.lieu.split('—')[0].trim()}</div><div class="case-sm-diff ${dc}">${s.diff}</div>`;
+      c.onclick=()=>openModeSelect(s.id);list.appendChild(c);
     }
   });
   feat.style.display=hasFeat?'grid':'none';
@@ -1052,16 +1061,15 @@ function buildCaseGrid(){
 // ══════════════════════════════════════
 // DÉMARRER JEU
 // ══════════════════════════════════════
+function imgOrEmoji(url,emoji,style=''){return `<img src="${url}" style="${style}" onerror="this.outerHTML='<span style=\\'font-size:1.8rem\\'>${emoji}</span>'" loading="lazy">`;}
+
 function startGame(id){
   SC=SCENARIOS.find(s=>s.id===id);
   indicesCol=[];suspActif=null;totalInterro=0;totalQs=0;
   piecesVisitees=new Set();photosVues=new Set();
-  sLeft=1200;score=1000;usedQs={};
+  sLeft=gameMode==='detective'?1200:0;score=1000;usedQs={};chatHistory={};stressLevels={};
   suspData={};
-  SC.suspects.forEach(s=>{
-    suspData[s.nom]={interroge:false,alibiVerif:false,suspicion:0};
-    usedQs[s.nom]=new Set();
-  });
+  SC.suspects.forEach(s=>{suspData[s.nom]={interroge:false,suspicion:0};usedQs[s.nom]=new Set();stressLevels[s.nom]=s.stress||10;});
   hideAll();
   document.getElementById('s-game').style.display='flex';
   document.getElementById('tb-case').textContent=SC.num+' — '+SC.titre;
@@ -1070,14 +1078,15 @@ function startGame(id){
   document.getElementById('carte-lieu').textContent=SC.lieu;
   document.getElementById('susp-count').textContent=SC.suspects.length+' personnes suspectes';
   document.getElementById('pv-ref').textContent='Réf. : '+SC.num+' — '+new Date().toLocaleDateString('fr-FR');
+  const mi=document.getElementById('mode-ind');
+  if(gameMode==='detective'){mi.textContent='⏱ DÉTECTIVE';mi.className='mode-indicator detective';}
+  else{mi.textContent='🔍 ENQUÊTEUR';mi.className='mode-indicator enqueteur';}
+  document.getElementById('timer').className=gameMode==='enqueteur'?'timer hidden':'timer';
   buildDossier();buildSuspects();buildSelBtns();buildCarte();buildAccSus();buildSuspTable();updateRepPanel();
   showPanel('dossier',document.querySelector('.nav-btn'));
-  ['theme','interro'].forEach(k=>{try{sounds[k]?.pause();}catch(e){}});
-  if(win) playSfx('victory');
-  else playSfx('failure');
-  clearInterval(timerInt);timerInt=setInterval(tick,1000);
-  updateTimer();
-  playMusic('theme');
+  clearInterval(timerInt);
+  if(gameMode==='detective'){timerInt=setInterval(tick,1000);updateTimer();}
+  currentTrack=null;playMusic('theme');
 }
 
 function tick(){
@@ -1087,6 +1096,7 @@ function tick(){
   if(sLeft<=0){clearInterval(timerInt);endGame(false,'timeout');}
 }
 function updateTimer(){
+  if(gameMode==='enqueteur')return;
   const m=Math.floor(sLeft/60),s=sLeft%60;
   const td=document.getElementById('timer');
   td.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
@@ -1098,8 +1108,8 @@ function showPanel(name,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
   if(btn)btn.classList.add('active');
-  if(name==='interro') playMusic('interro');
-  else if(name==='dossier'||name==='carte'||name==='suspects') playMusic('theme');
+  if(name==='interro')playMusic('interro');
+  else if(['dossier','carte','suspects','indices'].includes(name))playMusic('theme');
   if(name==='accusation')updateAccStats();
   if(name==='carnet')updateProg();
   if(name==='reputation')updateRepPanel();
@@ -1108,10 +1118,6 @@ function showPanel(name,btn){
 // ══════════════════════════════════════
 // DOSSIER
 // ══════════════════════════════════════
-function imgOrEmoji(url,emoji,cls='',style=''){
-  return `<img src="${url}" class="${cls}" style="${style}" onerror="this.outerHTML='<span style=\\'font-size:2rem\\'>${emoji}</span>'" loading="lazy">`;
-}
-
 function buildDossier(){
   document.getElementById('f-ref').textContent=SC.num;
   document.getElementById('f-nom').textContent=SC.victime.nom;
@@ -1123,110 +1129,89 @@ function buildDossier(){
   document.getElementById('f-rapport').textContent=SC.rapport;
   document.getElementById('f-resume').textContent=SC.resume;
   const vurl=SC.victime.gi%2===0?IMG_VICTIM_H:IMG_VICTIM_F;
-  document.getElementById('vphoto').innerHTML=imgOrEmoji(vurl,SC.victime.gi%2===0?'👨':'👩','','width:100%;height:100%;object-fit:cover;filter:grayscale(.4) brightness(.75)');
+  document.getElementById('vphoto').innerHTML=imgOrEmoji(vurl,SC.victime.gi%2===0?'👨':'👩','width:100%;height:100%;object-fit:cover;filter:grayscale(.4) brightness(.75)');
   const cp=document.getElementById('crime-photos');cp.innerHTML='';
   SC.photos.forEach((p,i)=>{
     const d=document.createElement('div');d.className='crime-photo';d.id='ph-'+i;
-    const crimeUrl=IMG_CRIMES[p.ic%IMG_CRIMES.length];
-    d.innerHTML=`<div class="cp-tape"></div>${imgOrEmoji(crimeUrl,ICONS_CRIMES[p.ic%ICONS_CRIMES.length],'','width:100%;height:100%;object-fit:cover;filter:grayscale(.4) brightness(.6);position:absolute;inset:0')}<div class="cp-corner">N°${String(i+1).padStart(2,'0')}</div><div class="cp-label">${p.t}</div>`;
-    d.style.position='relative';
-    d.onclick=()=>openPhotoModal(i);cp.appendChild(d);
+    const cu=IMG_CRIMES[p.ic%IMG_CRIMES.length];
+    d.innerHTML=`<div class="cp-tape"></div>${imgOrEmoji(cu,ICONS_CRIMES[p.ic%ICONS_CRIMES.length],'width:100%;height:100%;object-fit:cover;filter:grayscale(.4) brightness(.6);position:absolute;inset:0')}<div class="cp-corner">N°${String(i+1).padStart(2,'0')}</div><div class="cp-label">${p.t}</div>`;
+    d.style.position='relative';d.onclick=()=>openPhotoModal(i);cp.appendChild(d);
   });
-  // Sidebar suspects
   const sb=document.getElementById('sb-suspects');sb.innerHTML='';
   SC.suspects.forEach((s,i)=>{
-    const m=document.createElement('div');m.className='smini';m.title=s.nom;
-    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(s.gi/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(s.gi/2)%IMG_SUSPECTS_F.length];
-    m.innerHTML=imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:100%;height:100%;object-fit:cover;filter:grayscale(.4)');
+    const m=document.createElement('div');m.className='smini';m.id='smini-'+i;m.title=s.nom;
+    const su=s.gi%2===0?IMG_SUSPECTS_H[i%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[i%IMG_SUSPECTS_F.length];
+    m.innerHTML=imgOrEmoji(su,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'width:100%;height:100%;object-fit:cover;filter:grayscale(.4)');
     m.onclick=()=>{showPanel('interro',document.querySelectorAll('.nav-btn')[3]);selectSuspect(i);};
     sb.appendChild(m);
   });
 }
 
 function openPhotoModal(i){
-  const p=SC.photos[i];
-  const key='ph-'+i;
-  if(!photosVues.has(key)){photosVues.add(key);updateBadges();}
+  const p=SC.photos[i];const key='ph-'+i;
+  if(!photosVues.has(key)){photosVues.add(key);}
   document.getElementById('ph-'+i)?.classList.add('revealed');
-  document.getElementById('m-icon').textContent=ICONS_CRIMES[p.ic%ICONS_CRIMES.length];
+  const mu=IMG_CRIMES[p.ic%IMG_CRIMES.length];
+  document.getElementById('m-icon').innerHTML=`${imgOrEmoji(mu,ICONS_CRIMES[p.ic%ICONS_CRIMES.length],'width:100%;height:100%;object-fit:cover;filter:grayscale(.3) brightness(.7)')}`;
   document.getElementById('m-title').textContent='Pièce N°'+String(i+1).padStart(2,'0')+' — '+p.t;
   document.getElementById('m-desc').textContent=p.d;
   document.getElementById('m-clue-txt').textContent=p.c;
   document.getElementById('m-clue').style.display='block';
   document.getElementById('modal').classList.add('open');
-  if(!indicesCol.includes(key)){
-    indicesCol.push(key);
-    addIndice({icon:'📸',type:'Photo de scène',text:p.t,link:p.c});
-  }
+  if(!indicesCol.includes(key)){indicesCol.push(key);addIndice({icon:'📸',type:'Photo de scène',text:p.t,link:p.c});}
 }
-
 function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+// ══════════════════════════════════════
+// NOTIFICATION INDICE
+// ══════════════════════════════════════
+function showIndiceNotif(text){
+  const n=document.getElementById('indice-notif');
+  n.textContent='🔍 Nouvel indice : '+text;
+  n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),3000);
+}
 
 // ══════════════════════════════════════
 // CARTE
 // ══════════════════════════════════════
 function buildCarte(){
-  const svg=document.getElementById('mapsvg');
-  svg.innerHTML='';
-  // Fond
-  const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');
-  bg.setAttribute('width','800');bg.setAttribute('height','400');bg.setAttribute('fill','#0d0d0d');
-  svg.appendChild(bg);
-  // Grille
+  const svg=document.getElementById('mapsvg');svg.innerHTML='';
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');bg.setAttribute('width','800');bg.setAttribute('height','400');bg.setAttribute('fill','#0d0d0d');svg.appendChild(bg);
   for(let x=0;x<800;x+=40){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',x);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',400);l.setAttribute('stroke','#151515');l.setAttribute('stroke-width','.5');svg.appendChild(l);}
   for(let y=0;y<400;y+=40){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',y);l.setAttribute('x2',800);l.setAttribute('y2',y);l.setAttribute('stroke','#151515');l.setAttribute('stroke-width','.5');svg.appendChild(l);}
   SC.pieces.forEach(p=>{
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.style.cursor='pointer';
+    const visited=piecesVisitees.has(p.id);
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.style.cursor='pointer';
     const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
     r.setAttribute('x',p.x);r.setAttribute('y',p.y);r.setAttribute('width',p.w);r.setAttribute('height',p.h);
-    r.setAttribute('fill',p.crime?'rgba(192,57,43,.12)':'rgba(30,30,30,.8)');
-    r.setAttribute('stroke',p.crime?'#c0392b':'#2a2a2a');r.setAttribute('stroke-width',p.crime?'2':'1');
-    r.setAttribute('rx','2');g.appendChild(r);
-    // Indicateur crime
-    if(p.crime){const ci=document.createElementNS('http://www.w3.org/2000/svg','circle');ci.setAttribute('cx',p.x+p.w-10);ci.setAttribute('cy',p.y+10);ci.setAttribute('r','5');ci.setAttribute('fill','#c0392b');g.appendChild(ci);}
-    // Nom
-    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x',p.x+p.w/2);t.setAttribute('y',p.y+p.h/2-6);
-    t.setAttribute('text-anchor','middle');t.setAttribute('fill','#a09880');t.setAttribute('font-size','10');t.setAttribute('font-family','Special Elite, cursive');
-    t.textContent=p.nom;g.appendChild(t);
-    // Nb indices
-    const badge=document.createElementNS('http://www.w3.org/2000/svg','text');
-    badge.setAttribute('x',p.x+p.w/2);badge.setAttribute('y',p.y+p.h/2+12);
-    badge.setAttribute('text-anchor','middle');badge.setAttribute('fill','#6b6355');badge.setAttribute('font-size','9');badge.setAttribute('font-family','Courier Prime, monospace');
-    badge.textContent=p.indices.length+' indice'+(p.indices.length>1?'s':'');g.appendChild(badge);
+    r.setAttribute('fill',p.crime?'rgba(192,57,43,.12)':visited?'rgba(201,168,76,.05)':'rgba(30,30,30,.8)');
+    r.setAttribute('stroke',p.crime?'#c0392b':visited?'rgba(201,168,76,.4)':'#2a2a2a');r.setAttribute('stroke-width',p.crime?'2':'1');r.setAttribute('rx','2');g.appendChild(r);
+    if(p.crime){const ci=document.createElementNS('http://www.w3.org/2000/svg','circle');ci.setAttribute('cx',p.x+p.w-10);ci.setAttribute('cy',p.y+10);ci.setAttribute('r','5');ci.setAttribute('fill','#c0392b');ci.style.animation='pulse .8s infinite';g.appendChild(ci);}
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',p.x+p.w/2);t.setAttribute('y',p.y+p.h/2-6);t.setAttribute('text-anchor','middle');t.setAttribute('fill',visited?'#c9a84c':'#a09880');t.setAttribute('font-size','10');t.setAttribute('font-family','Special Elite, cursive');t.textContent=p.nom;g.appendChild(t);
+    const badge=document.createElementNS('http://www.w3.org/2000/svg','text');badge.setAttribute('x',p.x+p.w/2);badge.setAttribute('y',p.y+p.h/2+12);badge.setAttribute('text-anchor','middle');badge.setAttribute('fill','#6b6355');badge.setAttribute('font-size','9');badge.setAttribute('font-family','Courier Prime, monospace');badge.textContent=p.indices.length+' indice'+(p.indices.length>1?'s':'');g.appendChild(badge);
     g.onclick=()=>openRoom(p.id);svg.appendChild(g);
   });
 }
 
 function openRoom(pid){
   const p=SC.pieces.find(x=>x.id===pid);if(!p)return;
-  const visited=piecesVisitees.has(pid);
-  piecesVisitees.add(pid);
-  updateBadges();
+  piecesVisitees.add(pid);buildCarte();
   const rd=document.getElementById('room-detail');rd.style.display='block';
-  document.getElementById('mapsvg').querySelectorAll('rect[data-pid]');
-  rd.innerHTML=`<div class="paper-card">
+  rd.innerHTML=`<div class="paper-card" style="margin-top:1.25rem">
     <div class="paper-title">${p.nom}${p.crime?' — 🔴 SCÈNE DE CRIME':''}</div>
     <p style="font-family:var(--tw);font-size:.8rem;color:var(--ink2);line-height:1.7;margin-bottom:.85rem">${p.desc}</p>
     <div style="font-family:var(--sp);font-size:.6rem;color:#6b5a3a;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem">Indices dans cette pièce :</div>
-    ${p.indices.map((ind,i)=>{
-      const key=pid+'_'+i;
-      const col=indicesCol.includes(key);
-      return `<div class="rci ${col?'col':''}" onclick="collectIndice('${pid}',${i},'${ind.replace(/'/g,"\\'")}')">
-        ${col?'✅':'🔍'} ${ind}${col?' <span style="color:#888;font-size:.7rem">— collecté</span>':''}
-      </div>`;
-    }).join('')}
+    ${p.indices.map((ind,i)=>{const key=pid+'_'+i;const col=indicesCol.includes(key);return`<div class="rci ${col?'col':''}" onclick="collectIndice('${pid}',${i},'${ind.replace(/'/g,"\\'")}')">${col?'✅':'🔍'} ${ind}${col?' <span style="color:#888;font-size:.7rem">— collecté</span>':''}</div>`;}).join('')}
   </div>`;
 }
 
 function collectIndice(pid,i,texte){
-  const key=pid+'_'+i;
-  if(indicesCol.includes(key))return;
+  const key=pid+'_'+i;if(indicesCol.includes(key))return;
   indicesCol.push(key);
   addIndice({icon:'📍',type:'Indice de terrain',text:texte,link:'Trouvé dans : '+SC.pieces.find(p=>p.id===pid)?.nom});
+  showIndiceNotif(texte);
   openRoom(pid);
-  updateBadges();
 }
 
 function addIndice(ind){
@@ -1246,30 +1231,22 @@ function buildSuspects(){
   const g=document.getElementById('sgrid');g.innerHTML='';
   SC.suspects.forEach((s,i)=>{
     const c=document.createElement('div');c.className='suspect-card';
-    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(i/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(i/2)%IMG_SUSPECTS_F.length];
-    const avImg=imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:100%;height:100%;object-fit:cover;filter:grayscale(.3)');
+    const su=s.gi%2===0?IMG_SUSPECTS_H[i%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[i%IMG_SUSPECTS_F.length];
     c.innerHTML=`<div class="susp-head">
-      <div class="susp-av"><span class="susp-num">N°${String(i+1).padStart(2,'0')}</span>${avImg}</div>
-      <div>
-        <div class="susp-name">${s.nom}</div>
-        <div class="susp-role">${s.role}</div>
-        ${s.casier.map(c=>`<span class="susp-badge badge-warn">${c}</span>`).join('')}
-      </div>
+      <div class="susp-av"><span class="susp-num">N°${String(i+1).padStart(2,'0')}</span>${imgOrEmoji(su,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'width:100%;height:100%;object-fit:cover;filter:grayscale(.3)')}</div>
+      <div><div class="susp-name">${s.nom}</div><div class="susp-role">${s.role}</div>${s.casier.map(ca=>`<span class="susp-badge badge-warn">${ca}</span>`).join('')}</div>
     </div>
     <div class="susp-body">
       <div class="susp-field"><div class="susp-label">Alibi</div><div class="susp-val">${s.alibi}</div></div>
       <div class="susp-field"><div class="susp-label">Mobile potentiel</div><div class="susp-val">${s.motif}</div></div>
-      ${s.casier.map(c=>`<div class="casier-line">⚠ ${c}</div>`).join('')}
+      ${s.casier.map(ca=>`<div class="casier-line">⚠ ${ca}</div>`).join('')}
       <button class="btn-interro" onclick="goInterro(${i})">💬 Interroger ce suspect</button>
     </div>`;
     g.appendChild(c);
   });
 }
 
-function goInterro(i){
-  showPanel('interro',document.querySelectorAll('.nav-btn')[3]);
-  selectSuspect(i);
-}
+function goInterro(i){showPanel('interro',document.querySelectorAll('.nav-btn')[3]);selectSuspect(i);}
 
 // ══════════════════════════════════════
 // INTERROGATOIRE
@@ -1278,105 +1255,92 @@ function buildSelBtns(){
   const sb=document.getElementById('sel-btns');sb.innerHTML='';
   SC.suspects.forEach((s,i)=>{
     const b=document.createElement('button');b.className='sel-btn';b.id='selb-'+i;
-    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(i/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(i/2)%IMG_SUSPECTS_F.length];
-    b.innerHTML=`<span class="sel-btn-av">${imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:20px;height:20px;object-fit:cover;filter:grayscale(.4)')}</span>${s.nom}`;
+    const su=s.gi%2===0?IMG_SUSPECTS_H[i%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[i%IMG_SUSPECTS_F.length];
+    b.innerHTML=`<span class="sel-btn-av">${imgOrEmoji(su,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'width:22px;height:22px;object-fit:cover;filter:grayscale(.4)')}</span>${s.nom.split(' ')[0]}`;
     b.onclick=()=>selectSuspect(i);sb.appendChild(b);
   });
 }
 
-function buildAccSus(){
-  const ac=document.getElementById('acc-sus');ac.innerHTML='';
-  SC.suspects.forEach((s,i)=>{
-    const b=document.createElement('button');b.className='acc-btn';
-    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(i/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(i/2)%IMG_SUSPECTS_F.length];
-    b.innerHTML=`<div class="acc-av">${imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:28px;height:28px;object-fit:cover;filter:grayscale(.3)')}</div>${s.nom}`;
-    b.onclick=()=>accuse(s.nom);ac.appendChild(b);
-  });
-}
-
 function selectSuspect(i){
-  const s=SC.suspects[i];
-  suspActif=i;
+  const s=SC.suspects[i];suspActif=i;
   document.querySelectorAll('.sel-btn').forEach(b=>b.classList.remove('active-sus'));
-  document.getElementById('selb-'+i)?.classList.add('active-sus');
+  const sb=document.getElementById('selb-'+i);if(sb)sb.classList.add('active-sus');
   document.getElementById('iroom').style.display='block';
   document.getElementById('iph').style.display='none';
-  document.getElementById('iavatar').textContent=ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length];
+  const su=s.gi%2===0?IMG_SUSPECTS_H[i%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[i%IMG_SUSPECTS_F.length];
+  document.getElementById('iavatar').innerHTML=imgOrEmoji(su,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'width:70px;height:70px;object-fit:cover;filter:grayscale(.2)');
   document.getElementById('iname').textContent=s.nom;
-  const chat=document.getElementById('chat');
-  // Afficher seulement les messages de ce suspect
-  renderChat(i);
-  buildQsGrid(i);
+  document.getElementById('irole').textContent=s.role+' — Interrogé sous caution';
+  updateStressBar(s.nom);
+  renderChat(i);buildQsGrid(i);
   if(!suspData[s.nom].interroge){
-    suspData[s.nom].interroge=true;
-    totalInterro=Object.values(suspData).filter(x=>x.interroge).length;
+    suspData[s.nom].interroge=true;totalInterro++;
+    document.getElementById('smini-'+i)?.classList.add('interroge');
+    document.getElementById('selb-'+i)?.classList.add('interroge-done');
     updateSuspTable();
   }
 }
 
-let chatHistory={}; // {idx: [{who,text}]}
+function updateStressBar(nom){
+  const stress=stressLevels[nom]||10;
+  document.getElementById('stress-bar').style.width=stress+'%';
+  let label='';
+  if(stress<30)label='Calme';else if(stress<60)label='Nerveux';else if(stress<80)label='Très agité';else label='⚠ Sur le point de craquer';
+  document.getElementById('stress-val').textContent=label+' ('+Math.round(stress)+'%)';
+  document.getElementById('iroom').className='interro-room'+(stress>=70?' tense':'');
+}
+
 function renderChat(idx){
   if(!chatHistory[idx])chatHistory[idx]=[];
-  const chat=document.getElementById('chat');
-  chat.innerHTML='';
-  if(chatHistory[idx].length===0){
-    const intro=document.createElement('div');
-    intro.style.cssText='text-align:center;font-family:var(--sp);font-size:.7rem;color:#8b7355;padding:.5rem';
-    intro.textContent='— Interrogatoire commencé — Posez vos questions —';
-    chat.appendChild(intro);
-  } else {
-    chatHistory[idx].forEach(m=>appendBubble(m.who,m.text,false));
-  }
+  const chat=document.getElementById('chat');chat.innerHTML='';
+  if(chatHistory[idx].length===0){const intro=document.createElement('div');intro.style.cssText='text-align:center;font-family:var(--sp);font-size:.7rem;color:#8b7355;padding:.5rem';intro.textContent='— Interrogatoire commencé — Posez vos questions —';chat.appendChild(intro);}
+  else chatHistory[idx].forEach(m=>appendBubble(m.who,m.text,false));
   chat.scrollTop=chat.scrollHeight;
 }
 
 function appendBubble(who,text,animate=true){
   const chat=document.getElementById('chat');
-  const d=document.createElement('div');
-  d.className='msg '+(who==='det'?'det':'sus');
-  if(who==='det'){
-    d.innerHTML=`<div class="msg-av det-av">DET</div><div class="bubble">${text}</div>`;
-  } else {
-    const s=SC.suspects[suspActif];
-    d.innerHTML=`<div class="msg-av">${ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length]}</div><div class="bubble">${text}</div>`;
-  }
+  const d=document.createElement('div');d.className='msg '+(who==='det'?'det':'sus');
+  if(who==='det'){d.innerHTML=`<div class="msg-av det-av">DET</div><div class="bubble">${text}</div>`;}
+  else{const s=SC.suspects[suspActif];const su=s.gi%2===0?IMG_SUSPECTS_H[suspActif%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[suspActif%IMG_SUSPECTS_F.length];d.innerHTML=`<div class="msg-av">${imgOrEmoji(su,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'width:28px;height:28px;object-fit:cover;filter:grayscale(.3)')}</div><div class="bubble"></div>`;}
   if(animate)d.style.animation='fi .2s ease';
-  chat.appendChild(d);
-  chat.scrollTop=chat.scrollHeight;
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+  if(who!=='det'&&animate){
+    const bubble=d.querySelector('.bubble');
+    typeText(bubble,text);
+  } else if(who!=='det'){
+    d.querySelector('.bubble').textContent=text;
+  }
+}
+
+function typeText(el,text,speed=18){
+  el.textContent='';let i=0;
+  const interval=setInterval(()=>{el.textContent+=text[i];i++;if(i>=text.length)clearInterval(interval);
+  const chat=document.getElementById('chat');chat.scrollTop=chat.scrollHeight;},speed);
 }
 
 function buildQsGrid(idx){
-  const s=SC.suspects[idx];
-  const g=document.getElementById('qs-grid');g.innerHTML='';
-  s.qs.forEach((q,qi)=>{
-    const b=document.createElement('button');
-    b.className='q-btn'+(usedQs[s.nom].has(qi)?' used':'');
-    b.textContent=q.q;
-    b.onclick=()=>askQ(idx,qi);
-    g.appendChild(b);
-  });
+  const s=SC.suspects[idx];const g=document.getElementById('qs-grid');g.innerHTML='';
+  s.qs.forEach((q,qi)=>{const b=document.createElement('button');b.className='q-btn'+(usedQs[s.nom].has(qi)?' used':'');b.textContent=q.q;b.onclick=()=>askQ(idx,qi);g.appendChild(b);});
 }
 
 function askQ(idx,qi){
-  const s=SC.suspects[idx];
-  if(usedQs[s.nom].has(qi))return;
-  usedQs[s.nom].add(qi);
-  totalQs++;
+  const s=SC.suspects[idx];if(usedQs[s.nom].has(qi))return;
+  usedQs[s.nom].add(qi);totalQs++;
   if(!chatHistory[idx])chatHistory[idx]=[];
   chatHistory[idx].push({who:'det',text:s.qs[qi].q});
   appendBubble('det',s.qs[qi].q);
-  // Typing indicator
+  // Augmenter le stress
+  const stressIncrease=s.coupable?8+Math.random()*12:3+Math.random()*7;
+  stressLevels[s.nom]=Math.min(100,(stressLevels[s.nom]||10)+stressIncrease);
   const chat=document.getElementById('chat');
   const th=document.createElement('div');th.className='msg sus';
   th.innerHTML=`<div class="msg-av">${ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length]}</div><div class="thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
   chat.appendChild(th);chat.scrollTop=chat.scrollHeight;
   setTimeout(()=>{
-    th.remove();
-    chatHistory[idx].push({who:'sus',text:s.qs[qi].r});
-    appendBubble('sus',s.qs[qi].r);
-    document.querySelectorAll('.q-btn')[qi]?.classList.add('used');
-    buildQsGrid(idx);
-  },600+Math.random()*400);
+    th.remove();chatHistory[idx].push({who:'sus',text:s.qs[qi].r});
+    appendBubble('sus',s.qs[qi].r);buildQsGrid(idx);updateStressBar(s.nom);
+  },800+Math.random()*600);
 }
 
 // ══════════════════════════════════════
@@ -1385,8 +1349,7 @@ function askQ(idx,qi){
 function switchTab(name,btn){
   document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.ctab-content').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');document.getElementById('tab-'+name).classList.add('active');
   if(name==='progression')updateProg();
 }
 
@@ -1395,7 +1358,7 @@ function buildSuspTable(){
   SC.suspects.forEach(s=>{
     const tr=document.createElement('tr');
     tr.innerHTML=`<td>${s.nom}<br><span style="font-size:.7rem;color:#8b7355">${s.role}</span></td>
-    <td id="int-${s.nom.replace(/ /g,'_')}"><div class="check-box" onclick="toggleCheck(this)">${suspData[s.nom]?.interroge?'✓':''}</div></td>
+    <td id="int-${s.nom.replace(/ /g,'_')}"><div class="check-box ${suspData[s.nom]?.interroge?'checked':''}">${suspData[s.nom]?.interroge?'✓':''}</div></td>
     <td><div class="check-box" onclick="toggleCheck(this)"></div></td>
     <td id="stars-${s.nom.replace(/ /g,'_')}">${buildStars(s.nom)}</td>`;
     tb.appendChild(tr);
@@ -1410,78 +1373,50 @@ function updateSuspTable(){
   });
 }
 
-function buildStars(nom){
-  return [1,2,3,4,5].map(n=>`<span class="star${(suspData[nom]?.suspicion||0)>=n?' lit':''}" onclick="setStar('${nom}',${n})">★</span>`).join('');
-}
-
-function setStar(nom,n){
-  if(!suspData[nom])return;
-  suspData[nom].suspicion=n;
-  const key=nom.replace(/ /g,'_');
-  const el=document.getElementById('stars-'+key);
-  if(el)el.innerHTML=buildStars(nom);
-}
-
+function buildStars(nom){return[1,2,3,4,5].map(n=>`<span class="star${(suspData[nom]?.suspicion||0)>=n?' lit':''}" onclick="setStar('${nom}',${n})">★</span>`).join('');}
+function setStar(nom,n){if(!suspData[nom])return;suspData[nom].suspicion=n;const el=document.getElementById('stars-'+nom.replace(/ /g,'_'));if(el)el.innerHTML=buildStars(nom);}
 function toggleCheck(el){el.classList.toggle('checked');el.textContent=el.classList.contains('checked')?'✓':'';}
 
 function updateProg(){
-  const totalPhotos=SC.photos.length;
-  const vPhotos=photosVues.size;
-  const totalPieces=SC.pieces.length;
-  const vPieces=piecesVisitees.size;
-  const totalInd=SC.pieces.reduce((a,p)=>a+p.indices.length,0)+SC.photos.length;
-  const vInd=indicesCol.length;
-  const totalSus=SC.suspects.length;
-  const vSus=Object.values(suspData).filter(x=>x.interroge).length;
-  document.getElementById('cnt-photos').textContent=vPhotos+' / '+totalPhotos;
-  document.getElementById('cnt-pieces').textContent=vPieces+' / '+totalPieces;
-  document.getElementById('cnt-indices').textContent=vInd+' / '+totalInd;
-  document.getElementById('cnt-sus').textContent=vSus+' / '+totalSus;
+  const tP=SC.photos.length,vP=photosVues.size;
+  const tPi=SC.pieces.length,vPi=piecesVisitees.size;
+  const tI=SC.pieces.reduce((a,p)=>a+p.indices.length,0)+SC.photos.length,vI=indicesCol.length;
+  const tS=SC.suspects.length,vS=Object.values(suspData).filter(x=>x.interroge).length;
+  document.getElementById('cnt-photos').textContent=vP+'/'+tP;
+  document.getElementById('cnt-pieces').textContent=vPi+'/'+tPi;
+  document.getElementById('cnt-indices').textContent=vI+'/'+tI;
+  document.getElementById('cnt-sus').textContent=vS+'/'+tS;
   document.getElementById('cnt-qs').textContent=totalQs;
-  ['pc-photos','pc-pieces','pc-indices','pc-sus','pc-qs'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.classList.remove('done');
-  });
-  if(vPhotos>=totalPhotos)document.getElementById('pc-photos').classList.add('done');
-  if(vPieces>=totalPieces)document.getElementById('pc-pieces').classList.add('done');
-  if(vInd>=(totalInd*.7))document.getElementById('pc-indices').classList.add('done');
-  if(vSus>=totalSus)document.getElementById('pc-sus').classList.add('done');
-  if(totalQs>=totalSus*3)document.getElementById('pc-qs').classList.add('done');
-  const pct=Math.min(100,Math.round(((vPhotos/totalPhotos)+(vPieces/totalPieces)+(Math.min(vInd,totalInd)/totalInd)+(vSus/totalSus))/4*100));
+  if(vP>=tP)document.getElementById('pc-photos').classList.add('done');else document.getElementById('pc-photos').classList.remove('done');
+  if(vPi>=tPi)document.getElementById('pc-pieces').classList.add('done');else document.getElementById('pc-pieces').classList.remove('done');
+  if(vI>=(tI*.7))document.getElementById('pc-indices').classList.add('done');else document.getElementById('pc-indices').classList.remove('done');
+  if(vS>=tS)document.getElementById('pc-sus').classList.add('done');else document.getElementById('pc-sus').classList.remove('done');
+  if(totalQs>=tS*4)document.getElementById('pc-qs').classList.add('done');else document.getElementById('pc-qs').classList.remove('done');
+  const pct=Math.min(100,Math.round(((vP/tP)+(vPi/tPi)+(Math.min(vI,tI)/tI)+(vS/tS))/4*100));
   document.getElementById('prog-pct').textContent=pct+'%';
   document.getElementById('prog-bar').style.width=pct+'%';
   let msg='Commencez par analyser les photos et explorer la carte.';
-  if(pct>=25)msg='Bon début ! Interrogez les suspects pour progresser.';
-  if(pct>=50)msg='À mi-chemin. Cherchez les contradictions dans les témoignages.';
-  if(pct>=75)msg='Vous avez beaucoup d\'informations. Croisez les indices.';
+  if(pct>=25)msg='Bon début. Interrogez tous les suspects.';
+  if(pct>=50)msg='À mi-chemin. Cherchez les contradictions.';
+  if(pct>=75)msg='Presque là. Croisez les témoignages et les indices.';
   if(pct>=90)msg='Vous êtes prêt à accuser. Faites le bon choix.';
   document.getElementById('prog-msg').textContent=msg;
 }
 
-function updateBadges(){updateProg();}
-
 // ══════════════════════════════════════
 // RÉPUTATION
 // ══════════════════════════════════════
-const RANKS=[
-  {name:'Apprenti Détective',xp:0,next:200},
-  {name:'Inspecteur Adjoint',xp:200,next:500},
-  {name:'Inspecteur',xp:500,next:1000},
-  {name:'Commissaire',xp:1000,next:2000},
-  {name:'Commissaire Divisionnaire',xp:2000,next:Infinity},
-];
+const RANKS=[{name:'Apprenti Détective',xp:0,next:200},{name:'Inspecteur Adjoint',xp:200,next:500},{name:'Inspecteur',xp:500,next:1000},{name:'Commissaire',xp:1000,next:2000},{name:'Commissaire Divisionnaire',xp:2000,next:Infinity}];
 function getRank(xp){return RANKS.reduce((a,r)=>xp>=r.xp?r:a,RANKS[0]);}
-
 function updateRepPanel(){
   const r=getRank(reputation.xp);
   document.getElementById('rep-rank').textContent=r.name;
-  document.getElementById('rep-xp').textContent=reputation.xp+' XP'+(r.next<Infinity?' — Prochain rang : '+(RANKS[RANKS.indexOf(r)+1]?.name||'')+'('+r.next+' XP)':'');
+  document.getElementById('rep-xp').textContent=reputation.xp+' XP'+(r.next<Infinity?' — Prochain : '+(RANKS[RANKS.indexOf(r)+1]?.name||'')+' ('+r.next+' XP)':'');
   const pct=r.next<Infinity?Math.min(100,Math.round((reputation.xp-r.xp)/(r.next-r.xp)*100)):100;
   document.getElementById('rep-bar-el').style.width=pct+'%';
-  // Badges
-  const badges=['🔍 Première enquête','⚡ Vitesse d\'enquête','📚 Détective curieux','🏆 Sans faute'];
   const hist=document.getElementById('rep-hist');
   if(reputation.history.length===0){hist.innerHTML='<p style="font-family:var(--sp);font-size:.75rem;color:#8b7355">Aucune affaire résolue.</p>';return;}
-  hist.innerHTML=reputation.history.map(h=>`<div class="rep-hist-item"><span>${h.titre}</span><span style="color:var(--gold)">${h.score} pts</span></div>`).join('');
+  hist.innerHTML=reputation.history.map(h=>`<div class="rep-hist-item"><span>${h.win?'✅':'❌'} ${h.titre}</span><span style="color:var(--gold)">${h.score} pts</span></div>`).join('');
 }
 
 // ══════════════════════════════════════
@@ -1491,83 +1426,83 @@ function buildAccSus(){
   const ac=document.getElementById('acc-sus');ac.innerHTML='';
   SC.suspects.forEach((s,i)=>{
     const b=document.createElement('button');b.className='acc-btn';
-    b.innerHTML=`<div class="acc-av">${ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length]}</div>${s.nom}`;
+    const su=s.gi%2===0?IMG_SUSPECTS_H[i%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[i%IMG_SUSPECTS_F.length];
+    b.innerHTML=`<div class="acc-av">${imgOrEmoji(su,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'width:30px;height:30px;object-fit:cover;filter:grayscale(.3)')}</div>${s.nom}`;
     b.onclick=()=>accuse(s.nom);ac.appendChild(b);
   });
 }
+
 function updateAccStats(){
   document.getElementById('ev-ind').textContent=indicesCol.length;
   document.getElementById('ev-int').textContent=Object.values(suspData).filter(x=>x.interroge).length;
   document.getElementById('ev-qs').textContent=totalQs;
-  const m=Math.floor(sLeft/60),s=sLeft%60;
-  document.getElementById('ev-t').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  if(gameMode==='detective'){const m=Math.floor(sLeft/60),s=sLeft%60;document.getElementById('ev-t').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+  else document.getElementById('ev-t').textContent='Mode libre';
   document.getElementById('ev-s').textContent=score+' pts';
 }
 
 function accuse(nom){
-  // Créer une modale de confirmation custom
   const ov=document.createElement('div');
-  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:2000;display:flex;align-items:center;justify-content:center';
-  ov.innerHTML=`<div style="background:var(--paper);border:3px solid var(--red);padding:2rem;max-width:380px;width:90%;text-align:center;box-shadow:4px 4px 20px rgba(0,0,0,.5)">
-    <div style="font-family:var(--ti);font-size:1.4rem;color:var(--ink);margin-bottom:.5rem">⚖️ CONFIRMER L'ACCUSATION</div>
-    <p style="font-family:var(--sp);font-size:.85rem;color:#6b5a3a;margin-bottom:1.5rem">Vous allez accuser <b>${nom}</b> du meurtre.<br>Cette action est irréversible.</p>
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2000;display:flex;align-items:center;justify-content:center';
+  ov.innerHTML=`<div style="background:var(--paper);border:3px solid var(--red);padding:2rem;max-width:400px;width:90%;text-align:center;box-shadow:4px 4px 20px rgba(0,0,0,.5);position:relative">
+    <div style="font-family:var(--ti);font-size:1.4rem;color:var(--ink);margin-bottom:.5rem;letter-spacing:.1em">⚖️ ACCUSATION FINALE</div>
+    <p style="font-family:var(--sp);font-size:.85rem;color:#6b5a3a;margin-bottom:1.5rem;line-height:1.7">Vous allez accuser <b>${nom}</b> du meurtre de <b>${SC.victime.nom}</b>.<br>Cette décision est irréversible.</p>
     <div style="display:flex;gap:1rem;justify-content:center">
-      <button id="acc-confirm" style="font-family:var(--sp);background:var(--red);color:#fff;border:none;padding:.65rem 1.5rem;font-size:.85rem;letter-spacing:.1em;cursor:pointer">OUI, J'ACCUSE</button>
-      <button id="acc-cancel" style="font-family:var(--sp);background:var(--ink);color:var(--paper);border:none;padding:.65rem 1.5rem;font-size:.85rem;letter-spacing:.1em;cursor:pointer">ANNULER</button>
+      <button id="acc-confirm" style="font-family:var(--sp);background:var(--red);color:#fff;border:none;padding:.75rem 1.75rem;font-size:.85rem;letter-spacing:.1em;cursor:pointer;text-transform:uppercase">J'ACCUSE</button>
+      <button id="acc-cancel" style="font-family:var(--sp);background:var(--ink);color:var(--paper);border:none;padding:.75rem 1.75rem;font-size:.85rem;letter-spacing:.1em;cursor:pointer">ANNULER</button>
     </div>
   </div>`;
   document.body.appendChild(ov);
-  document.getElementById('acc-confirm').onclick=()=>{
-    ov.remove();
-    clearInterval(timerInt);
-    const win=nom===SC.coupable;
-    endGame(win,win?'correct':'wrong',nom);
-  };
+  document.getElementById('acc-confirm').onclick=()=>{ov.remove();clearInterval(timerInt);const win=nom===SC.coupable;endGame(win,win?'correct':'wrong',nom);};
   document.getElementById('acc-cancel').onclick=()=>ov.remove();
 }
 
 // ══════════════════════════════════════
-// FIN DE JEU
+// VERDICT + CONFETTIS
 // ══════════════════════════════════════
+function spawnConfetti(){
+  const colors=['#c9a84c','#e74c3c','#f0d878','#fff','#c0392b'];
+  for(let i=0;i<80;i++){
+    const c=document.createElement('div');c.className='confetti-piece';
+    c.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*.5}s`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),4000);
+  }
+}
+
 function endGame(win,reason,accusedNom=''){
   clearInterval(timerInt);
-  let finalScore=score;
-  let bonus=0;
+  ['theme','interro'].forEach(k=>{try{sounds[k]?.pause();}catch(e){}});
+  if(win)playSfx('victory');else playSfx('failure');
+  let finalScore=score,bonus=0;
   if(win){
-    bonus+=Math.floor(sLeft/10)*5;
-    bonus+=indicesCol.length*15;
-    bonus+=totalQs*5;
+    if(gameMode==='detective'){bonus+=Math.floor(sLeft/10)*5;bonus+=indicesCol.length*15;bonus+=totalQs*5;}
+    else{bonus+=indicesCol.length*10;bonus+=totalQs*3;}
     finalScore+=bonus;
-  } else {finalScore=Math.floor(finalScore*.3);}
-  // XP
+  } else finalScore=Math.floor(finalScore*.3);
   const xpGain=win?Math.floor(finalScore/10):10;
-  reputation.xp+=xpGain;
-  reputation.history.unshift({titre:SC.titre,score:finalScore,win});
-  if(reputation.history.length>10)reputation.history.pop();
-  saveRep();
+  reputation.xp+=xpGain;reputation.history.unshift({titre:SC.titre,score:finalScore,win});
+  if(reputation.history.length>10)reputation.history.pop();saveRep();
   const rank=getRank(reputation.xp);
   hideAll();
   const v=document.getElementById('s-verdict');
   v.style.display='flex';v.style.flexDirection='column';v.style.alignItems='center';v.style.justifyContent='center';
+  if(win)setTimeout(spawnConfetti,300);
   document.getElementById('vbadge').textContent=win?'🏆':'💀';
   document.getElementById('vtitle').textContent=win?'AFFAIRE RÉSOLUE !':(reason==='timeout'?'TEMPS ÉCOULÉ':'MAUVAISE ACCUSATION');
   document.getElementById('vtitle').className='verdict-title '+(win?'win':'lose');
-  document.getElementById('vsub').textContent=win?`Bravo ! Vous avez identifié ${SC.coupable} comme coupable avec un score de ${finalScore} points.`:(reason==='timeout'?'Le temps s\'est écoulé. La vérité reste cachée...':`${accusedNom} est innocent(e). Le vrai coupable était ${SC.coupable}.`);
+  document.getElementById('vsub').textContent=win?`Brillant ! Vous avez identifié ${SC.coupable} comme coupable.`:(reason==='timeout'?'Le temps est écoulé. La vérité reste enfouie...':`${accusedNom} est innocent(e). Le vrai coupable était ${SC.coupable}.`);
   document.getElementById('vrank').textContent=rank.name+' — '+reputation.xp+' XP';
   document.getElementById('v-case-title').textContent=SC.titre;
   document.getElementById('vscore').innerHTML=`
     <div class="score-row"><span>Score de base</span><span>${score}</span></div>
-    ${win?`<div class="score-row"><span>Bonus temps</span><span>+${Math.floor(sLeft/10)*5}</span></div>
-    <div class="score-row"><span>Bonus indices</span><span>+${indicesCol.length*15}</span></div>
-    <div class="score-row"><span>Bonus questions</span><span>+${totalQs*5}</span></div>`:''}
+    ${win&&gameMode==='detective'?`<div class="score-row"><span>Bonus temps</span><span>+${Math.floor(sLeft/10)*5}</span></div>`:''}
+    <div class="score-row"><span>Bonus indices</span><span>+${win?(gameMode==='detective'?indicesCol.length*15:indicesCol.length*10):0}</span></div>
+    <div class="score-row"><span>Bonus questions</span><span>+${win?(gameMode==='detective'?totalQs*5:totalQs*3):0}</span></div>
     <div class="score-row"><span>XP gagnés</span><span>+${xpGain} XP</span></div>
     <div class="score-row"><span>SCORE FINAL</span><span>${finalScore}</span></div>`;
   document.getElementById('vsol').innerHTML=`<p><b>Le coupable :</b> ${SC.coupable}</p><br><p>${SC.solution}</p>`;
 }
 
-// ══════════════════════════════════════
-// INIT
-// ══════════════════════════════════════
 showIntro();
 </script>
 </body>
