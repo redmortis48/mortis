@@ -556,6 +556,34 @@ button{cursor:pointer;transition:all .2s}
 // ══════════════════════════════════════
 // ICÔNES pour photos (emojis)
 // ══════════════════════════════════════
+const BASE='https://raw.githubusercontent.com/redmortis48/mortis/main/images';
+const IMG_CASES=[
+  `${BASE}/cases/case-01-hotel.jpg`,`${BASE}/cases/case-02-musee.jpg`,`${BASE}/cases/case-03-yacht.jpg`,
+  `${BASE}/cases/case-04-manoir.jpg`,`${BASE}/cases/case-05-labo.jpg`,`${BASE}/cases/case-06-casino.jpg`,
+  `${BASE}/cases/case-07-chateau.jpg`,`${BASE}/cases/case-08-train.jpg`,`${BASE}/cases/case-09-galerie.jpg`,
+  `${BASE}/cases/case-10-villa.jpg`,`${BASE}/cases/case-11-universite.jpg`,`${BASE}/cases/case-12-restaurant.jpg`,
+  `${BASE}/cases/case-13-opera.jpg`,`${BASE}/cases/case-14-ile.jpg`,`${BASE}/cases/case-15-ambassade.jpg`,
+  `${BASE}/cases/case-16-sousmarin.jpg`,`${BASE}/cases/case-17-ski.jpg`,`${BASE}/cases/case-18-cathedrale.jpg`,
+  `${BASE}/cases/case-19-espace.jpg`,`${BASE}/cases/case-20-tribunal.jpg`,
+];
+const IMG_SUSPECTS_H=[
+  `${BASE}/suspects/suspect-homme-01.jpg`,`${BASE}/suspects/suspect-homme-02.jpg`,
+  `${BASE}/suspects/suspect-homme-03.jpg`,`${BASE}/suspects/suspect-homme-04.jpg`,
+  `${BASE}/suspects/suspect-homme-05.jpg`,
+];
+const IMG_SUSPECTS_F=[
+  `${BASE}/suspects/suspect-femme-01.jpg`,`${BASE}/suspects/suspect-femme-02.jpg`,
+  `${BASE}/suspects/suspect-femme-03.jpg`,`${BASE}/suspects/suspect-femme-04.jpg`,
+  `${BASE}/suspects/suspect-femme-05.jpg`,
+];
+const IMG_CRIMES=[
+  `${BASE}/crimes/crime-verre.jpg`,`${BASE}/crimes/crime-porte.jpg`,`${BASE}/crimes/crime-couteau.jpg`,
+  `${BASE}/crimes/crime-fenetre.jpg`,`${BASE}/crimes/crime-seringue.jpg`,`${BASE}/crimes/crime-documents.jpg`,
+  `${BASE}/crimes/crime-collier.jpg`,`${BASE}/crimes/crime-lettre.jpg`,`${BASE}/crimes/crime-camera.jpg`,
+  `${BASE}/crimes/crime-corde.jpg`,
+];
+const IMG_VICTIM_H=`${BASE}/victims/victim-homme.jpg`;
+const IMG_VICTIM_F=`${BASE}/victims/victim-femme.jpg`;
 const ICONS_CRIMES=['🥃','🚪','🔪','🪟','💉','📄','📿','✉️','📷','🪢'];
 const ICONS_SUSPECTS=['👨‍💼','👩‍💼','👨','👩','🧔','👩‍⚕️','👩‍💻','👴','🧑‍⚖️','👮‍♀️'];
 
@@ -952,8 +980,9 @@ function buildCaseGrid(){
     if(s.featured&&currentFilter==='all'){
       hasFeat=true;
       const c=document.createElement('div');c.className='case-card-big';
+      const caseImg=IMG_CASES[s.id]||'';
       c.innerHTML=`<div class="case-stamp ${dc}">${s.diff}</div>
-      <div class="case-thumb-ph">${icons[s.id]||'🔍'}</div>
+      <div class="case-thumb-ph" style="position:relative;overflow:hidden">${imgOrEmoji(caseImg,icons[s.id]||'🔍','','width:100%;height:100%;object-fit:cover;filter:saturate(.2) brightness(.55);position:absolute;inset:0')}<span style="position:relative;z-index:1">${!caseImg?icons[s.id]||'🔍':''}</span></div>
       <div class="case-info-big">
         <div class="case-num">${s.num}</div>
         <div class="case-title-big">${s.titre}</div>
@@ -1026,6 +1055,10 @@ function showPanel(name,btn){
 // ══════════════════════════════════════
 // DOSSIER
 // ══════════════════════════════════════
+function imgOrEmoji(url,emoji,cls='',style=''){
+  return `<img src="${url}" class="${cls}" style="${style}" onerror="this.outerHTML='<span style=\\'font-size:2rem\\'>${emoji}</span>'" loading="lazy">`;
+}
+
 function buildDossier(){
   document.getElementById('f-ref').textContent=SC.num;
   document.getElementById('f-nom').textContent=SC.victime.nom;
@@ -1036,18 +1069,22 @@ function buildDossier(){
   document.getElementById('f-heure').textContent=SC.heure;
   document.getElementById('f-rapport').textContent=SC.rapport;
   document.getElementById('f-resume').textContent=SC.resume;
-  document.getElementById('vphoto').innerHTML=`<span style="font-size:2.5rem">${SC.victime.gi%2===0?'👨':'👩'}</span>`;
+  const vurl=SC.victime.gi%2===0?IMG_VICTIM_H:IMG_VICTIM_F;
+  document.getElementById('vphoto').innerHTML=imgOrEmoji(vurl,SC.victime.gi%2===0?'👨':'👩','','width:100%;height:100%;object-fit:cover;filter:grayscale(.4) brightness(.75)');
   const cp=document.getElementById('crime-photos');cp.innerHTML='';
   SC.photos.forEach((p,i)=>{
     const d=document.createElement('div');d.className='crime-photo';d.id='ph-'+i;
-    d.innerHTML=`<div class="cp-tape"></div><div class="cp-icon">${ICONS_CRIMES[p.ic%ICONS_CRIMES.length]}</div><div class="cp-corner">N°${String(i+1).padStart(2,'0')}</div><div class="cp-label">${p.t}</div>`;
+    const crimeUrl=IMG_CRIMES[p.ic%IMG_CRIMES.length];
+    d.innerHTML=`<div class="cp-tape"></div>${imgOrEmoji(crimeUrl,ICONS_CRIMES[p.ic%ICONS_CRIMES.length],'','width:100%;height:100%;object-fit:cover;filter:grayscale(.4) brightness(.6);position:absolute;inset:0')}<div class="cp-corner">N°${String(i+1).padStart(2,'0')}</div><div class="cp-label">${p.t}</div>`;
+    d.style.position='relative';
     d.onclick=()=>openPhotoModal(i);cp.appendChild(d);
   });
   // Sidebar suspects
   const sb=document.getElementById('sb-suspects');sb.innerHTML='';
   SC.suspects.forEach((s,i)=>{
     const m=document.createElement('div');m.className='smini';m.title=s.nom;
-    m.textContent=ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length];
+    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(s.gi/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(s.gi/2)%IMG_SUSPECTS_F.length];
+    m.innerHTML=imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:100%;height:100%;object-fit:cover;filter:grayscale(.4)');
     m.onclick=()=>{showPanel('interro',document.querySelectorAll('.nav-btn')[3]);selectSuspect(i);};
     sb.appendChild(m);
   });
@@ -1156,8 +1193,10 @@ function buildSuspects(){
   const g=document.getElementById('sgrid');g.innerHTML='';
   SC.suspects.forEach((s,i)=>{
     const c=document.createElement('div');c.className='suspect-card';
+    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(i/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(i/2)%IMG_SUSPECTS_F.length];
+    const avImg=imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:100%;height:100%;object-fit:cover;filter:grayscale(.3)');
     c.innerHTML=`<div class="susp-head">
-      <div class="susp-av"><span class="susp-num">N°${String(i+1).padStart(2,'0')}</span>${ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length]}</div>
+      <div class="susp-av"><span class="susp-num">N°${String(i+1).padStart(2,'0')}</span>${avImg}</div>
       <div>
         <div class="susp-name">${s.nom}</div>
         <div class="susp-role">${s.role}</div>
@@ -1186,8 +1225,19 @@ function buildSelBtns(){
   const sb=document.getElementById('sel-btns');sb.innerHTML='';
   SC.suspects.forEach((s,i)=>{
     const b=document.createElement('button');b.className='sel-btn';b.id='selb-'+i;
-    b.innerHTML=`<span class="sel-btn-av">${ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length]}</span>${s.nom}`;
+    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(i/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(i/2)%IMG_SUSPECTS_F.length];
+    b.innerHTML=`<span class="sel-btn-av">${imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:20px;height:20px;object-fit:cover;filter:grayscale(.4)')}</span>${s.nom}`;
     b.onclick=()=>selectSuspect(i);sb.appendChild(b);
+  });
+}
+
+function buildAccSus(){
+  const ac=document.getElementById('acc-sus');ac.innerHTML='';
+  SC.suspects.forEach((s,i)=>{
+    const b=document.createElement('button');b.className='acc-btn';
+    const surl=s.gi%2===0?IMG_SUSPECTS_H[Math.floor(i/2)%IMG_SUSPECTS_H.length]:IMG_SUSPECTS_F[Math.floor(i/2)%IMG_SUSPECTS_F.length];
+    b.innerHTML=`<div class="acc-av">${imgOrEmoji(surl,ICONS_SUSPECTS[s.gi%ICONS_SUSPECTS.length],'','width:28px;height:28px;object-fit:cover;filter:grayscale(.3)')}</div>${s.nom}`;
+    b.onclick=()=>accuse(s.nom);ac.appendChild(b);
   });
 }
 
@@ -1402,10 +1452,25 @@ function updateAccStats(){
 }
 
 function accuse(nom){
-  if(!confirm(`Êtes-vous sûr(e) d'accuser ${nom} ?`))return;
-  clearInterval(timerInt);
-  const win=nom===SC.coupable;
-  endGame(win,win?'correct':'wrong',nom);
+  // Créer une modale de confirmation custom
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:2000;display:flex;align-items:center;justify-content:center';
+  ov.innerHTML=`<div style="background:var(--paper);border:3px solid var(--red);padding:2rem;max-width:380px;width:90%;text-align:center;box-shadow:4px 4px 20px rgba(0,0,0,.5)">
+    <div style="font-family:var(--ti);font-size:1.4rem;color:var(--ink);margin-bottom:.5rem">⚖️ CONFIRMER L'ACCUSATION</div>
+    <p style="font-family:var(--sp);font-size:.85rem;color:#6b5a3a;margin-bottom:1.5rem">Vous allez accuser <b>${nom}</b> du meurtre.<br>Cette action est irréversible.</p>
+    <div style="display:flex;gap:1rem;justify-content:center">
+      <button id="acc-confirm" style="font-family:var(--sp);background:var(--red);color:#fff;border:none;padding:.65rem 1.5rem;font-size:.85rem;letter-spacing:.1em;cursor:pointer">OUI, J'ACCUSE</button>
+      <button id="acc-cancel" style="font-family:var(--sp);background:var(--ink);color:var(--paper);border:none;padding:.65rem 1.5rem;font-size:.85rem;letter-spacing:.1em;cursor:pointer">ANNULER</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  document.getElementById('acc-confirm').onclick=()=>{
+    ov.remove();
+    clearInterval(timerInt);
+    const win=nom===SC.coupable;
+    endGame(win,win?'correct':'wrong',nom);
+  };
+  document.getElementById('acc-cancel').onclick=()=>ov.remove();
 }
 
 // ══════════════════════════════════════
